@@ -33,8 +33,9 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 3, 0, 0);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 4, 0, 0);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "AddToEntityManager", _m_AddToEntityManager_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "AddToEntity", _m_AddToEntity_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "CopyAllComponentsToEntity", _m_CopyAllComponentsToEntity_xlua_st_);
             
 			
@@ -95,6 +96,34 @@ namespace XLua.CSObjectWrap
                     
                     
                     return 1;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_AddToEntity_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+                
+                {
+                    Unity.Entities.EntityManager _entityManager = (Unity.Entities.EntityManager)translator.GetObject(L, 1, typeof(Unity.Entities.EntityManager));
+                    UnityEngine.GameObject _gameObject = (UnityEngine.GameObject)translator.GetObject(L, 2, typeof(UnityEngine.GameObject));
+                    Unity.Entities.Entity _entity;translator.Get(L, 3, out _entity);
+                    
+                    Unity.Entities.GameObjectEntity.AddToEntity( _entityManager, _gameObject, _entity );
+                    
+                    
+                    
+                    return 0;
                 }
                 
             } catch(System.Exception gen_e) {

@@ -162,8 +162,8 @@ public class Packager {
 
         BuildPipeline.BuildAssetBundles(streamPath, maps.ToArray(), BuildAssetBundleOptions.None, target);
 
-        BuildSceneBundles("Assets/AssetBundleRes/scene/navmesh", streamPath, target);
-        // BuildSceneBundles("Assets/AssetBundleRes/scene/baseworld", streamPath, target);
+        // BuildSceneBundles("Assets/AssetBundleRes/scene/navmesh", streamPath, target);
+        BuildSceneBundles("Assets/AssetBundleRes/scene/base_world", streamPath, target);
 
         BuildFileIndex(streamPath);
 
@@ -192,23 +192,29 @@ public class Packager {
         if (!Directory.Exists(tempLuaDir)) Directory.CreateDirectory(tempLuaDir);
 
         string[] srcDirs = { AppConfig.LuaAssetsDir };
-        for (int i = 0; i < srcDirs.Length; i++) {
-            if (AppConfig.LuaByteMode) {
+        for (int i = 0; i < srcDirs.Length; i++) 
+        {
+            if (AppConfig.LuaByteMode) 
+            {
                 string sourceDir = srcDirs[i];
                 string[] files = Directory.GetFiles(sourceDir, "*.lua", SearchOption.AllDirectories);
                 int len = sourceDir.Length;
 
-                if (sourceDir[len - 1] == '/' || sourceDir[len - 1] == '\\') {
+                if (sourceDir[len - 1] == '/' || sourceDir[len - 1] == '\\') 
+                {
                     --len;
                 }
-                for (int j = 0; j < files.Length; j++) {
+                for (int j = 0; j < files.Length; j++) 
+                {
                     string str = files[j].Remove(0, len);
                     string dest = tempLuaDir + str + ".bytes";
                     string dir = Path.GetDirectoryName(dest);
                     Directory.CreateDirectory(dir);
                     EncodeLuaFile(files[j], dest);
                 }    
-            } else {
+            } 
+            else 
+            {
                 CopyLuaBytesFiles(srcDirs[i], tempLuaDir);
             }
         }
@@ -313,7 +319,7 @@ public class Packager {
         for (int i = 0; i < dirs.Length; i++)
         {
             string folder_name = Path.GetFileName(dirs[i]);
-            if (folder_name == "navmesh")
+            if (folder_name == "base_world")
                 continue;
             string asset_name = "scene_" + folder_name;
             List<string> file_list = new List<string>();//文件列表

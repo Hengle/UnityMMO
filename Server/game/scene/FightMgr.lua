@@ -59,7 +59,14 @@ function FightMgr:CalDefenderList( fight_info, attacker_aoi_handle )
 		around[attacker_aoi_handle] = nil--把攻击者自己去掉
 		for aoi_handle,v in pairs(around) do
 			local uid = self.aoi:get_user_data(aoi_handle, "uid")
-			uid_defenders_map[uid] = true
+			local entity = self.sceneMgr:GetEntity(uid)
+			local isBeatable = self.entityMgr:HasComponent(entity, "UMO.Beatable")
+			if isBeatable then
+				local hpData = self.entityMgr:GetComponentData(entity, "UMO.HP")
+				if hpData.cur > 0 then
+					uid_defenders_map[uid] = true
+				end
+			end
 		end
 	end
 	self.aoi:remove(skill_bomb)
@@ -77,32 +84,17 @@ function FightMgr:AddDamageEventForDefenders( fight_event, uid_defenders_map )
 			local hp = self.entityMgr:GetComponentData(entity, "UMO.HP")
 			local damage_value = self:CalDamage(fight_info, entity)
 			table.insert(fight_event.defenders, {uid=uid, cur_hp=hp.cur, damage=damage_value, flag=math.random(0, 2)})
-
+			local pos = self.entityMgr:GetComponentData(entity, "UMO.Position")
+			local dEvents = self.entityMgr:GetComponentData(entity, "UMO.DamageEvents")
+			-- attacker攻击者，damage伤害值，direction攻击方向，impulse推力
+			local direction = Vector3.Sub(Vector3(fight_event.attacker_pos_x, fight_event.attacker_pos_y, fight_event.attacker_pos_z), pos)
+			table.insert(dEvents, {attacker=fight_event.attacker_uid, damage=damage_value, direction=direction, impulse=0})
 		end
-		-- end
-		-- self.damage_events[v.uid] = self.damage_events[v.uid] or {}
-		-- local damage_event = {
-		-- 	-- instigator_uid = fight_event.attacker_uid,
-		-- 	damage = v.damage,
-		-- 	-- damage_time = --技能不一定中了就马上扣血的
-		-- }
-		-- table.insert(self.damage_events[v.uid], damage_event)
 	end
 end
 
--- function FightMgr:GetDamageEvents( scene_uid )
--- 	if not scene_uid then return end
--- 	return self.damage_events[scene_uid]
--- end
-
--- function FightMgr:ClearDamageEvents( scene_uid )
--- 	if not scene_uid or not self.damage_events[scene_uid] then return end
-
--- 	self.damage_events[scene_uid] = nil
--- end
-
 function FightMgr:CalDamage( fight_info, entity )
-	return math.random(50, 1234)
+	return math.random(100, 550)
 end
 
 return FightMgr

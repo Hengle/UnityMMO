@@ -31,7 +31,7 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 34, 0, 0);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 40, 0, 0);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "SetPosition", _m_SetPosition_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetPositionX", _m_SetPositionX_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetPositionY", _m_SetPositionY_xlua_st_);
@@ -61,7 +61,13 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.CLS_IDX, "GetSizeDeltaX", _m_GetSizeDeltaX_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "GetSizeDeltaY", _m_GetSizeDeltaY_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetParent", _m_SetParent_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "SetLayer", _m_SetLayer_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "BindClickEvent", _m_BindClickEvent_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "BindDownEvent", _m_BindDownEvent_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "BindUpEvent", _m_BindUpEvent_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "BindDragEvent", _m_BindDragEvent_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "BindDragBeginEvent", _m_BindDragBeginEvent_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "BindDragEndEvent", _m_BindDragEndEvent_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "FillUIResPath", _m_FillUIResPath_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetImage", _m_SetImage_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetRawImage", _m_SetRawImage_xlua_st_);
@@ -901,6 +907,49 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetLayer_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+			    int gen_param_count = LuaAPI.lua_gettop(L);
+            
+                if(gen_param_count == 3&& translator.Assignable<UnityEngine.GameObject>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)&& LuaTypes.LUA_TBOOLEAN == LuaAPI.lua_type(L, 3)) 
+                {
+                    UnityEngine.GameObject _obj = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
+                    string _layerName = LuaAPI.lua_tostring(L, 2);
+                    bool _isAllChildren = LuaAPI.lua_toboolean(L, 3);
+                    
+                    XLuaFramework.UIHelper.SetLayer( _obj, _layerName, _isAllChildren );
+                    
+                    
+                    
+                    return 0;
+                }
+                if(gen_param_count == 2&& translator.Assignable<UnityEngine.GameObject>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
+                {
+                    UnityEngine.GameObject _obj = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
+                    string _layerName = LuaAPI.lua_tostring(L, 2);
+                    
+                    XLuaFramework.UIHelper.SetLayer( _obj, _layerName );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+            return LuaAPI.luaL_error(L, "invalid arguments to XLuaFramework.UIHelper.SetLayer!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _m_BindClickEvent_xlua_st_(RealStatePtr L)
         {
 		    try {
@@ -915,6 +964,141 @@ namespace XLua.CSObjectWrap
                     XLua.LuaFunction _luafunc = (XLua.LuaFunction)translator.GetObject(L, 2, typeof(XLua.LuaFunction));
                     
                     XLuaFramework.UIHelper.BindClickEvent( _obj, _luafunc );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_BindDownEvent_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+                
+                {
+                    UnityEngine.GameObject _obj = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
+                    XLua.LuaFunction _luafunc = (XLua.LuaFunction)translator.GetObject(L, 2, typeof(XLua.LuaFunction));
+                    
+                    XLuaFramework.UIHelper.BindDownEvent( _obj, _luafunc );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_BindUpEvent_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+                
+                {
+                    UnityEngine.GameObject _obj = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
+                    XLua.LuaFunction _luafunc = (XLua.LuaFunction)translator.GetObject(L, 2, typeof(XLua.LuaFunction));
+                    
+                    XLuaFramework.UIHelper.BindUpEvent( _obj, _luafunc );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_BindDragEvent_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+                
+                {
+                    UnityEngine.GameObject _obj = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
+                    XLua.LuaFunction _luafunc = (XLua.LuaFunction)translator.GetObject(L, 2, typeof(XLua.LuaFunction));
+                    
+                    XLuaFramework.UIHelper.BindDragEvent( _obj, _luafunc );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_BindDragBeginEvent_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+                
+                {
+                    UnityEngine.GameObject _obj = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
+                    XLua.LuaFunction _luafunc = (XLua.LuaFunction)translator.GetObject(L, 2, typeof(XLua.LuaFunction));
+                    
+                    XLuaFramework.UIHelper.BindDragBeginEvent( _obj, _luafunc );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_BindDragEndEvent_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+                
+                {
+                    UnityEngine.GameObject _obj = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
+                    XLua.LuaFunction _luafunc = (XLua.LuaFunction)translator.GetObject(L, 2, typeof(XLua.LuaFunction));
+                    
+                    XLuaFramework.UIHelper.BindDragEndEvent( _obj, _luafunc );
                     
                     
                     

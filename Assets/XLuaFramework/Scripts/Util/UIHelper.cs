@@ -259,6 +259,22 @@ namespace XLuaFramework
             }
         }
 
+        public static void SetLayer(GameObject obj, string layerName, bool isAllChildren=true)
+        {
+            if (isAllChildren)
+            {
+                Transform[] children = obj.GetComponentsInChildren<Transform>();
+                for (int i = 0; i < children.Length; i++)
+                {
+                    children[i].gameObject.layer = LayerMask.NameToLayer(layerName);
+                }
+            }
+            else
+            {
+                obj.layer = LayerMask.NameToLayer(layerName);
+            }
+        }
+
         public static void BindClickEvent(GameObject obj, LuaFunction luafunc)
         {
             if (obj == null || luafunc == null) return;
@@ -267,11 +283,51 @@ namespace XLuaFramework
                 listener.onClick = luafunc;
         }
 
+        public static void BindDownEvent(GameObject obj, LuaFunction luafunc)
+        {
+            if (obj == null || luafunc == null) return;
+            EventTriggerListener listener = EventTriggerListener.Get(obj);
+            if (listener != null)
+                listener.onDown = luafunc;
+        }
+
+        public static void BindUpEvent(GameObject obj, LuaFunction luafunc)
+        {
+            if (obj == null || luafunc == null) return;
+            EventTriggerListener listener = EventTriggerListener.Get(obj);
+            if (listener != null)
+                listener.onUp = luafunc;
+        }
+
+        public static void BindDragEvent(GameObject obj, LuaFunction luafunc)
+        {
+            if (obj == null || luafunc == null) return;
+            DragTriggerListener listener = DragTriggerListener.Get(obj);
+            if (listener != null)
+                listener.onDrag = luafunc;
+        }
+
+        public static void BindDragBeginEvent(GameObject obj, LuaFunction luafunc)
+        {
+            if (obj == null || luafunc == null) return;
+            DragTriggerListener listener = DragTriggerListener.Get(obj);
+            if (listener != null)
+                listener.onDragBegin = luafunc;
+        }
+
+        public static void BindDragEndEvent(GameObject obj, LuaFunction luafunc)
+        {
+            if (obj == null || luafunc == null) return;
+            DragTriggerListener listener = DragTriggerListener.Get(obj);
+            if (listener != null)
+                listener.onDragEnd = luafunc;
+        }
+
         public static string FillUIResPath(string fileName)
         {
             if (fileName.StartsWith("Assets/"))
                 return fileName;
-            return GameConst.GetUIResPath()+"/"+fileName;
+            return ResPath.UIResPath+"/"+fileName;
         }
 
         public static void SetImage(Image img, string file_path, bool is_auto_size=false, LuaFunction func = null)

@@ -70,150 +70,6 @@ namespace XLua.CSObjectWrap
 		}
 	}
     
-    public class UnityMMOSceneInfoKeyWrap
-    {
-		public static void __Register(RealStatePtr L)
-        {
-		    ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-		    Utils.BeginObjectRegister(typeof(UnityMMO.SceneInfoKey), L, translator, 0, 0, 0, 0);
-			Utils.EndObjectRegister(typeof(UnityMMO.SceneInfoKey), L, translator, null, null, null, null, null);
-			
-			Utils.BeginClassRegister(typeof(UnityMMO.SceneInfoKey), L, null, 7, 0, 0);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "None", UnityMMO.SceneInfoKey.None);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "EnterView", UnityMMO.SceneInfoKey.EnterView);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "LeaveView", UnityMMO.SceneInfoKey.LeaveView);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "PosChange", UnityMMO.SceneInfoKey.PosChange);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "TargetPos", UnityMMO.SceneInfoKey.TargetPos);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JumpState", UnityMMO.SceneInfoKey.JumpState);
-            
-			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
-            
-            Utils.EndClassRegister(typeof(UnityMMO.SceneInfoKey), L, translator);
-        }
-		
-		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int __CastFrom(RealStatePtr L)
-		{
-			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			LuaTypes lua_type = LuaAPI.lua_type(L, 1);
-            if (lua_type == LuaTypes.LUA_TNUMBER)
-            {
-                translator.PushUnityMMOSceneInfoKey(L, (UnityMMO.SceneInfoKey)LuaAPI.xlua_tointeger(L, 1));
-            }
-			
-            else if(lua_type == LuaTypes.LUA_TSTRING)
-            {
-			    if (LuaAPI.xlua_is_eq_str(L, 1, "None"))
-                {
-                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.None);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "EnterView"))
-                {
-                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.EnterView);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "LeaveView"))
-                {
-                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.LeaveView);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "PosChange"))
-                {
-                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.PosChange);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "TargetPos"))
-                {
-                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.TargetPos);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "JumpState"))
-                {
-                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.JumpState);
-                }
-				else
-                {
-                    return LuaAPI.luaL_error(L, "invalid string for UnityMMO.SceneInfoKey!");
-                }
-            }
-			
-            else
-            {
-                return LuaAPI.luaL_error(L, "invalid lua type for UnityMMO.SceneInfoKey! Expect number or string, got + " + lua_type);
-            }
-
-            return 1;
-		}
-	}
-    
-    public class UnityMMOSceneObjectTypeWrap
-    {
-		public static void __Register(RealStatePtr L)
-        {
-		    ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-		    Utils.BeginObjectRegister(typeof(UnityMMO.SceneObjectType), L, translator, 0, 0, 0, 0);
-			Utils.EndObjectRegister(typeof(UnityMMO.SceneObjectType), L, translator, null, null, null, null, null);
-			
-			Utils.BeginClassRegister(typeof(UnityMMO.SceneObjectType), L, null, 5, 0, 0);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "None", UnityMMO.SceneObjectType.None);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Role", UnityMMO.SceneObjectType.Role);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Monster", UnityMMO.SceneObjectType.Monster);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "NPC", UnityMMO.SceneObjectType.NPC);
-            
-			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
-            
-            Utils.EndClassRegister(typeof(UnityMMO.SceneObjectType), L, translator);
-        }
-		
-		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int __CastFrom(RealStatePtr L)
-		{
-			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			LuaTypes lua_type = LuaAPI.lua_type(L, 1);
-            if (lua_type == LuaTypes.LUA_TNUMBER)
-            {
-                translator.PushUnityMMOSceneObjectType(L, (UnityMMO.SceneObjectType)LuaAPI.xlua_tointeger(L, 1));
-            }
-			
-            else if(lua_type == LuaTypes.LUA_TSTRING)
-            {
-			    if (LuaAPI.xlua_is_eq_str(L, 1, "None"))
-                {
-                    translator.PushUnityMMOSceneObjectType(L, UnityMMO.SceneObjectType.None);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Role"))
-                {
-                    translator.PushUnityMMOSceneObjectType(L, UnityMMO.SceneObjectType.Role);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Monster"))
-                {
-                    translator.PushUnityMMOSceneObjectType(L, UnityMMO.SceneObjectType.Monster);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "NPC"))
-                {
-                    translator.PushUnityMMOSceneObjectType(L, UnityMMO.SceneObjectType.NPC);
-                }
-				else
-                {
-                    return LuaAPI.luaL_error(L, "invalid string for UnityMMO.SceneObjectType!");
-                }
-            }
-			
-            else
-            {
-                return LuaAPI.luaL_error(L, "invalid lua type for UnityMMO.SceneObjectType! Expect number or string, got + " + lua_type);
-            }
-
-            return 1;
-		}
-	}
-    
     public class UnityEngineTextAnchorWrap
     {
 		public static void __Register(RealStatePtr L)
@@ -382,23 +238,671 @@ namespace XLua.CSObjectWrap
 		}
 	}
     
-    public class UnityMMOTimelineStateNewStateWrap
+    public class UnityEngineKeyCodeWrap
     {
 		public static void __Register(RealStatePtr L)
         {
 		    ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-		    Utils.BeginObjectRegister(typeof(UnityMMO.TimelineState.NewState), L, translator, 0, 0, 0, 0);
-			Utils.EndObjectRegister(typeof(UnityMMO.TimelineState.NewState), L, translator, null, null, null, null, null);
+		    Utils.BeginObjectRegister(typeof(UnityEngine.KeyCode), L, translator, 0, 0, 0, 0);
+			Utils.EndObjectRegister(typeof(UnityEngine.KeyCode), L, translator, null, null, null, null, null);
 			
-			Utils.BeginClassRegister(typeof(UnityMMO.TimelineState.NewState), L, null, 3, 0, 0);
+			Utils.BeginClassRegister(typeof(UnityEngine.KeyCode), L, null, 327, 0, 0);
             
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Allow", UnityMMO.TimelineState.NewState.Allow);
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "None", UnityEngine.KeyCode.None);
             
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Forbid", UnityMMO.TimelineState.NewState.Forbid);
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Backspace", UnityEngine.KeyCode.Backspace);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Delete", UnityEngine.KeyCode.Delete);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Tab", UnityEngine.KeyCode.Tab);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Clear", UnityEngine.KeyCode.Clear);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Return", UnityEngine.KeyCode.Return);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Pause", UnityEngine.KeyCode.Pause);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Escape", UnityEngine.KeyCode.Escape);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Space", UnityEngine.KeyCode.Space);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Keypad0", UnityEngine.KeyCode.Keypad0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Keypad1", UnityEngine.KeyCode.Keypad1);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Keypad2", UnityEngine.KeyCode.Keypad2);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Keypad3", UnityEngine.KeyCode.Keypad3);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Keypad4", UnityEngine.KeyCode.Keypad4);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Keypad5", UnityEngine.KeyCode.Keypad5);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Keypad6", UnityEngine.KeyCode.Keypad6);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Keypad7", UnityEngine.KeyCode.Keypad7);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Keypad8", UnityEngine.KeyCode.Keypad8);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Keypad9", UnityEngine.KeyCode.Keypad9);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "KeypadPeriod", UnityEngine.KeyCode.KeypadPeriod);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "KeypadDivide", UnityEngine.KeyCode.KeypadDivide);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "KeypadMultiply", UnityEngine.KeyCode.KeypadMultiply);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "KeypadMinus", UnityEngine.KeyCode.KeypadMinus);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "KeypadPlus", UnityEngine.KeyCode.KeypadPlus);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "KeypadEnter", UnityEngine.KeyCode.KeypadEnter);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "KeypadEquals", UnityEngine.KeyCode.KeypadEquals);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "UpArrow", UnityEngine.KeyCode.UpArrow);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "DownArrow", UnityEngine.KeyCode.DownArrow);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "RightArrow", UnityEngine.KeyCode.RightArrow);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "LeftArrow", UnityEngine.KeyCode.LeftArrow);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Insert", UnityEngine.KeyCode.Insert);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Home", UnityEngine.KeyCode.Home);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "End", UnityEngine.KeyCode.End);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "PageUp", UnityEngine.KeyCode.PageUp);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "PageDown", UnityEngine.KeyCode.PageDown);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F1", UnityEngine.KeyCode.F1);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F2", UnityEngine.KeyCode.F2);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F3", UnityEngine.KeyCode.F3);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F4", UnityEngine.KeyCode.F4);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F5", UnityEngine.KeyCode.F5);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F6", UnityEngine.KeyCode.F6);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F7", UnityEngine.KeyCode.F7);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F8", UnityEngine.KeyCode.F8);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F9", UnityEngine.KeyCode.F9);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F10", UnityEngine.KeyCode.F10);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F11", UnityEngine.KeyCode.F11);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F12", UnityEngine.KeyCode.F12);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F13", UnityEngine.KeyCode.F13);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F14", UnityEngine.KeyCode.F14);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F15", UnityEngine.KeyCode.F15);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Alpha0", UnityEngine.KeyCode.Alpha0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Alpha1", UnityEngine.KeyCode.Alpha1);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Alpha2", UnityEngine.KeyCode.Alpha2);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Alpha3", UnityEngine.KeyCode.Alpha3);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Alpha4", UnityEngine.KeyCode.Alpha4);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Alpha5", UnityEngine.KeyCode.Alpha5);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Alpha6", UnityEngine.KeyCode.Alpha6);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Alpha7", UnityEngine.KeyCode.Alpha7);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Alpha8", UnityEngine.KeyCode.Alpha8);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Alpha9", UnityEngine.KeyCode.Alpha9);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Exclaim", UnityEngine.KeyCode.Exclaim);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "DoubleQuote", UnityEngine.KeyCode.DoubleQuote);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Hash", UnityEngine.KeyCode.Hash);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Dollar", UnityEngine.KeyCode.Dollar);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Percent", UnityEngine.KeyCode.Percent);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Ampersand", UnityEngine.KeyCode.Ampersand);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Quote", UnityEngine.KeyCode.Quote);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "LeftParen", UnityEngine.KeyCode.LeftParen);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "RightParen", UnityEngine.KeyCode.RightParen);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Asterisk", UnityEngine.KeyCode.Asterisk);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Plus", UnityEngine.KeyCode.Plus);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Comma", UnityEngine.KeyCode.Comma);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Minus", UnityEngine.KeyCode.Minus);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Period", UnityEngine.KeyCode.Period);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Slash", UnityEngine.KeyCode.Slash);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Colon", UnityEngine.KeyCode.Colon);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Semicolon", UnityEngine.KeyCode.Semicolon);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Less", UnityEngine.KeyCode.Less);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Equals", UnityEngine.KeyCode.Equals);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Greater", UnityEngine.KeyCode.Greater);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Question", UnityEngine.KeyCode.Question);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "At", UnityEngine.KeyCode.At);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "LeftBracket", UnityEngine.KeyCode.LeftBracket);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Backslash", UnityEngine.KeyCode.Backslash);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "RightBracket", UnityEngine.KeyCode.RightBracket);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Caret", UnityEngine.KeyCode.Caret);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Underscore", UnityEngine.KeyCode.Underscore);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "BackQuote", UnityEngine.KeyCode.BackQuote);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "A", UnityEngine.KeyCode.A);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "B", UnityEngine.KeyCode.B);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "C", UnityEngine.KeyCode.C);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "D", UnityEngine.KeyCode.D);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "E", UnityEngine.KeyCode.E);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "F", UnityEngine.KeyCode.F);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "G", UnityEngine.KeyCode.G);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "H", UnityEngine.KeyCode.H);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "I", UnityEngine.KeyCode.I);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "J", UnityEngine.KeyCode.J);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "K", UnityEngine.KeyCode.K);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "L", UnityEngine.KeyCode.L);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "M", UnityEngine.KeyCode.M);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "N", UnityEngine.KeyCode.N);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "O", UnityEngine.KeyCode.O);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "P", UnityEngine.KeyCode.P);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Q", UnityEngine.KeyCode.Q);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "R", UnityEngine.KeyCode.R);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "S", UnityEngine.KeyCode.S);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "T", UnityEngine.KeyCode.T);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "U", UnityEngine.KeyCode.U);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "V", UnityEngine.KeyCode.V);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "W", UnityEngine.KeyCode.W);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "X", UnityEngine.KeyCode.X);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Y", UnityEngine.KeyCode.Y);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Z", UnityEngine.KeyCode.Z);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "LeftCurlyBracket", UnityEngine.KeyCode.LeftCurlyBracket);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Pipe", UnityEngine.KeyCode.Pipe);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "RightCurlyBracket", UnityEngine.KeyCode.RightCurlyBracket);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Tilde", UnityEngine.KeyCode.Tilde);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Numlock", UnityEngine.KeyCode.Numlock);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "CapsLock", UnityEngine.KeyCode.CapsLock);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "ScrollLock", UnityEngine.KeyCode.ScrollLock);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "RightShift", UnityEngine.KeyCode.RightShift);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "LeftShift", UnityEngine.KeyCode.LeftShift);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "RightControl", UnityEngine.KeyCode.RightControl);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "LeftControl", UnityEngine.KeyCode.LeftControl);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "RightAlt", UnityEngine.KeyCode.RightAlt);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "LeftAlt", UnityEngine.KeyCode.LeftAlt);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "LeftCommand", UnityEngine.KeyCode.LeftCommand);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "LeftApple", UnityEngine.KeyCode.LeftApple);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "LeftWindows", UnityEngine.KeyCode.LeftWindows);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "RightCommand", UnityEngine.KeyCode.RightCommand);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "RightApple", UnityEngine.KeyCode.RightApple);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "RightWindows", UnityEngine.KeyCode.RightWindows);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "AltGr", UnityEngine.KeyCode.AltGr);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Help", UnityEngine.KeyCode.Help);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Print", UnityEngine.KeyCode.Print);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "SysReq", UnityEngine.KeyCode.SysReq);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Break", UnityEngine.KeyCode.Break);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Menu", UnityEngine.KeyCode.Menu);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Mouse0", UnityEngine.KeyCode.Mouse0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Mouse1", UnityEngine.KeyCode.Mouse1);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Mouse2", UnityEngine.KeyCode.Mouse2);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Mouse3", UnityEngine.KeyCode.Mouse3);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Mouse4", UnityEngine.KeyCode.Mouse4);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Mouse5", UnityEngine.KeyCode.Mouse5);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Mouse6", UnityEngine.KeyCode.Mouse6);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton0", UnityEngine.KeyCode.JoystickButton0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton1", UnityEngine.KeyCode.JoystickButton1);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton2", UnityEngine.KeyCode.JoystickButton2);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton3", UnityEngine.KeyCode.JoystickButton3);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton4", UnityEngine.KeyCode.JoystickButton4);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton5", UnityEngine.KeyCode.JoystickButton5);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton6", UnityEngine.KeyCode.JoystickButton6);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton7", UnityEngine.KeyCode.JoystickButton7);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton8", UnityEngine.KeyCode.JoystickButton8);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton9", UnityEngine.KeyCode.JoystickButton9);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton10", UnityEngine.KeyCode.JoystickButton10);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton11", UnityEngine.KeyCode.JoystickButton11);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton12", UnityEngine.KeyCode.JoystickButton12);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton13", UnityEngine.KeyCode.JoystickButton13);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton14", UnityEngine.KeyCode.JoystickButton14);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton15", UnityEngine.KeyCode.JoystickButton15);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton16", UnityEngine.KeyCode.JoystickButton16);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton17", UnityEngine.KeyCode.JoystickButton17);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton18", UnityEngine.KeyCode.JoystickButton18);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JoystickButton19", UnityEngine.KeyCode.JoystickButton19);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button0", UnityEngine.KeyCode.Joystick1Button0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button1", UnityEngine.KeyCode.Joystick1Button1);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button2", UnityEngine.KeyCode.Joystick1Button2);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button3", UnityEngine.KeyCode.Joystick1Button3);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button4", UnityEngine.KeyCode.Joystick1Button4);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button5", UnityEngine.KeyCode.Joystick1Button5);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button6", UnityEngine.KeyCode.Joystick1Button6);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button7", UnityEngine.KeyCode.Joystick1Button7);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button8", UnityEngine.KeyCode.Joystick1Button8);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button9", UnityEngine.KeyCode.Joystick1Button9);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button10", UnityEngine.KeyCode.Joystick1Button10);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button11", UnityEngine.KeyCode.Joystick1Button11);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button12", UnityEngine.KeyCode.Joystick1Button12);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button13", UnityEngine.KeyCode.Joystick1Button13);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button14", UnityEngine.KeyCode.Joystick1Button14);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button15", UnityEngine.KeyCode.Joystick1Button15);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button16", UnityEngine.KeyCode.Joystick1Button16);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button17", UnityEngine.KeyCode.Joystick1Button17);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button18", UnityEngine.KeyCode.Joystick1Button18);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick1Button19", UnityEngine.KeyCode.Joystick1Button19);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button0", UnityEngine.KeyCode.Joystick2Button0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button1", UnityEngine.KeyCode.Joystick2Button1);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button2", UnityEngine.KeyCode.Joystick2Button2);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button3", UnityEngine.KeyCode.Joystick2Button3);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button4", UnityEngine.KeyCode.Joystick2Button4);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button5", UnityEngine.KeyCode.Joystick2Button5);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button6", UnityEngine.KeyCode.Joystick2Button6);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button7", UnityEngine.KeyCode.Joystick2Button7);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button8", UnityEngine.KeyCode.Joystick2Button8);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button9", UnityEngine.KeyCode.Joystick2Button9);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button10", UnityEngine.KeyCode.Joystick2Button10);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button11", UnityEngine.KeyCode.Joystick2Button11);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button12", UnityEngine.KeyCode.Joystick2Button12);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button13", UnityEngine.KeyCode.Joystick2Button13);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button14", UnityEngine.KeyCode.Joystick2Button14);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button15", UnityEngine.KeyCode.Joystick2Button15);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button16", UnityEngine.KeyCode.Joystick2Button16);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button17", UnityEngine.KeyCode.Joystick2Button17);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button18", UnityEngine.KeyCode.Joystick2Button18);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick2Button19", UnityEngine.KeyCode.Joystick2Button19);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button0", UnityEngine.KeyCode.Joystick3Button0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button1", UnityEngine.KeyCode.Joystick3Button1);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button2", UnityEngine.KeyCode.Joystick3Button2);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button3", UnityEngine.KeyCode.Joystick3Button3);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button4", UnityEngine.KeyCode.Joystick3Button4);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button5", UnityEngine.KeyCode.Joystick3Button5);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button6", UnityEngine.KeyCode.Joystick3Button6);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button7", UnityEngine.KeyCode.Joystick3Button7);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button8", UnityEngine.KeyCode.Joystick3Button8);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button9", UnityEngine.KeyCode.Joystick3Button9);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button10", UnityEngine.KeyCode.Joystick3Button10);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button11", UnityEngine.KeyCode.Joystick3Button11);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button12", UnityEngine.KeyCode.Joystick3Button12);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button13", UnityEngine.KeyCode.Joystick3Button13);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button14", UnityEngine.KeyCode.Joystick3Button14);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button15", UnityEngine.KeyCode.Joystick3Button15);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button16", UnityEngine.KeyCode.Joystick3Button16);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button17", UnityEngine.KeyCode.Joystick3Button17);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button18", UnityEngine.KeyCode.Joystick3Button18);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick3Button19", UnityEngine.KeyCode.Joystick3Button19);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button0", UnityEngine.KeyCode.Joystick4Button0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button1", UnityEngine.KeyCode.Joystick4Button1);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button2", UnityEngine.KeyCode.Joystick4Button2);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button3", UnityEngine.KeyCode.Joystick4Button3);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button4", UnityEngine.KeyCode.Joystick4Button4);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button5", UnityEngine.KeyCode.Joystick4Button5);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button6", UnityEngine.KeyCode.Joystick4Button6);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button7", UnityEngine.KeyCode.Joystick4Button7);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button8", UnityEngine.KeyCode.Joystick4Button8);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button9", UnityEngine.KeyCode.Joystick4Button9);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button10", UnityEngine.KeyCode.Joystick4Button10);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button11", UnityEngine.KeyCode.Joystick4Button11);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button12", UnityEngine.KeyCode.Joystick4Button12);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button13", UnityEngine.KeyCode.Joystick4Button13);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button14", UnityEngine.KeyCode.Joystick4Button14);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button15", UnityEngine.KeyCode.Joystick4Button15);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button16", UnityEngine.KeyCode.Joystick4Button16);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button17", UnityEngine.KeyCode.Joystick4Button17);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button18", UnityEngine.KeyCode.Joystick4Button18);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick4Button19", UnityEngine.KeyCode.Joystick4Button19);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button0", UnityEngine.KeyCode.Joystick5Button0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button1", UnityEngine.KeyCode.Joystick5Button1);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button2", UnityEngine.KeyCode.Joystick5Button2);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button3", UnityEngine.KeyCode.Joystick5Button3);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button4", UnityEngine.KeyCode.Joystick5Button4);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button5", UnityEngine.KeyCode.Joystick5Button5);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button6", UnityEngine.KeyCode.Joystick5Button6);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button7", UnityEngine.KeyCode.Joystick5Button7);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button8", UnityEngine.KeyCode.Joystick5Button8);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button9", UnityEngine.KeyCode.Joystick5Button9);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button10", UnityEngine.KeyCode.Joystick5Button10);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button11", UnityEngine.KeyCode.Joystick5Button11);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button12", UnityEngine.KeyCode.Joystick5Button12);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button13", UnityEngine.KeyCode.Joystick5Button13);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button14", UnityEngine.KeyCode.Joystick5Button14);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button15", UnityEngine.KeyCode.Joystick5Button15);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button16", UnityEngine.KeyCode.Joystick5Button16);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button17", UnityEngine.KeyCode.Joystick5Button17);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button18", UnityEngine.KeyCode.Joystick5Button18);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick5Button19", UnityEngine.KeyCode.Joystick5Button19);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button0", UnityEngine.KeyCode.Joystick6Button0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button1", UnityEngine.KeyCode.Joystick6Button1);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button2", UnityEngine.KeyCode.Joystick6Button2);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button3", UnityEngine.KeyCode.Joystick6Button3);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button4", UnityEngine.KeyCode.Joystick6Button4);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button5", UnityEngine.KeyCode.Joystick6Button5);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button6", UnityEngine.KeyCode.Joystick6Button6);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button7", UnityEngine.KeyCode.Joystick6Button7);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button8", UnityEngine.KeyCode.Joystick6Button8);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button9", UnityEngine.KeyCode.Joystick6Button9);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button10", UnityEngine.KeyCode.Joystick6Button10);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button11", UnityEngine.KeyCode.Joystick6Button11);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button12", UnityEngine.KeyCode.Joystick6Button12);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button13", UnityEngine.KeyCode.Joystick6Button13);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button14", UnityEngine.KeyCode.Joystick6Button14);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button15", UnityEngine.KeyCode.Joystick6Button15);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button16", UnityEngine.KeyCode.Joystick6Button16);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button17", UnityEngine.KeyCode.Joystick6Button17);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button18", UnityEngine.KeyCode.Joystick6Button18);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick6Button19", UnityEngine.KeyCode.Joystick6Button19);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button0", UnityEngine.KeyCode.Joystick7Button0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button1", UnityEngine.KeyCode.Joystick7Button1);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button2", UnityEngine.KeyCode.Joystick7Button2);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button3", UnityEngine.KeyCode.Joystick7Button3);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button4", UnityEngine.KeyCode.Joystick7Button4);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button5", UnityEngine.KeyCode.Joystick7Button5);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button6", UnityEngine.KeyCode.Joystick7Button6);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button7", UnityEngine.KeyCode.Joystick7Button7);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button8", UnityEngine.KeyCode.Joystick7Button8);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button9", UnityEngine.KeyCode.Joystick7Button9);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button10", UnityEngine.KeyCode.Joystick7Button10);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button11", UnityEngine.KeyCode.Joystick7Button11);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button12", UnityEngine.KeyCode.Joystick7Button12);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button13", UnityEngine.KeyCode.Joystick7Button13);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button14", UnityEngine.KeyCode.Joystick7Button14);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button15", UnityEngine.KeyCode.Joystick7Button15);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button16", UnityEngine.KeyCode.Joystick7Button16);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button17", UnityEngine.KeyCode.Joystick7Button17);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button18", UnityEngine.KeyCode.Joystick7Button18);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick7Button19", UnityEngine.KeyCode.Joystick7Button19);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button0", UnityEngine.KeyCode.Joystick8Button0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button1", UnityEngine.KeyCode.Joystick8Button1);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button2", UnityEngine.KeyCode.Joystick8Button2);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button3", UnityEngine.KeyCode.Joystick8Button3);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button4", UnityEngine.KeyCode.Joystick8Button4);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button5", UnityEngine.KeyCode.Joystick8Button5);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button6", UnityEngine.KeyCode.Joystick8Button6);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button7", UnityEngine.KeyCode.Joystick8Button7);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button8", UnityEngine.KeyCode.Joystick8Button8);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button9", UnityEngine.KeyCode.Joystick8Button9);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button10", UnityEngine.KeyCode.Joystick8Button10);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button11", UnityEngine.KeyCode.Joystick8Button11);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button12", UnityEngine.KeyCode.Joystick8Button12);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button13", UnityEngine.KeyCode.Joystick8Button13);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button14", UnityEngine.KeyCode.Joystick8Button14);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button15", UnityEngine.KeyCode.Joystick8Button15);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button16", UnityEngine.KeyCode.Joystick8Button16);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button17", UnityEngine.KeyCode.Joystick8Button17);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button18", UnityEngine.KeyCode.Joystick8Button18);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Joystick8Button19", UnityEngine.KeyCode.Joystick8Button19);
             
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
             
-            Utils.EndClassRegister(typeof(UnityMMO.TimelineState.NewState), L, translator);
+            Utils.EndClassRegister(typeof(UnityEngine.KeyCode), L, translator);
         }
 		
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -408,339 +912,1361 @@ namespace XLua.CSObjectWrap
 			LuaTypes lua_type = LuaAPI.lua_type(L, 1);
             if (lua_type == LuaTypes.LUA_TNUMBER)
             {
-                translator.PushUnityMMOTimelineStateNewState(L, (UnityMMO.TimelineState.NewState)LuaAPI.xlua_tointeger(L, 1));
-            }
-			
-            else if(lua_type == LuaTypes.LUA_TSTRING)
-            {
-			    if (LuaAPI.xlua_is_eq_str(L, 1, "Allow"))
-                {
-                    translator.PushUnityMMOTimelineStateNewState(L, UnityMMO.TimelineState.NewState.Allow);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Forbid"))
-                {
-                    translator.PushUnityMMOTimelineStateNewState(L, UnityMMO.TimelineState.NewState.Forbid);
-                }
-				else
-                {
-                    return LuaAPI.luaL_error(L, "invalid string for UnityMMO.TimelineState.NewState!");
-                }
-            }
-			
-            else
-            {
-                return LuaAPI.luaL_error(L, "invalid lua type for UnityMMO.TimelineState.NewState! Expect number or string, got + " + lua_type);
-            }
-
-            return 1;
-		}
-	}
-    
-    public class UnityMMOTimelineStateInterruptStateWrap
-    {
-		public static void __Register(RealStatePtr L)
-        {
-		    ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-		    Utils.BeginObjectRegister(typeof(UnityMMO.TimelineState.InterruptState), L, translator, 0, 0, 0, 0);
-			Utils.EndObjectRegister(typeof(UnityMMO.TimelineState.InterruptState), L, translator, null, null, null, null, null);
-			
-			Utils.BeginClassRegister(typeof(UnityMMO.TimelineState.InterruptState), L, null, 3, 0, 0);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Allow", UnityMMO.TimelineState.InterruptState.Allow);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Forbid", UnityMMO.TimelineState.InterruptState.Forbid);
-            
-			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
-            
-            Utils.EndClassRegister(typeof(UnityMMO.TimelineState.InterruptState), L, translator);
-        }
-		
-		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int __CastFrom(RealStatePtr L)
-		{
-			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			LuaTypes lua_type = LuaAPI.lua_type(L, 1);
-            if (lua_type == LuaTypes.LUA_TNUMBER)
-            {
-                translator.PushUnityMMOTimelineStateInterruptState(L, (UnityMMO.TimelineState.InterruptState)LuaAPI.xlua_tointeger(L, 1));
-            }
-			
-            else if(lua_type == LuaTypes.LUA_TSTRING)
-            {
-			    if (LuaAPI.xlua_is_eq_str(L, 1, "Allow"))
-                {
-                    translator.PushUnityMMOTimelineStateInterruptState(L, UnityMMO.TimelineState.InterruptState.Allow);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Forbid"))
-                {
-                    translator.PushUnityMMOTimelineStateInterruptState(L, UnityMMO.TimelineState.InterruptState.Forbid);
-                }
-				else
-                {
-                    return LuaAPI.luaL_error(L, "invalid string for UnityMMO.TimelineState.InterruptState!");
-                }
-            }
-			
-            else
-            {
-                return LuaAPI.luaL_error(L, "invalid lua type for UnityMMO.TimelineState.InterruptState! Expect number or string, got + " + lua_type);
-            }
-
-            return 1;
-		}
-	}
-    
-    public class UnityMMOLocomotionStateStateWrap
-    {
-		public static void __Register(RealStatePtr L)
-        {
-		    ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-		    Utils.BeginObjectRegister(typeof(UnityMMO.LocomotionState.State), L, translator, 0, 0, 0, 0);
-			Utils.EndObjectRegister(typeof(UnityMMO.LocomotionState.State), L, translator, null, null, null, null, null);
-			
-			Utils.BeginClassRegister(typeof(UnityMMO.LocomotionState.State), L, null, 10, 0, 0);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Idle", UnityMMO.LocomotionState.State.Idle);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Run", UnityMMO.LocomotionState.State.Run);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Sprint", UnityMMO.LocomotionState.State.Sprint);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Jump", UnityMMO.LocomotionState.State.Jump);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "DoubleJump", UnityMMO.LocomotionState.State.DoubleJump);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "TrebleJump", UnityMMO.LocomotionState.State.TrebleJump);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "InAir", UnityMMO.LocomotionState.State.InAir);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "BeHit", UnityMMO.LocomotionState.State.BeHit);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "StateNum", UnityMMO.LocomotionState.State.StateNum);
-            
-			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
-            
-            Utils.EndClassRegister(typeof(UnityMMO.LocomotionState.State), L, translator);
-        }
-		
-		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int __CastFrom(RealStatePtr L)
-		{
-			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			LuaTypes lua_type = LuaAPI.lua_type(L, 1);
-            if (lua_type == LuaTypes.LUA_TNUMBER)
-            {
-                translator.PushUnityMMOLocomotionStateState(L, (UnityMMO.LocomotionState.State)LuaAPI.xlua_tointeger(L, 1));
-            }
-			
-            else if(lua_type == LuaTypes.LUA_TSTRING)
-            {
-			    if (LuaAPI.xlua_is_eq_str(L, 1, "Idle"))
-                {
-                    translator.PushUnityMMOLocomotionStateState(L, UnityMMO.LocomotionState.State.Idle);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Run"))
-                {
-                    translator.PushUnityMMOLocomotionStateState(L, UnityMMO.LocomotionState.State.Run);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Sprint"))
-                {
-                    translator.PushUnityMMOLocomotionStateState(L, UnityMMO.LocomotionState.State.Sprint);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Jump"))
-                {
-                    translator.PushUnityMMOLocomotionStateState(L, UnityMMO.LocomotionState.State.Jump);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "DoubleJump"))
-                {
-                    translator.PushUnityMMOLocomotionStateState(L, UnityMMO.LocomotionState.State.DoubleJump);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "TrebleJump"))
-                {
-                    translator.PushUnityMMOLocomotionStateState(L, UnityMMO.LocomotionState.State.TrebleJump);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "InAir"))
-                {
-                    translator.PushUnityMMOLocomotionStateState(L, UnityMMO.LocomotionState.State.InAir);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "BeHit"))
-                {
-                    translator.PushUnityMMOLocomotionStateState(L, UnityMMO.LocomotionState.State.BeHit);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "StateNum"))
-                {
-                    translator.PushUnityMMOLocomotionStateState(L, UnityMMO.LocomotionState.State.StateNum);
-                }
-				else
-                {
-                    return LuaAPI.luaL_error(L, "invalid string for UnityMMO.LocomotionState.State!");
-                }
-            }
-			
-            else
-            {
-                return LuaAPI.luaL_error(L, "invalid lua type for UnityMMO.LocomotionState.State! Expect number or string, got + " + lua_type);
-            }
-
-            return 1;
-		}
-	}
-    
-    public class UnityMMONameboardDataResStateWrap
-    {
-		public static void __Register(RealStatePtr L)
-        {
-		    ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-		    Utils.BeginObjectRegister(typeof(UnityMMO.NameboardData.ResState), L, translator, 0, 0, 0, 0);
-			Utils.EndObjectRegister(typeof(UnityMMO.NameboardData.ResState), L, translator, null, null, null, null, null);
-			
-			Utils.BeginClassRegister(typeof(UnityMMO.NameboardData.ResState), L, null, 5, 0, 0);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "WaitLoad", UnityMMO.NameboardData.ResState.WaitLoad);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Loading", UnityMMO.NameboardData.ResState.Loading);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Loaded", UnityMMO.NameboardData.ResState.Loaded);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "DontLoad", UnityMMO.NameboardData.ResState.DontLoad);
-            
-			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
-            
-            Utils.EndClassRegister(typeof(UnityMMO.NameboardData.ResState), L, translator);
-        }
-		
-		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int __CastFrom(RealStatePtr L)
-		{
-			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			LuaTypes lua_type = LuaAPI.lua_type(L, 1);
-            if (lua_type == LuaTypes.LUA_TNUMBER)
-            {
-                translator.PushUnityMMONameboardDataResState(L, (UnityMMO.NameboardData.ResState)LuaAPI.xlua_tointeger(L, 1));
-            }
-			
-            else if(lua_type == LuaTypes.LUA_TSTRING)
-            {
-			    if (LuaAPI.xlua_is_eq_str(L, 1, "WaitLoad"))
-                {
-                    translator.PushUnityMMONameboardDataResState(L, UnityMMO.NameboardData.ResState.WaitLoad);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Loading"))
-                {
-                    translator.PushUnityMMONameboardDataResState(L, UnityMMO.NameboardData.ResState.Loading);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Loaded"))
-                {
-                    translator.PushUnityMMONameboardDataResState(L, UnityMMO.NameboardData.ResState.Loaded);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "DontLoad"))
-                {
-                    translator.PushUnityMMONameboardDataResState(L, UnityMMO.NameboardData.ResState.DontLoad);
-                }
-				else
-                {
-                    return LuaAPI.luaL_error(L, "invalid string for UnityMMO.NameboardData.ResState!");
-                }
-            }
-			
-            else
-            {
-                return LuaAPI.luaL_error(L, "invalid lua type for UnityMMO.NameboardData.ResState! Expect number or string, got + " + lua_type);
-            }
-
-            return 1;
-		}
-	}
-    
-    public class UnityMMOJumpStateStateWrap
-    {
-		public static void __Register(RealStatePtr L)
-        {
-		    ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-		    Utils.BeginObjectRegister(typeof(UnityMMO.JumpState.State), L, translator, 0, 0, 0, 0);
-			Utils.EndObjectRegister(typeof(UnityMMO.JumpState.State), L, translator, null, null, null, null, null);
-			
-			Utils.BeginClassRegister(typeof(UnityMMO.JumpState.State), L, null, 5, 0, 0);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "None", UnityMMO.JumpState.State.None);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "StartJump", UnityMMO.JumpState.State.StartJump);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "InAir", UnityMMO.JumpState.State.InAir);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "EndJump", UnityMMO.JumpState.State.EndJump);
-            
-			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
-            
-            Utils.EndClassRegister(typeof(UnityMMO.JumpState.State), L, translator);
-        }
-		
-		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int __CastFrom(RealStatePtr L)
-		{
-			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			LuaTypes lua_type = LuaAPI.lua_type(L, 1);
-            if (lua_type == LuaTypes.LUA_TNUMBER)
-            {
-                translator.PushUnityMMOJumpStateState(L, (UnityMMO.JumpState.State)LuaAPI.xlua_tointeger(L, 1));
+                translator.PushUnityEngineKeyCode(L, (UnityEngine.KeyCode)LuaAPI.xlua_tointeger(L, 1));
             }
 			
             else if(lua_type == LuaTypes.LUA_TSTRING)
             {
 			    if (LuaAPI.xlua_is_eq_str(L, 1, "None"))
                 {
-                    translator.PushUnityMMOJumpStateState(L, UnityMMO.JumpState.State.None);
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.None);
                 }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "StartJump"))
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Backspace"))
                 {
-                    translator.PushUnityMMOJumpStateState(L, UnityMMO.JumpState.State.StartJump);
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Backspace);
                 }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "InAir"))
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Delete"))
                 {
-                    translator.PushUnityMMOJumpStateState(L, UnityMMO.JumpState.State.InAir);
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Delete);
                 }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "EndJump"))
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Tab"))
                 {
-                    translator.PushUnityMMOJumpStateState(L, UnityMMO.JumpState.State.EndJump);
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Tab);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Clear"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Clear);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Return"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Return);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Pause"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Pause);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Escape"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Escape);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Space"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Space);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Keypad0"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Keypad0);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Keypad1"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Keypad1);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Keypad2"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Keypad2);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Keypad3"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Keypad3);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Keypad4"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Keypad4);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Keypad5"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Keypad5);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Keypad6"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Keypad6);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Keypad7"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Keypad7);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Keypad8"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Keypad8);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Keypad9"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Keypad9);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "KeypadPeriod"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.KeypadPeriod);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "KeypadDivide"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.KeypadDivide);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "KeypadMultiply"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.KeypadMultiply);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "KeypadMinus"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.KeypadMinus);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "KeypadPlus"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.KeypadPlus);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "KeypadEnter"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.KeypadEnter);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "KeypadEquals"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.KeypadEquals);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "UpArrow"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.UpArrow);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "DownArrow"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.DownArrow);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "RightArrow"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.RightArrow);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "LeftArrow"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.LeftArrow);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Insert"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Insert);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Home"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Home);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "End"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.End);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "PageUp"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.PageUp);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "PageDown"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.PageDown);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F1"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F1);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F2"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F2);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F3"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F3);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F4"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F4);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F5"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F5);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F6"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F6);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F7"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F7);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F8"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F8);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F9"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F9);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F10"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F10);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F11"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F11);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F12"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F12);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F13"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F13);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F14"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F14);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F15"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F15);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Alpha0"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Alpha0);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Alpha1"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Alpha1);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Alpha2"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Alpha2);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Alpha3"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Alpha3);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Alpha4"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Alpha4);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Alpha5"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Alpha5);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Alpha6"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Alpha6);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Alpha7"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Alpha7);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Alpha8"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Alpha8);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Alpha9"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Alpha9);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Exclaim"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Exclaim);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "DoubleQuote"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.DoubleQuote);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Hash"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Hash);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Dollar"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Dollar);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Percent"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Percent);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Ampersand"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Ampersand);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Quote"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Quote);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "LeftParen"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.LeftParen);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "RightParen"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.RightParen);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Asterisk"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Asterisk);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Plus"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Plus);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Comma"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Comma);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Minus"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Minus);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Period"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Period);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Slash"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Slash);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Colon"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Colon);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Semicolon"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Semicolon);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Less"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Less);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Equals"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Equals);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Greater"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Greater);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Question"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Question);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "At"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.At);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "LeftBracket"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.LeftBracket);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Backslash"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Backslash);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "RightBracket"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.RightBracket);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Caret"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Caret);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Underscore"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Underscore);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "BackQuote"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.BackQuote);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "A"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.A);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "B"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.B);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "C"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.C);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "D"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.D);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "E"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.E);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "F"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.F);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "G"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.G);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "H"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.H);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "I"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.I);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "J"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.J);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "K"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.K);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "L"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.L);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "M"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.M);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "N"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.N);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "O"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.O);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "P"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.P);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Q"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Q);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "R"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.R);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "S"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.S);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "T"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.T);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "U"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.U);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "V"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.V);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "W"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.W);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "X"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.X);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Y"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Y);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Z"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Z);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "LeftCurlyBracket"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.LeftCurlyBracket);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Pipe"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Pipe);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "RightCurlyBracket"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.RightCurlyBracket);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Tilde"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Tilde);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Numlock"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Numlock);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "CapsLock"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.CapsLock);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "ScrollLock"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.ScrollLock);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "RightShift"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.RightShift);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "LeftShift"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.LeftShift);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "RightControl"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.RightControl);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "LeftControl"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.LeftControl);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "RightAlt"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.RightAlt);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "LeftAlt"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.LeftAlt);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "LeftCommand"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.LeftCommand);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "LeftApple"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.LeftApple);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "LeftWindows"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.LeftWindows);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "RightCommand"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.RightCommand);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "RightApple"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.RightApple);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "RightWindows"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.RightWindows);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "AltGr"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.AltGr);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Help"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Help);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Print"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Print);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "SysReq"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.SysReq);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Break"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Break);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Menu"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Menu);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Mouse0"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Mouse0);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Mouse1"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Mouse1);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Mouse2"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Mouse2);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Mouse3"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Mouse3);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Mouse4"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Mouse4);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Mouse5"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Mouse5);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Mouse6"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Mouse6);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton0"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton0);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton1"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton1);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton2"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton2);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton3"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton3);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton4"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton4);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton5"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton5);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton6"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton6);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton7"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton7);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton8"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton8);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton9"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton9);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton10"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton10);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton11"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton11);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton12"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton12);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton13"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton13);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton14"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton14);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton15"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton15);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton16"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton16);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton17"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton17);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton18"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton18);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JoystickButton19"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.JoystickButton19);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button0"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button0);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button1"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button1);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button2"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button2);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button3"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button3);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button4"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button4);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button5"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button5);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button6"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button6);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button7"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button7);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button8"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button8);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button9"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button9);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button10"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button10);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button11"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button11);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button12"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button12);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button13"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button13);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button14"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button14);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button15"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button15);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button16"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button16);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button17"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button17);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button18"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button18);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick1Button19"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick1Button19);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button0"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button0);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button1"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button1);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button2"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button2);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button3"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button3);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button4"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button4);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button5"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button5);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button6"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button6);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button7"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button7);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button8"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button8);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button9"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button9);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button10"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button10);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button11"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button11);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button12"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button12);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button13"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button13);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button14"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button14);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button15"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button15);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button16"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button16);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button17"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button17);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button18"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button18);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick2Button19"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick2Button19);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button0"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button0);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button1"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button1);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button2"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button2);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button3"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button3);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button4"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button4);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button5"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button5);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button6"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button6);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button7"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button7);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button8"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button8);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button9"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button9);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button10"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button10);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button11"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button11);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button12"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button12);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button13"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button13);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button14"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button14);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button15"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button15);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button16"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button16);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button17"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button17);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button18"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button18);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick3Button19"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick3Button19);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button0"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button0);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button1"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button1);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button2"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button2);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button3"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button3);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button4"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button4);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button5"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button5);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button6"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button6);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button7"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button7);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button8"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button8);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button9"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button9);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button10"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button10);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button11"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button11);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button12"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button12);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button13"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button13);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button14"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button14);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button15"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button15);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button16"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button16);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button17"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button17);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button18"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button18);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick4Button19"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick4Button19);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button0"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button0);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button1"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button1);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button2"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button2);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button3"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button3);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button4"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button4);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button5"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button5);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button6"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button6);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button7"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button7);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button8"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button8);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button9"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button9);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button10"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button10);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button11"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button11);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button12"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button12);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button13"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button13);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button14"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button14);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button15"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button15);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button16"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button16);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button17"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button17);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button18"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button18);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick5Button19"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick5Button19);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button0"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button0);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button1"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button1);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button2"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button2);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button3"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button3);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button4"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button4);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button5"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button5);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button6"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button6);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button7"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button7);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button8"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button8);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button9"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button9);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button10"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button10);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button11"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button11);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button12"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button12);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button13"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button13);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button14"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button14);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button15"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button15);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button16"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button16);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button17"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button17);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button18"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button18);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick6Button19"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick6Button19);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button0"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button0);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button1"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button1);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button2"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button2);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button3"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button3);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button4"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button4);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button5"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button5);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button6"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button6);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button7"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button7);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button8"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button8);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button9"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button9);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button10"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button10);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button11"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button11);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button12"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button12);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button13"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button13);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button14"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button14);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button15"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button15);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button16"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button16);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button17"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button17);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button18"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button18);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick7Button19"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick7Button19);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button0"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button0);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button1"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button1);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button2"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button2);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button3"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button3);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button4"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button4);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button5"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button5);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button6"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button6);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button7"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button7);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button8"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button8);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button9"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button9);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button10"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button10);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button11"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button11);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button12"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button12);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button13"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button13);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button14"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button14);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button15"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button15);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button16"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button16);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button17"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button17);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button18"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button18);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Joystick8Button19"))
+                {
+                    translator.PushUnityEngineKeyCode(L, UnityEngine.KeyCode.Joystick8Button19);
                 }
 				else
                 {
-                    return LuaAPI.luaL_error(L, "invalid string for UnityMMO.JumpState.State!");
+                    return LuaAPI.luaL_error(L, "invalid string for UnityEngine.KeyCode!");
                 }
             }
 			
             else
             {
-                return LuaAPI.luaL_error(L, "invalid lua type for UnityMMO.JumpState.State! Expect number or string, got + " + lua_type);
+                return LuaAPI.luaL_error(L, "invalid lua type for UnityEngine.KeyCode! Expect number or string, got + " + lua_type);
             }
 
             return 1;
 		}
 	}
     
-    public class UnityMMOActionInfoTypeWrap
+    public class UnityMMOSceneInfoKeyWrap
     {
 		public static void __Register(RealStatePtr L)
         {
 		    ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-		    Utils.BeginObjectRegister(typeof(UnityMMO.ActionInfo.Type), L, translator, 0, 0, 0, 0);
-			Utils.EndObjectRegister(typeof(UnityMMO.ActionInfo.Type), L, translator, null, null, null, null, null);
+		    Utils.BeginObjectRegister(typeof(UnityMMO.SceneInfoKey), L, translator, 0, 0, 0, 0);
+			Utils.EndObjectRegister(typeof(UnityMMO.SceneInfoKey), L, translator, null, null, null, null, null);
 			
-			Utils.BeginClassRegister(typeof(UnityMMO.ActionInfo.Type), L, null, 6, 0, 0);
+			Utils.BeginClassRegister(typeof(UnityMMO.SceneInfoKey), L, null, 10, 0, 0);
             
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "None", UnityMMO.ActionInfo.Type.None);
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "None", UnityMMO.SceneInfoKey.None);
             
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Skill1", UnityMMO.ActionInfo.Type.Skill1);
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "EnterView", UnityMMO.SceneInfoKey.EnterView);
             
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Skill2", UnityMMO.ActionInfo.Type.Skill2);
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "LeaveView", UnityMMO.SceneInfoKey.LeaveView);
             
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Skill3", UnityMMO.ActionInfo.Type.Skill3);
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "PosChange", UnityMMO.SceneInfoKey.PosChange);
             
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Skill4", UnityMMO.ActionInfo.Type.Skill4);
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "TargetPos", UnityMMO.SceneInfoKey.TargetPos);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "JumpState", UnityMMO.SceneInfoKey.JumpState);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "HPChange", UnityMMO.SceneInfoKey.HPChange);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "NPCState", UnityMMO.SceneInfoKey.NPCState);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "SceneChange", UnityMMO.SceneInfoKey.SceneChange);
             
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
             
-            Utils.EndClassRegister(typeof(UnityMMO.ActionInfo.Type), L, translator);
+            Utils.EndClassRegister(typeof(UnityMMO.SceneInfoKey), L, translator);
         }
 		
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -750,65 +2276,89 @@ namespace XLua.CSObjectWrap
 			LuaTypes lua_type = LuaAPI.lua_type(L, 1);
             if (lua_type == LuaTypes.LUA_TNUMBER)
             {
-                translator.PushUnityMMOActionInfoType(L, (UnityMMO.ActionInfo.Type)LuaAPI.xlua_tointeger(L, 1));
+                translator.PushUnityMMOSceneInfoKey(L, (UnityMMO.SceneInfoKey)LuaAPI.xlua_tointeger(L, 1));
             }
 			
             else if(lua_type == LuaTypes.LUA_TSTRING)
             {
 			    if (LuaAPI.xlua_is_eq_str(L, 1, "None"))
                 {
-                    translator.PushUnityMMOActionInfoType(L, UnityMMO.ActionInfo.Type.None);
+                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.None);
                 }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Skill1"))
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "EnterView"))
                 {
-                    translator.PushUnityMMOActionInfoType(L, UnityMMO.ActionInfo.Type.Skill1);
+                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.EnterView);
                 }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Skill2"))
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "LeaveView"))
                 {
-                    translator.PushUnityMMOActionInfoType(L, UnityMMO.ActionInfo.Type.Skill2);
+                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.LeaveView);
                 }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Skill3"))
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "PosChange"))
                 {
-                    translator.PushUnityMMOActionInfoType(L, UnityMMO.ActionInfo.Type.Skill3);
+                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.PosChange);
                 }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Skill4"))
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "TargetPos"))
                 {
-                    translator.PushUnityMMOActionInfoType(L, UnityMMO.ActionInfo.Type.Skill4);
+                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.TargetPos);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "JumpState"))
+                {
+                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.JumpState);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "HPChange"))
+                {
+                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.HPChange);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "NPCState"))
+                {
+                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.NPCState);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "SceneChange"))
+                {
+                    translator.PushUnityMMOSceneInfoKey(L, UnityMMO.SceneInfoKey.SceneChange);
                 }
 				else
                 {
-                    return LuaAPI.luaL_error(L, "invalid string for UnityMMO.ActionInfo.Type!");
+                    return LuaAPI.luaL_error(L, "invalid string for UnityMMO.SceneInfoKey!");
                 }
             }
 			
             else
             {
-                return LuaAPI.luaL_error(L, "invalid lua type for UnityMMO.ActionInfo.Type! Expect number or string, got + " + lua_type);
+                return LuaAPI.luaL_error(L, "invalid lua type for UnityMMO.SceneInfoKey! Expect number or string, got + " + lua_type);
             }
 
             return 1;
 		}
 	}
     
-    public class UnityMMOLooksInfoStateWrap
+    public class UnityMMOSceneObjectTypeWrap
     {
 		public static void __Register(RealStatePtr L)
         {
 		    ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-		    Utils.BeginObjectRegister(typeof(UnityMMO.LooksInfo.State), L, translator, 0, 0, 0, 0);
-			Utils.EndObjectRegister(typeof(UnityMMO.LooksInfo.State), L, translator, null, null, null, null, null);
+		    Utils.BeginObjectRegister(typeof(UnityMMO.SceneObjectType), L, translator, 0, 0, 0, 0);
+			Utils.EndObjectRegister(typeof(UnityMMO.SceneObjectType), L, translator, null, null, null, null, null);
 			
-			Utils.BeginClassRegister(typeof(UnityMMO.LooksInfo.State), L, null, 4, 0, 0);
+			Utils.BeginClassRegister(typeof(UnityMMO.SceneObjectType), L, null, 8, 0, 0);
             
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "None", UnityMMO.LooksInfo.State.None);
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "None", UnityMMO.SceneObjectType.None);
             
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Loading", UnityMMO.LooksInfo.State.Loading);
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Role", UnityMMO.SceneObjectType.Role);
             
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Loaded", UnityMMO.LooksInfo.State.Loaded);
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Monster", UnityMMO.SceneObjectType.Monster);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "NPC", UnityMMO.SceneObjectType.NPC);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Collectable", UnityMMO.SceneObjectType.Collectable);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "DropItem", UnityMMO.SceneObjectType.DropItem);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Interactive", UnityMMO.SceneObjectType.Interactive);
             
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
             
-            Utils.EndClassRegister(typeof(UnityMMO.LooksInfo.State), L, translator);
+            Utils.EndClassRegister(typeof(UnityMMO.SceneObjectType), L, translator);
         }
 		
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -818,92 +2368,48 @@ namespace XLua.CSObjectWrap
 			LuaTypes lua_type = LuaAPI.lua_type(L, 1);
             if (lua_type == LuaTypes.LUA_TNUMBER)
             {
-                translator.PushUnityMMOLooksInfoState(L, (UnityMMO.LooksInfo.State)LuaAPI.xlua_tointeger(L, 1));
+                translator.PushUnityMMOSceneObjectType(L, (UnityMMO.SceneObjectType)LuaAPI.xlua_tointeger(L, 1));
             }
 			
             else if(lua_type == LuaTypes.LUA_TSTRING)
             {
 			    if (LuaAPI.xlua_is_eq_str(L, 1, "None"))
                 {
-                    translator.PushUnityMMOLooksInfoState(L, UnityMMO.LooksInfo.State.None);
+                    translator.PushUnityMMOSceneObjectType(L, UnityMMO.SceneObjectType.None);
                 }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Loading"))
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Role"))
                 {
-                    translator.PushUnityMMOLooksInfoState(L, UnityMMO.LooksInfo.State.Loading);
-                }
-				else if (LuaAPI.xlua_is_eq_str(L, 1, "Loaded"))
-                {
-                    translator.PushUnityMMOLooksInfoState(L, UnityMMO.LooksInfo.State.Loaded);
-                }
-				else
-                {
-                    return LuaAPI.luaL_error(L, "invalid string for UnityMMO.LooksInfo.State!");
-                }
-            }
-			
-            else
-            {
-                return LuaAPI.luaL_error(L, "invalid lua type for UnityMMO.LooksInfo.State! Expect number or string, got + " + lua_type);
-            }
-
-            return 1;
-		}
-	}
-    
-    public class UnityMMOSceneObjectDataTypeWrap
-    {
-		public static void __Register(RealStatePtr L)
-        {
-		    ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-		    Utils.BeginObjectRegister(typeof(UnityMMO.SceneObjectData.Type), L, translator, 0, 0, 0, 0);
-			Utils.EndObjectRegister(typeof(UnityMMO.SceneObjectData.Type), L, translator, null, null, null, null, null);
-			
-			Utils.BeginClassRegister(typeof(UnityMMO.SceneObjectData.Type), L, null, 4, 0, 0);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Role", UnityMMO.SceneObjectData.Type.Role);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Monster", UnityMMO.SceneObjectData.Type.Monster);
-            
-            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "NPC", UnityMMO.SceneObjectData.Type.NPC);
-            
-			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
-            
-            Utils.EndClassRegister(typeof(UnityMMO.SceneObjectData.Type), L, translator);
-        }
-		
-		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int __CastFrom(RealStatePtr L)
-		{
-			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			LuaTypes lua_type = LuaAPI.lua_type(L, 1);
-            if (lua_type == LuaTypes.LUA_TNUMBER)
-            {
-                translator.PushUnityMMOSceneObjectDataType(L, (UnityMMO.SceneObjectData.Type)LuaAPI.xlua_tointeger(L, 1));
-            }
-			
-            else if(lua_type == LuaTypes.LUA_TSTRING)
-            {
-			    if (LuaAPI.xlua_is_eq_str(L, 1, "Role"))
-                {
-                    translator.PushUnityMMOSceneObjectDataType(L, UnityMMO.SceneObjectData.Type.Role);
+                    translator.PushUnityMMOSceneObjectType(L, UnityMMO.SceneObjectType.Role);
                 }
 				else if (LuaAPI.xlua_is_eq_str(L, 1, "Monster"))
                 {
-                    translator.PushUnityMMOSceneObjectDataType(L, UnityMMO.SceneObjectData.Type.Monster);
+                    translator.PushUnityMMOSceneObjectType(L, UnityMMO.SceneObjectType.Monster);
                 }
 				else if (LuaAPI.xlua_is_eq_str(L, 1, "NPC"))
                 {
-                    translator.PushUnityMMOSceneObjectDataType(L, UnityMMO.SceneObjectData.Type.NPC);
+                    translator.PushUnityMMOSceneObjectType(L, UnityMMO.SceneObjectType.NPC);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Collectable"))
+                {
+                    translator.PushUnityMMOSceneObjectType(L, UnityMMO.SceneObjectType.Collectable);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "DropItem"))
+                {
+                    translator.PushUnityMMOSceneObjectType(L, UnityMMO.SceneObjectType.DropItem);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Interactive"))
+                {
+                    translator.PushUnityMMOSceneObjectType(L, UnityMMO.SceneObjectType.Interactive);
                 }
 				else
                 {
-                    return LuaAPI.luaL_error(L, "invalid string for UnityMMO.SceneObjectData.Type!");
+                    return LuaAPI.luaL_error(L, "invalid string for UnityMMO.SceneObjectType!");
                 }
             }
 			
             else
             {
-                return LuaAPI.luaL_error(L, "invalid lua type for UnityMMO.SceneObjectData.Type! Expect number or string, got + " + lua_type);
+                return LuaAPI.luaL_error(L, "invalid lua type for UnityMMO.SceneObjectType! Expect number or string, got + " + lua_type);
             }
 
             return 1;

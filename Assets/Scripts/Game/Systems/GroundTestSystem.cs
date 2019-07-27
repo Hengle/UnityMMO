@@ -3,11 +3,12 @@ using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 using UnityMMO;
+using UnityMMO.Component;
 
 [DisableAutoCreation]
 public class GroundTestSystem : BaseComponentSystem
 {
-    ComponentGroup Group;
+    EntityQuery Group;
 
     public GroundTestSystem(GameWorld gameWorld) : base(gameWorld)
     {
@@ -23,14 +24,13 @@ public class GroundTestSystem : BaseComponentSystem
     protected override void OnCreateManager()
     {
         base.OnCreateManager();
-        Group = GetComponentGroup(typeof(Transform), typeof(GroundInfo));
+        Group = GetEntityQuery(typeof(Transform), typeof(GroundInfo));
     }
 
     protected override void OnUpdate()
     {        
-        var posArray = Group.GetComponentArray<Transform>();
-        var groundArray = Group.GetComponentDataArray<GroundInfo>();
-        
+        var posArray = Group.ToComponentArray<Transform>();
+        var groundArray = Group.ToComponentDataArray<GroundInfo>(Allocator.TempJob);
         var startOffset = 1f;
         var distance = 3f;
 
@@ -61,6 +61,7 @@ public class GroundTestSystem : BaseComponentSystem
         
         rayCommands.Dispose();
         rayResults.Dispose();
+        groundArray.Dispose();
     }
     
     readonly int m_defaultLayer;

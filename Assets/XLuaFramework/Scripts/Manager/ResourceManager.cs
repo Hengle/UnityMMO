@@ -47,9 +47,15 @@ public class AssetBundleInfo {
         }
 
         // Load AssetBundleManifest.
-        public void Initialize(string manifestName, Action initOK) {
-            m_BaseDownloadingURL = AppConfig.GetRelativePath();
+        public void Initialize(string manifestName, Action<float> onUpdate, Action initOK) {
+            // m_BaseDownloadingURL = AppConfig.GetRelativePath();
+            m_BaseDownloadingURL = AppConfig.DataPath;
             Debug.Log("ResourceManager:Initialize() m_BaseDownloadingURL:" + m_BaseDownloadingURL);
+            if (AppConfig.DebugMode)
+            {
+                initOK();
+                return;
+            }
             LoadAsset<AssetBundleManifest>(manifestName, new string[] { "AssetBundleManifest" }, delegate(UObject[] objs) {
                 if (objs.Length > 0) {
                     m_AssetBundleManifest = objs[0] as AssetBundleManifest;
@@ -214,6 +220,7 @@ public class AssetBundleInfo {
                 yield return StartCoroutine(OnLoadAssetBundle(abName, typeof(T)));
 
                 bundleInfo = GetLoadedAssetBundle(abName);
+                Debug.Log("abName : "+abName);
                 if (bundleInfo == null) {
                     m_LoadRequests.Remove(abName);
                     Debug.LogError("OnLoadAsset failed!--->>>" + abName);
@@ -259,21 +266,27 @@ public class AssetBundleInfo {
             WWW download = null;
             if (type == typeof(AssetBundleManifest))
                 download = new WWW(url);
-            else {
-                string[] dependencies = m_AssetBundleManifest.GetAllDependencies(abName);
-                if (dependencies.Length > 0) {
-                    m_Dependencies.Add(abName, dependencies);
-                    for (int i = 0; i < dependencies.Length; i++) {
-                        string depName = dependencies[i];
-                        AssetBundleInfo bundleInfo = null;
-                        if (m_LoadedAssetBundles.TryGetValue(depName, out bundleInfo)) {
-                            bundleInfo.m_ReferencedCount++;
-                        } else if (!m_LoadRequests.ContainsKey(depName)) {
-                            yield return StartCoroutine(OnLoadAssetBundle(depName, type));
+            else 
+            {
+                Hash128 hash = new Hash128();
+                if (m_AssetBundleManifest != null)
+                {
+                    string[] dependencies = m_AssetBundleManifest.GetAllDependencies(abName);
+                    if (dependencies.Length > 0) {
+                        m_Dependencies.Add(abName, dependencies);
+                        for (int i = 0; i < dependencies.Length; i++) {
+                            string depName = dependencies[i];
+                            AssetBundleInfo bundleInfo = null;
+                            if (m_LoadedAssetBundles.TryGetValue(depName, out bundleInfo)) {
+                                bundleInfo.m_ReferencedCount++;
+                            } else if (!m_LoadRequests.ContainsKey(depName)) {
+                                yield return StartCoroutine(OnLoadAssetBundle(depName, type));
+                            }
                         }
                     }
+                    hash = m_AssetBundleManifest.GetAssetBundleHash(abName);
                 }
-                download = WWW.LoadFromCacheOrDownload(url, m_AssetBundleManifest.GetAssetBundleHash(abName), 0);
+                download = WWW.LoadFromCacheOrDownload(url, hash, 0);
             }
             yield return download;
 

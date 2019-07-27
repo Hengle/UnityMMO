@@ -11,65 +11,44 @@
 		<type fullname="XLuaFramework.ResourceManager" preserve="all"/>
 		<type fullname="XLuaFramework.UIHelper" preserve="all"/>
 		<type fullname="XLuaFramework.Util" preserve="all"/>
-		<type fullname="UnityMMO.GameConst" preserve="all"/>
 		<type fullname="UnityMMO.GameVariable" preserve="all"/>
-		<type fullname="UnityMMO.SceneInfoKey" preserve="all"/>
-		<type fullname="UnityMMO.SceneObjectType" preserve="all"/>
-		<type fullname="UnityMMO.SceneMgr" preserve="all"/>
 		<type fullname="CircleRawImage" preserve="all"/>
 		<type fullname="UnityMMO.UID" preserve="all"/>
-		<type fullname="UnityMMO.SceneObjectTypeData" preserve="all"/>
-		<type fullname="UnityMMO.TypeID" preserve="all"/>
-		<type fullname="UnityMMO.TimelineState" preserve="all"/>
-		<type fullname="UnityMMO.LocomotionState" preserve="all"/>
-		<type fullname="UnityMMO.ActionData" preserve="all"/>
-		<type fullname="UnityMMO.NameboardData" preserve="all"/>
-		<type fullname="UnityMMO.PosOffset" preserve="all"/>
-		<type fullname="UnityMMO.JumpState" preserve="all"/>
-		<type fullname="UnityMMO.ActionInfo" preserve="all"/>
-		<type fullname="UnityMMO.MoveSpeed" preserve="all"/>
-		<type fullname="UnityMMO.TargetPosition" preserve="all"/>
-		<type fullname="UnityMMO.PosSynchInfo" preserve="all"/>
-		<type fullname="UnityMMO.LooksInfo" preserve="all"/>
-		<type fullname="UnityMMO.GroundInfo" preserve="all"/>
-		<type fullname="UnityMMO.SprintInfo" preserve="all"/>
-		<type fullname="UnityMMO.Shot" preserve="all"/>
-		<type fullname="UnityMMO.Factions" preserve="all"/>
-		<type fullname="UnityMMO.ModifyHealthQueue" preserve="all"/>
-		<type fullname="UnityMMO.Health" preserve="all"/>
-		<type fullname="UnityMMO.SceneObjectData" preserve="all"/>
-		<type fullname="UnityMMO.Enemy" preserve="all"/>
-		<type fullname="UnityMMO.EnemyShootState" preserve="all"/>
-		<type fullname="UnityMMO.EnemySpawnCooldown" preserve="all"/>
-		<type fullname="UnityMMO.EnemySpawnSystemState" preserve="all"/>
+		<type fullname="UnityMMO.UIDProxy" preserve="all"/>
+		<type fullname="UnityMMO.GameConst" preserve="all"/>
+		<type fullname="UnityMMO.ResPath" preserve="all"/>
+		<type fullname="UnityMMO.ECSHelper" preserve="all"/>
 		<type fullname="UnityMMO.GameInput" preserve="all"/>
+		<type fullname="UnityMMO.MainWorld" preserve="all"/>
+		<type fullname="UnityMMO.AutoFight" preserve="all"/>
 		<type fullname="UnityMMO.MonsterMgr" preserve="all"/>
+		<type fullname="UnityMMO.NPCMgr" preserve="all"/>
 		<type fullname="UnityMMO.RoleInfo" preserve="all"/>
 		<type fullname="UnityMMO.RoleMgr" preserve="all"/>
 		<type fullname="UnityMMO.ResMgr" preserve="all"/>
-		<type fullname="UnityMMO.TimelineInfo" preserve="all"/>
-		<type fullname="UnityMMO.TimelineManager" preserve="all"/>
-		<type fullname="UnityMMO.MainWorld" preserve="all"/>
-		<type fullname="UnityMMO.NetMsgDispatcher" preserve="all"/>
 		<type fullname="UnityMMO.BornInfo" preserve="all"/>
 		<type fullname="UnityMMO.BornInfoData" preserve="all"/>
+		<type fullname="UnityMMO.RaycastSceneObjHit" preserve="all"/>
+		<type fullname="UnityMMO.SceneHelper" preserve="all"/>
 		<type fullname="UnityMMO.SceneInfo" preserve="all"/>
 		<type fullname="UnityMMO.BaseSceneInfoData" preserve="all"/>
-		<type fullname="UnityMMO.SynchFromNet" preserve="all"/>
+		<type fullname="UnityMMO.SceneInfoKey" preserve="all"/>
+		<type fullname="UnityMMO.SceneObjectType" preserve="all"/>
+		<type fullname="UnityMMO.SceneMgr" preserve="all"/>
+		<type fullname="UnityMMO.FindWayInfo" preserve="all"/>
+		<type fullname="UnityMMO.MoveQuery" preserve="all"/>
 		<type fullname="UnityMMO.PlayerInputSystem" preserve="all"/>
 		<type fullname="UnityMMO.TestManager" preserve="all"/>
+		<type fullname="UnityMMO.TimeEx" preserve="all"/>
+		<type fullname="UnityMMO.TimelineInfo" preserve="all"/>
+		<type fullname="UnityMMO.TimelineManager" preserve="all"/>
+		<type fullname="UnityMMO.NetMsgDispatcher" preserve="all"/>
+		<type fullname="UnityMMO.SynchFromNet" preserve="all"/>
 		<type fullname="UnityMMO.FightFlyWord" preserve="all"/>
+		<type fullname="UnityMMO.LoadingView" preserve="all"/>
 		<type fullname="UnityMMO.Nameboard" preserve="all"/>
 		<type fullname="UnityMMO.Timer" preserve="all"/>
 		<type fullname="UnityMMO.TimerExtensions" preserve="all"/>
-		<type fullname="UnityMMO.TimelineState+NewState" preserve="all"/>
-		<type fullname="UnityMMO.TimelineState+InterruptState" preserve="all"/>
-		<type fullname="UnityMMO.LocomotionState+State" preserve="all"/>
-		<type fullname="UnityMMO.NameboardData+ResState" preserve="all"/>
-		<type fullname="UnityMMO.JumpState+State" preserve="all"/>
-		<type fullname="UnityMMO.ActionInfo+Type" preserve="all"/>
-		<type fullname="UnityMMO.LooksInfo+State" preserve="all"/>
-		<type fullname="UnityMMO.SceneObjectData+Type" preserve="all"/>
 		<type fullname="UnityMMO.TimelineInfo+Event" preserve="all"/>
 		<type fullname="UnityMMO.Nameboard+ColorStyle" preserve="all"/>
 		
@@ -110,6 +89,10 @@
 		<type fullname="UnityEngine.LayerMask" preserve="all"/>
 		<type fullname="UnityEngine.Plane" preserve="all"/>
 		<type fullname="UnityEngine.RectTransform" preserve="all"/>
+		<type fullname="UnityEngine.Camera" preserve="all"/>
+		<type fullname="UnityEngine.Input" preserve="all"/>
+		<type fullname="UnityEngine.KeyCode" preserve="all"/>
+		<type fullname="UnityEngine.RenderTexture" preserve="all"/>
 		<type fullname="UnityEngine.Debug" preserve="all"/>
 		
 	</assembly>
@@ -141,6 +124,7 @@
 
 	<assembly fullname="UnityEngine.PhysicsModule">
 	    <type fullname="UnityEngine.RaycastHit" preserve="all"/>
+		<type fullname="UnityEngine.Physics" preserve="all"/>
 		
 	</assembly>
 
@@ -153,6 +137,7 @@
 
 	<assembly fullname="Unity.Entities.Hybrid">
 	    <type fullname="Unity.Entities.GameObjectEntity" preserve="all"/>
+		<type fullname="Unity.Entities.EntityManagerExtensions" preserve="all"/>
 		
 	</assembly>
 

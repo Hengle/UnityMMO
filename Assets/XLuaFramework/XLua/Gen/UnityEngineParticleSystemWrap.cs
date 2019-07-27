@@ -21,13 +21,12 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(UnityEngine.ParticleSystem);
-			Utils.BeginObjectRegister(type, L, translator, 0, 12, 31, 3);
+			Utils.BeginObjectRegister(type, L, translator, 0, 13, 31, 3);
 			
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetCustomParticleData", _m_SetCustomParticleData);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetCustomParticleData", _m_GetCustomParticleData);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "TriggerSubEmitter", _m_TriggerSubEmitter);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetParticles", _m_SetParticles);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetParticles", _m_GetParticles);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetCustomParticleData", _m_SetCustomParticleData);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetCustomParticleData", _m_GetCustomParticleData);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Simulate", _m_Simulate);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Play", _m_Play);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Pause", _m_Pause);
@@ -35,6 +34,8 @@ namespace XLua.CSObjectWrap
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Clear", _m_Clear);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "IsAlive", _m_IsAlive);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Emit", _m_Emit);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "TriggerSubEmitter", _m_TriggerSubEmitter);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ClearJob", _m_ClearJob);
 			
 			
 			Utils.RegisterFunc(L, Utils.GETTER_IDX, "isPlaying", _g_get_isPlaying);
@@ -117,122 +118,6 @@ namespace XLua.CSObjectWrap
         
         
         
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_SetCustomParticleData(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-                UnityEngine.ParticleSystem gen_to_be_invoked = (UnityEngine.ParticleSystem)translator.FastGetCSObj(L, 1);
-            
-            
-                
-                {
-                    System.Collections.Generic.List<UnityEngine.Vector4> _customData = (System.Collections.Generic.List<UnityEngine.Vector4>)translator.GetObject(L, 2, typeof(System.Collections.Generic.List<UnityEngine.Vector4>));
-                    UnityEngine.ParticleSystemCustomData _streamIndex;translator.Get(L, 3, out _streamIndex);
-                    
-                    gen_to_be_invoked.SetCustomParticleData( _customData, _streamIndex );
-                    
-                    
-                    
-                    return 0;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_GetCustomParticleData(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-                UnityEngine.ParticleSystem gen_to_be_invoked = (UnityEngine.ParticleSystem)translator.FastGetCSObj(L, 1);
-            
-            
-                
-                {
-                    System.Collections.Generic.List<UnityEngine.Vector4> _customData = (System.Collections.Generic.List<UnityEngine.Vector4>)translator.GetObject(L, 2, typeof(System.Collections.Generic.List<UnityEngine.Vector4>));
-                    UnityEngine.ParticleSystemCustomData _streamIndex;translator.Get(L, 3, out _streamIndex);
-                    
-                        int gen_ret = gen_to_be_invoked.GetCustomParticleData( _customData, _streamIndex );
-                        LuaAPI.xlua_pushinteger(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_TriggerSubEmitter(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-                UnityEngine.ParticleSystem gen_to_be_invoked = (UnityEngine.ParticleSystem)translator.FastGetCSObj(L, 1);
-            
-            
-			    int gen_param_count = LuaAPI.lua_gettop(L);
-            
-                if(gen_param_count == 2&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)) 
-                {
-                    int _subEmitterIndex = LuaAPI.xlua_tointeger(L, 2);
-                    
-                    gen_to_be_invoked.TriggerSubEmitter( _subEmitterIndex );
-                    
-                    
-                    
-                    return 0;
-                }
-                if(gen_param_count == 3&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& translator.Assignable<UnityEngine.ParticleSystem.Particle>(L, 3)) 
-                {
-                    int _subEmitterIndex = LuaAPI.xlua_tointeger(L, 2);
-                    UnityEngine.ParticleSystem.Particle _particle;translator.Get(L, 3, out _particle);
-                    
-                    gen_to_be_invoked.TriggerSubEmitter( _subEmitterIndex, ref _particle );
-                    translator.Push(L, _particle);
-                        translator.Update(L, 3, _particle);
-                        
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 3&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& translator.Assignable<System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle>>(L, 3)) 
-                {
-                    int _subEmitterIndex = LuaAPI.xlua_tointeger(L, 2);
-                    System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> _particles = (System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle>)translator.GetObject(L, 3, typeof(System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle>));
-                    
-                    gen_to_be_invoked.TriggerSubEmitter( _subEmitterIndex, _particles );
-                    
-                    
-                    
-                    return 0;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-            return LuaAPI.luaL_error(L, "invalid arguments to UnityEngine.ParticleSystem.TriggerSubEmitter!");
-            
-        }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _m_SetParticles(RealStatePtr L)
@@ -344,6 +229,65 @@ namespace XLua.CSObjectWrap
             }
             
             return LuaAPI.luaL_error(L, "invalid arguments to UnityEngine.ParticleSystem.GetParticles!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetCustomParticleData(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.ParticleSystem gen_to_be_invoked = (UnityEngine.ParticleSystem)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    System.Collections.Generic.List<UnityEngine.Vector4> _customData = (System.Collections.Generic.List<UnityEngine.Vector4>)translator.GetObject(L, 2, typeof(System.Collections.Generic.List<UnityEngine.Vector4>));
+                    UnityEngine.ParticleSystemCustomData _streamIndex;translator.Get(L, 3, out _streamIndex);
+                    
+                    gen_to_be_invoked.SetCustomParticleData( _customData, _streamIndex );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_GetCustomParticleData(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.ParticleSystem gen_to_be_invoked = (UnityEngine.ParticleSystem)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    System.Collections.Generic.List<UnityEngine.Vector4> _customData = (System.Collections.Generic.List<UnityEngine.Vector4>)translator.GetObject(L, 2, typeof(System.Collections.Generic.List<UnityEngine.Vector4>));
+                    UnityEngine.ParticleSystemCustomData _streamIndex;translator.Get(L, 3, out _streamIndex);
+                    
+                        int gen_ret = gen_to_be_invoked.GetCustomParticleData( _customData, _streamIndex );
+                        LuaAPI.xlua_pushinteger(L, gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
             
         }
         
@@ -677,6 +621,63 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_TriggerSubEmitter(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.ParticleSystem gen_to_be_invoked = (UnityEngine.ParticleSystem)translator.FastGetCSObj(L, 1);
+            
+            
+			    int gen_param_count = LuaAPI.lua_gettop(L);
+            
+                if(gen_param_count == 2&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)) 
+                {
+                    int _subEmitterIndex = LuaAPI.xlua_tointeger(L, 2);
+                    
+                    gen_to_be_invoked.TriggerSubEmitter( _subEmitterIndex );
+                    
+                    
+                    
+                    return 0;
+                }
+                if(gen_param_count == 3&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& translator.Assignable<UnityEngine.ParticleSystem.Particle>(L, 3)) 
+                {
+                    int _subEmitterIndex = LuaAPI.xlua_tointeger(L, 2);
+                    UnityEngine.ParticleSystem.Particle _particle;translator.Get(L, 3, out _particle);
+                    
+                    gen_to_be_invoked.TriggerSubEmitter( _subEmitterIndex, ref _particle );
+                    translator.Push(L, _particle);
+                        translator.Update(L, 3, _particle);
+                        
+                    
+                    
+                    
+                    return 1;
+                }
+                if(gen_param_count == 3&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& translator.Assignable<System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle>>(L, 3)) 
+                {
+                    int _subEmitterIndex = LuaAPI.xlua_tointeger(L, 2);
+                    System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> _particles = (System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle>)translator.GetObject(L, 3, typeof(System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle>));
+                    
+                    gen_to_be_invoked.TriggerSubEmitter( _subEmitterIndex, _particles );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+            return LuaAPI.luaL_error(L, "invalid arguments to UnityEngine.ParticleSystem.TriggerSubEmitter!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _m_ResetPreMappedBufferMemory_xlua_st_(RealStatePtr L)
         {
 		    try {
@@ -687,6 +688,33 @@ namespace XLua.CSObjectWrap
                 {
                     
                     UnityEngine.ParticleSystem.ResetPreMappedBufferMemory(  );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_ClearJob(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.ParticleSystem gen_to_be_invoked = (UnityEngine.ParticleSystem)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    
+                    gen_to_be_invoked.ClearJob(  );
                     
                     
                     

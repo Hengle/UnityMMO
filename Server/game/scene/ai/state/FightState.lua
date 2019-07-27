@@ -9,7 +9,7 @@ local SubState = {
 	GoBack = 3,--回到巡逻点
 }
 function FightState:OnInit(  )
-	print('Cat:FightState.lua[OnInit]')
+	-- print('Cat:FightState.lua[OnInit]')
 	self.aoi_handle = self.blackboard:GetVariable("aoi_handle")
 	self.aoi_area = self.blackboard:GetVariable("aoi_area")
 	self.entity = self.blackboard:GetVariable("entity")
@@ -19,7 +19,7 @@ function FightState:OnInit(  )
 	self.monsterMgr = self.sceneMgr.monsterMgr
 	self.cfg = self.blackboard:GetVariable("cfg")
 
-	self.uid = self.entityMgr:GetComponentData(self.entity, "UMO.UID").value
+	self.uid = self.entityMgr:GetComponentData(self.entity, "UMO.UID")
 end
 
 function FightState:OnEnter(  )
@@ -44,7 +44,7 @@ function FightState:OnUpdate( )
 				if isOverHuntDis then
 					self.targetEnemyEntity = nil
 					self.blackboard:SetVariable("targetEnemyEntity", nil)
-					self.fsm:TriggerState("Patrol")
+					self.fsm:TriggerState("PatrolState")
 				elseif isMaxOk and isMinOk then
 					--离敌人距离刚好，发动攻击
 					self:Attack()
@@ -57,7 +57,7 @@ function FightState:OnUpdate( )
 		else
 			--没有攻击目标了，回去耕田吧
 			-- self:SetSubState(SubState.GoBack)
-			self.fsm:TriggerState("Patrol")
+			self.fsm:TriggerState("PatrolState")
 		end
 	-- elseif self.sub_state == SubState.Fighting then
 		--Cat_Todo : 攻击时间间隔需要加上其触发的技能等信息判断
@@ -102,7 +102,7 @@ function FightState:Attack(  )
 		target_pos_y = math.floor(enemyPos.y),
 		target_pos_z = math.floor(enemyPos.z),
 		-- direction = math.floor(angle*100),
-		uid_defenders_map = {[defender_uid.value]=true},	
+		uid_defenders_map = {[defender_uid]=true},	
 	})
 	
 end

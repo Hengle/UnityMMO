@@ -3,6 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
+using UnityMMO.Component;
 
 namespace UnityMMO
 {
@@ -26,7 +27,7 @@ public class MonsterMgr
     public void Init(GameWorld world)
 	{
         m_world = world;
-        container = GameObject.Find("SceneObjContainer").transform;
+        container = GameObject.Find("SceneObjContainer/MonsterContainer").transform;
 	}
 
     public void OnDestroy()
@@ -34,30 +35,33 @@ public class MonsterMgr
 		Instance = null;
 	}
 
-    public Entity AddMonster(long uid, long typeID, Vector3 pos, Vector3 targetPos)
+    public Entity AddMonster(long uid, long typeID, Vector3 pos, Vector3 targetPos, float curHp, float maxHp)
 	{
         GameObjectEntity monsterGameOE = m_world.Spawn<GameObjectEntity>(ResMgr.GetInstance().GetPrefab("Monster"));
         monsterGameOE.name = ConfigMonster.GetInstance().GetName(typeID);
         monsterGameOE.transform.SetParent(container);
+        // Debug.Log("pos : "+pos.x+" "+pos.y+" "+pos.z);
         monsterGameOE.transform.localPosition = pos;
         Entity monster = monsterGameOE.Entity;
-        InitMonster(monster, uid, typeID, pos, targetPos);
+        monsterGameOE.GetComponent<UIDProxy>().Value = new UID{Value=uid};
+        InitMonster(monster, uid, typeID, pos, targetPos, curHp, maxHp);
         return monster;
 	}
 
-    private void InitMonster(Entity monster, long uid, long typeID, Vector3 pos, Vector3 targetPos)
+    private void InitMonster(Entity monster, long uid, long typeID, Vector3 pos, Vector3 targetPos, float curHp, float maxHp)
     {
         EntityManager.AddComponentData(monster, new MoveSpeed {Value = ConfigMonster.GetInstance().GetMoveSpeed(typeID)});
         EntityManager.AddComponentData(monster, new TargetPosition {Value = targetPos});
-        EntityManager.AddComponentData(monster, new LocomotionState {LocoState = LocomotionState.State.Idle});
+        EntityManager.AddComponentData(monster, new LocomotionState {LocoState = curHp>0.001f?LocomotionState.State.Idle:LocomotionState.State.Dead, StartTime=0});
         EntityManager.AddComponentData(monster, new LooksInfo {CurState=LooksInfo.State.None, LooksEntity=Entity.Null});
-        EntityManager.AddComponentData(monster, new UID {Value=uid});
+        // EntityManager.SetComponentData(monster, new UID {Value=uid});
         EntityManager.AddComponentData(monster, new TypeID {Value=typeID});
         EntityManager.AddComponentData(monster, ActionData.Empty);
         EntityManager.AddComponentData(monster, new SceneObjectTypeData {Value=SceneObjectType.Monster});
         EntityManager.AddComponentData(monster, new NameboardData {UIResState=NameboardData.ResState.WaitLoad});
         // EntityManager.AddComponentData(monster, new JumpState {JumpStatus=JumpState.State.None, JumpCount=0, OriginYPos=0, AscentHeight=0});
         EntityManager.AddComponentData(monster, new PosOffset {Value = float3.zero});
+        EntityManager.AddComponentData(monster, new HealthStateData {CurHp=curHp, MaxHp=maxHp});
         EntityManager.AddComponentData(monster, new TimelineState {NewStatus=TimelineState.NewState.Allow, InterruptStatus=TimelineState.InterruptState.Allow});
         
         MoveQuery rmq = EntityManager.GetComponentObject<MoveQuery>(monster);
@@ -68,10 +72,16 @@ public class MonsterMgr
 
     private void CreateLooks(Entity ownerEntity, long typeID)
     {
-        var resPath = GameConst.GetMonsterResPath(typeID);
-        string bodyPath = resPath+"/model_clothe_"+typeID+".prefab";
+        var resPath = ResPath.GetMonsterResPath(typeID);
+        var bodyResID = ConfigMonster.GetInstance().GetBodyResID(typeID);
+        if (bodyResID == 0)
+        {
+            Debug.LogError("monster body res id 0, typeID:"+typeID);
+            return;
+        }
+        string bodyPath = resPath+"/model_clothe_"+bodyResID+".prefab";
         XLuaFramework.ResourceManager.GetInstance().LoadAsset<GameObject>(bodyPath, delegate(UnityEngine.Object[] objs) {
-            if (objs!=null && objs.Length>0)
+            if (objs!=null && objs.Length>0 && EntityManager.Exists(ownerEntity))
             {
                 GameObject bodyObj = objs[0] as GameObject;
                 GameObjectEntity bodyOE = m_world.Spawn<GameObjectEntity>(bodyObj);

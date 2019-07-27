@@ -1,3 +1,5 @@
+using System;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -60,9 +62,9 @@ public class SkillManager
         string assetPath;
         int scene_obj_type = GetSceneObjTypeBySkillID(skillID);
         if (scene_obj_type == (int)SceneObjectType.Role)
-            assetPath = GameConst.GetRoleSkillResPath(GetCareerBySkillID(skillID), skillID);
+            assetPath = ResPath.GetRoleSkillResPath(skillID);
         else if(scene_obj_type == (int)SceneObjectType.Monster)
-            assetPath = GameConst.GetMonsterSkillResPath(skillID);
+            assetPath = ResPath.GetMonsterSkillResPath(skillID);
         else
             assetPath = "";
         return assetPath;
@@ -72,7 +74,7 @@ public class SkillManager
     {
         int scene_obj_type = GetSceneObjTypeBySkillID(skillID);
         if (scene_obj_type == (int)SceneObjectType.Role)
-            return (int)math.floor((skillID%10000)/1000);
+            return (int)math.floor((skillID%100000)/10000);
         return 1;
     }
 
@@ -85,6 +87,31 @@ public class SkillManager
     {
         //技能id：十万位是类型1角色，2怪物，3NPC，万位为职业，个十百位随便用
         return 100000+career*10000+comboIndex;
+    }
+
+    public void CastSkill(int skillIndex=-1)
+    {
+        var roleGameOE = RoleMgr.GetInstance().GetMainRole();
+        var roleInfo = roleGameOE.GetComponent<RoleInfo>();
+        var skillID = SkillManager.GetInstance().GetSkillIDByIndex(skillIndex);
+        
+        string assetPath = ResPath.GetRoleSkillResPath(skillID);
+        bool isNormalAttack = skillIndex == -1;//普通攻击
+        if (!isNormalAttack)
+            SkillManager.GetInstance().ResetCombo();//使用非普攻技能时就重置连击索引
+        var uid = SceneMgr.Instance.EntityManager.GetComponentData<UID>(roleGameOE.Entity);
+        Action<TimelineInfo.Event> afterAdd = null;
+        if (isNormalAttack)
+        {
+            //普攻的话增加连击索引
+            afterAdd = (TimelineInfo.Event e)=>
+            {
+                if (e == TimelineInfo.Event.AfterAdd)
+                    SkillManager.GetInstance().IncreaseCombo();
+            };
+        }
+        var timelineInfo = new TimelineInfo{ResPath=assetPath, Owner=roleGameOE.Entity,  StateChange=afterAdd};
+        TimelineManager.GetInstance().AddTimeline(uid.Value, timelineInfo, SceneMgr.Instance.EntityManager);
     }
 
     private SkillManager()
@@ -105,8 +132,8 @@ public struct SkillSpawnRequest : IComponentData
     public static void Create(EntityCommandBuffer commandBuffer, long UID, int SkillID)
     {
         var data = new SkillSpawnRequest(UID, SkillID);
-        commandBuffer.CreateEntity();
-        commandBuffer.AddComponent(data);
+        var entity = commandBuffer.CreateEntity();
+        commandBuffer.AddComponent(entity, data);
     }
 }
 
@@ -116,22 +143,25 @@ public class SkillSpawnSystem : BaseComponentSystem
 {
     public SkillSpawnSystem(GameWorld world) : base(world) {}
 
-    ComponentGroup RequestGroup;
+    EntityQuery RequestGroup;
 
     protected override void OnCreateManager()
     {
         base.OnCreateManager();
-        RequestGroup = GetComponentGroup(typeof(SkillSpawnRequest));
+        RequestGroup = GetEntityQuery(typeof(SkillSpawnRequest));
     }
 
     protected override void OnUpdate()
     {
         float dt = Time.deltaTime;
-        var requestArray = RequestGroup.GetComponentDataArray<SkillSpawnRequest>();
+        var requestArray = RequestGroup.ToComponentDataArray<SkillSpawnRequest>(Allocator.TempJob);
         if (requestArray.Length == 0)
+        {
+            requestArray.Dispose();
             return;
+        }
 
-        var requestEntityArray = RequestGroup.GetEntityArray();
+        var requestEntityArray = RequestGroup.ToEntityArray(Allocator.TempJob);
         
         // Copy requests as spawning will invalidate Group
         var requests = new SkillSpawnRequest[requestArray.Length];
@@ -143,7 +173,8 @@ public class SkillSpawnSystem : BaseComponentSystem
 
         for(var i = 0; i < requests.Length; i++)
         {
-            
         }
+        requestEntityArray.Dispose();
+        requestArray.Dispose();
     }
 }

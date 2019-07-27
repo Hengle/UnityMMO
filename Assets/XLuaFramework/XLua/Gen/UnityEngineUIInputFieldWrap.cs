@@ -21,8 +21,9 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(UnityEngine.UI.InputField);
-			Utils.BeginObjectRegister(type, L, translator, 0, 20, 34, 23);
+			Utils.BeginObjectRegister(type, L, translator, 0, 21, 34, 23);
 			
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetTextWithoutNotify", _m_SetTextWithoutNotify);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "MoveTextEnd", _m_MoveTextEnd);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "MoveTextStart", _m_MoveTextStart);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnBeginDrag", _m_OnBeginDrag);
@@ -130,6 +131,34 @@ namespace XLua.CSObjectWrap
         
         
         
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetTextWithoutNotify(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.UI.InputField gen_to_be_invoked = (UnityEngine.UI.InputField)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    string _input = LuaAPI.lua_tostring(L, 2);
+                    
+                    gen_to_be_invoked.SetTextWithoutNotify( _input );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _m_MoveTextEnd(RealStatePtr L)

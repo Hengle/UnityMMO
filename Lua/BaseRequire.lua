@@ -1,16 +1,4 @@
 --下面基础组件间的require有依赖顺序相关,闲着没事也别换顺序,要加新的往文件尾加就好
-Util = CS.XLuaFramework.Util
-AppConfig = CS.XLuaFramework.AppConfig
-ResMgr = CS.XLuaFramework.ResourceManager.GetInstance()
-NetMgr = CS.XLuaFramework.NetworkManager.GetInstance()
-UIHelper = CS.XLuaFramework.UIHelper
-cookiesManager = CS.XLuaFramework.CookiesManager.GetInstance()
-GameObject = CS.UnityEngine.GameObject
-GameConst = CS.UnityMMO.GameConst
-GameVariable = CS.UnityMMO.GameVariable
-SceneMgr = CS.UnityMMO.SceneMgr
-TextAnchor = CS.UnityEngine.TextAnchor
--- SkillMgr = CS.UnityMMO.SkillManager
 
 Mathf		= require "Common.UnityEngine.Mathf"
 Vector2		= require "Common.UnityEngine.Vector2"
@@ -35,6 +23,7 @@ require("Common.Util.event")
 require("Common.Util.Timer")
 UpdateManager = require "Common.UpdateManager"
 require "Common.GlobalEventSystem"
+ECS = require "Game.Common.ECS"
 
 require("Game.Common.Action.ActionNodeWrapper")
 require("Game.Common.Action.ActionTweenFunction")
@@ -54,5 +43,5 @@ require("Game.Common.UIGlobal")
 require("Tools.CookieWrapper")
 
 
-require("Game.Common.GameResPath")
+require("Game.Common.ResPath")
 

@@ -1,11 +1,14 @@
 
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
+using UnityMMO;
+using UnityMMO.Component;
 
 [DisableAutoCreation]
 public class HandleDamage : BaseComponentSystem
 {
-    private ComponentGroup Group;
+    private EntityQuery Group;
     
     public HandleDamage(GameWorld gameWorld) : base(gameWorld)
     {}
@@ -13,19 +16,19 @@ public class HandleDamage : BaseComponentSystem
     protected override void OnCreateManager()
     {
         base.OnCreateManager();
-        Group = GetComponentGroup(typeof(HealthStateData));
+        Group = GetEntityQuery(typeof(HealthStateData));
     }
     
     protected override void OnUpdate()
     {
-        var entityArray = Group.GetEntityArray();
-        var healthStateArray = Group.GetComponentDataArray<HealthStateData>();
-        // var collOwnerArray = Group.GetComponentDataArray<HitCollisionOwnerData>();
+        var entityArray = Group.ToEntityArray(Allocator.TempJob);
+        var healthStateArray = Group.ToComponentDataArray<HealthStateData>(Allocator.TempJob);
+        // var collOwnerArray = Group.ToComponentDataArray<HitCollisionOwnerData>();
         for (int i = 0; i < entityArray.Length; i++)
         {
             var healthState = healthStateArray[i];
             
-            if (healthState.health <= 0)
+            if (healthState.CurHp <= 0)
                 continue;
 
             var entity = entityArray[i]; 
@@ -46,7 +49,8 @@ public class HandleDamage : BaseComponentSystem
                 var damageEvent = damageBuffer[eventIndex];
     
                 //GameDebug.Log(string.Format("ApplyDamage. Target:{0} Instigator:{1} Dam:{2}", healthState.name, m_world.GetGameObjectFromEntity(damageEvent.instigator), damageEvent.damage ));
-                healthState.ApplyDamage(ref damageEvent, (int)Time.time);
+                
+                // healthState.ApplyDamage(ref damageEvent, (int)Time.time);
                 EntityManager.SetComponentData(entity,healthState);
                 
                 impulseVec += damageEvent.direction * damageEvent.impulse;
@@ -94,5 +98,7 @@ public class HandleDamage : BaseComponentSystem
                 // }
             }
         }
+        entityArray.Dispose();
+        healthStateArray.Dispose();
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using Cinemachine;
-using Cinemachine.Timeline;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -8,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using UnityMMO;
+using UnityMMO.Component;
 using XLuaFramework;
 
 public struct TimelineSpawnRequest : IComponentData
@@ -75,6 +75,11 @@ public class TimelineSpawnSystem : BaseComponentSystem
             var animator = EntityManager.GetComponentObject<Animator>(looksEntity);
             foreach (var at in playerDirector.playableAsset.outputs)
             {
+                if (at.sourceObject == null)
+                {
+                    // Debug.Log("detect nil track in : "+timelineInfo.ResPath);
+                    continue;
+                }
                 if (at.sourceObject.GetType() == typeof(AnimationTrack))
                 {
                     playerDirector.SetGenericBinding(at.sourceObject, animator);
@@ -84,7 +89,6 @@ public class TimelineSpawnSystem : BaseComponentSystem
                     CinemachineBrain mainCamBrian = SceneMgr.Instance.MainCameraTrans.GetComponent<Cinemachine.CinemachineBrain>();//将主摄像机传入
                     playerDirector.SetGenericBinding(at.sourceObject, mainCamBrian);
                     CinemachineTrack cinemachineTrack = (CinemachineTrack)at.sourceObject;
-                    int idx = 0;
                     try
                     {
                         foreach (var c in cinemachineTrack.GetClips())

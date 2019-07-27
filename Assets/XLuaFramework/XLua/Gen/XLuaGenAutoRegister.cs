@@ -46,19 +46,7 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(XLuaFramework.Util), XLuaFrameworkUtilWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(UnityMMO.GameConst), UnityMMOGameConstWrap.__Register);
-        
-        
             translator.DelayWrapLoader(typeof(UnityMMO.GameVariable), UnityMMOGameVariableWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.SceneInfoKey), UnityMMOSceneInfoKeyWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.SceneObjectType), UnityMMOSceneObjectTypeWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.SceneMgr), UnityMMOSceneMgrWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(object), SystemObjectWrap.__Register);
@@ -174,10 +162,6 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityEngine.UI.ScrollRect), UnityEngineUIScrollRectWrap.__Register);
         
-        }
-        
-        static void wrapInit1(LuaEnv luaenv, ObjectTranslator translator)
-        {
         
             translator.DelayWrapLoader(typeof(UnityEngine.UI.Image), UnityEngineUIImageWrap.__Register);
         
@@ -186,6 +170,25 @@ namespace XLua.CSObjectWrap
         
         
             translator.DelayWrapLoader(typeof(CircleRawImage), CircleRawImageWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityEngine.Camera), UnityEngineCameraWrap.__Register);
+        
+        }
+        
+        static void wrapInit1(LuaEnv luaenv, ObjectTranslator translator)
+        {
+        
+            translator.DelayWrapLoader(typeof(UnityEngine.Physics), UnityEnginePhysicsWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityEngine.Input), UnityEngineInputWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityEngine.KeyCode), UnityEngineKeyCodeWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityEngine.RenderTexture), UnityEngineRenderTextureWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityEngine.Debug), UnityEngineDebugWrap.__Register);
@@ -200,6 +203,9 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(Unity.Entities.GameObjectEntity), UnityEntitiesGameObjectEntityWrap.__Register);
         
         
+            translator.DelayWrapLoader(typeof(Unity.Entities.EntityManagerExtensions), UnityEntitiesEntityManagerExtensionsWrap.__Register);
+        
+        
             translator.DelayWrapLoader(typeof(Unity.Entities.EntityManager), UnityEntitiesEntityManagerWrap.__Register);
         
         
@@ -212,82 +218,31 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(UnityMMO.UID), UnityMMOUIDWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(UnityMMO.SceneObjectTypeData), UnityMMOSceneObjectTypeDataWrap.__Register);
+            translator.DelayWrapLoader(typeof(UnityMMO.UIDProxy), UnityMMOUIDProxyWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(UnityMMO.TypeID), UnityMMOTypeIDWrap.__Register);
+            translator.DelayWrapLoader(typeof(UnityMMO.GameConst), UnityMMOGameConstWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(UnityMMO.TimelineState), UnityMMOTimelineStateWrap.__Register);
+            translator.DelayWrapLoader(typeof(UnityMMO.ResPath), UnityMMOResPathWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(UnityMMO.LocomotionState), UnityMMOLocomotionStateWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.ActionData), UnityMMOActionDataWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.NameboardData), UnityMMONameboardDataWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.PosOffset), UnityMMOPosOffsetWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.JumpState), UnityMMOJumpStateWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.ActionInfo), UnityMMOActionInfoWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.MoveSpeed), UnityMMOMoveSpeedWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.TargetPosition), UnityMMOTargetPositionWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.PosSynchInfo), UnityMMOPosSynchInfoWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.LooksInfo), UnityMMOLooksInfoWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.GroundInfo), UnityMMOGroundInfoWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.SprintInfo), UnityMMOSprintInfoWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.Shot), UnityMMOShotWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.Factions), UnityMMOFactionsWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.ModifyHealthQueue), UnityMMOModifyHealthQueueWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.Health), UnityMMOHealthWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.SceneObjectData), UnityMMOSceneObjectDataWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.Enemy), UnityMMOEnemyWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.EnemyShootState), UnityMMOEnemyShootStateWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.EnemySpawnCooldown), UnityMMOEnemySpawnCooldownWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.EnemySpawnSystemState), UnityMMOEnemySpawnSystemStateWrap.__Register);
+            translator.DelayWrapLoader(typeof(UnityMMO.ECSHelper), UnityMMOECSHelperWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityMMO.GameInput), UnityMMOGameInputWrap.__Register);
         
         
+            translator.DelayWrapLoader(typeof(UnityMMO.MainWorld), UnityMMOMainWorldWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityMMO.AutoFight), UnityMMOAutoFightWrap.__Register);
+        
+        
             translator.DelayWrapLoader(typeof(UnityMMO.MonsterMgr), UnityMMOMonsterMgrWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityMMO.NPCMgr), UnityMMONPCMgrWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityMMO.RoleInfo), UnityMMORoleInfoWrap.__Register);
@@ -299,22 +254,16 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(UnityMMO.ResMgr), UnityMMOResMgrWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(UnityMMO.TimelineInfo), UnityMMOTimelineInfoWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.TimelineManager), UnityMMOTimelineManagerWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.MainWorld), UnityMMOMainWorldWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.NetMsgDispatcher), UnityMMONetMsgDispatcherWrap.__Register);
-        
-        
             translator.DelayWrapLoader(typeof(UnityMMO.BornInfo), UnityMMOBornInfoWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityMMO.BornInfoData), UnityMMOBornInfoDataWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityMMO.RaycastSceneObjHit), UnityMMORaycastSceneObjHitWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityMMO.SceneHelper), UnityMMOSceneHelperWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityMMO.SceneInfo), UnityMMOSceneInfoWrap.__Register);
@@ -323,7 +272,19 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(UnityMMO.BaseSceneInfoData), UnityMMOBaseSceneInfoDataWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(UnityMMO.SynchFromNet), UnityMMOSynchFromNetWrap.__Register);
+            translator.DelayWrapLoader(typeof(UnityMMO.SceneInfoKey), UnityMMOSceneInfoKeyWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityMMO.SceneObjectType), UnityMMOSceneObjectTypeWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityMMO.SceneMgr), UnityMMOSceneMgrWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityMMO.FindWayInfo), UnityMMOFindWayInfoWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityMMO.MoveQuery), UnityMMOMoveQueryWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityMMO.PlayerInputSystem), UnityMMOPlayerInputSystemWrap.__Register);
@@ -331,12 +292,26 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityMMO.TestManager), UnityMMOTestManagerWrap.__Register);
         
-        }
         
-        static void wrapInit2(LuaEnv luaenv, ObjectTranslator translator)
-        {
+            translator.DelayWrapLoader(typeof(UnityMMO.TimeEx), UnityMMOTimeExWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityMMO.TimelineInfo), UnityMMOTimelineInfoWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityMMO.TimelineManager), UnityMMOTimelineManagerWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityMMO.NetMsgDispatcher), UnityMMONetMsgDispatcherWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityMMO.SynchFromNet), UnityMMOSynchFromNetWrap.__Register);
+        
         
             translator.DelayWrapLoader(typeof(UnityMMO.FightFlyWord), UnityMMOFightFlyWordWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityMMO.LoadingView), UnityMMOLoadingViewWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityMMO.Nameboard), UnityMMONameboardWrap.__Register);
@@ -346,30 +321,6 @@ namespace XLua.CSObjectWrap
         
         
             translator.DelayWrapLoader(typeof(UnityMMO.TimerExtensions), UnityMMOTimerExtensionsWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.TimelineState.NewState), UnityMMOTimelineStateNewStateWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.TimelineState.InterruptState), UnityMMOTimelineStateInterruptStateWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.LocomotionState.State), UnityMMOLocomotionStateStateWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.NameboardData.ResState), UnityMMONameboardDataResStateWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.JumpState.State), UnityMMOJumpStateStateWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.ActionInfo.Type), UnityMMOActionInfoTypeWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.LooksInfo.State), UnityMMOLooksInfoStateWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityMMO.SceneObjectData.Type), UnityMMOSceneObjectDataTypeWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityMMO.TimelineInfo.Event), UnityMMOTimelineInfoEventWrap.__Register);
@@ -387,8 +338,6 @@ namespace XLua.CSObjectWrap
             wrapInit0(luaenv, translator);
             
             wrapInit1(luaenv, translator);
-            
-            wrapInit2(luaenv, translator);
             
             
             translator.AddInterfaceBridgeCreator(typeof(System.Collections.IEnumerator), SystemCollectionsIEnumeratorBridge.__Create);

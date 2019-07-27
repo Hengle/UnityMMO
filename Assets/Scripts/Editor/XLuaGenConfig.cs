@@ -68,6 +68,11 @@ public static class XLuaGenConfig
                 typeof(Image),
                 typeof(Animator),
                 typeof(CircleRawImage),
+                typeof(Camera),
+                typeof(Physics),
+                typeof(Input),
+                typeof(KeyCode),
+                typeof(RenderTexture),
                 typeof(UnityEngine.Debug)
             };
 
@@ -76,6 +81,7 @@ public static class XLuaGenConfig
         typeof(Unity.Entities.World),
         typeof(Unity.Entities.Entity),
         typeof(Unity.Entities.GameObjectEntity),
+        typeof(Unity.Entities.EntityManagerExtensions),
         typeof(Unity.Entities.EntityManager)
     };
 
@@ -127,6 +133,7 @@ public static class XLuaGenConfig
                 new List<string>(){"UnityEngine.Light", "SetLightDirty"},
                 new List<string>(){"UnityEngine.Light", "shadowRadius"},
                 new List<string>(){"UnityEngine.Light", "shadowAngle"},
+                new List<string>(){"UnityEngine.Input", "IsJoystickPreconfigured", "System.String"},
                 
                 new List<string>(){"UnityEngine.WWW", "MovieTexture"},
                 new List<string>(){"UnityEngine.WWW", "GetMovieTexture"},

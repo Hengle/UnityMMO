@@ -18,7 +18,7 @@ end
 
 function LoginCreateRoleView:OnLoad(  )
 	local names = {
-		"head_scroll/Viewport/head_con","close:obj","create_role:obj","item_con","head_scroll","role_tip:img","random:obj","role_name:input","effect","select_role_con",
+		"head_scroll/Viewport/head_con","close:obj","create_role:obj","item_con","head_scroll","role_tip:img","random:obj","role_name:input","effect","select_role_con:raw",
 	}
 	UI.GetChildren(self, self.transform, names)
 	self.transform.sizeDelta = Vector2.zero
@@ -38,7 +38,7 @@ function LoginCreateRoleView:InitView(  )
 	local info = {
 		data_list = {1,2}, 
 		item_con = self.item_con, 
-		prefab_path = GameResPath.GetFullUIPath("login/LoginCreateRoleItem.prefab"), 
+		prefab_path = ResPath.GetFullUIPath("login/LoginCreateRoleItem.prefab"), 
 		item_height = 128,
 		space_y = 5,
 		scroll_view = self.item_con,
@@ -55,7 +55,7 @@ function LoginCreateRoleView:InitView(  )
 			item:UpdateSelect()
 			if not item.UpdateHead then
 				item.UpdateHead = function(item)
-					local headRes = GameResPath.GetRoleHeadRes(v, 0)
+					local headRes = ResPath.GetRoleHeadRes(v, 0)
 					UIHelper.SetRawImage(item.role_head_raw, headRes)
 				end
 			end
@@ -88,7 +88,21 @@ function LoginCreateRoleView:SetCurSelectSex( sex )
 	-- self:UpdateRoleHead()
 	UIHelper.SetImage(self.role_tip_img, "login/login_role_tip_"..sex..".png", true)
 	self:OnClickRandomName()
+	self:UpdateRoleMesh(sex)
 	-- self:PlayRoleSound(sex)
+end
+
+function LoginCreateRoleView:UpdateRoleMesh( sex )
+	local show_data = {
+		showType = UILooksNode.ShowType.Role,
+		showRawImg = self.select_role_con_raw,
+		body = 1,
+		hair = 1,
+		career = sex==1 and 1 or 2,
+		canRotate = true,
+	}
+	self.roleUILooksNode = self.roleUILooksNode or UILooksNode.New(self.select_role_con)
+	self.roleUILooksNode:SetData(show_data)
 end
 
 function LoginCreateRoleView:OnClickRandomName(  )
@@ -103,16 +117,16 @@ function LoginCreateRoleView:OnClickRandomName(  )
 	else
 		nick_name = nick_name .. self.forename_woman[math.ceil(#self.forename_woman*math.random())]
 	end
+	print('Cat:LoginCreateRoleView.lua[106] nick_name', nick_name)
 	self.role_name_input.text = nick_name
 end
 
 function LoginCreateRoleView:AddEvents(  )
-    print('Cat:LoginCreateRoleView.lua[AddEvents]')
 	local on_click = function ( click_btn )
 		print('Cat:LoginCreateRoleView.lua[29] click_btn', click_btn)
 		if click_btn == self.close_obj then
             UIMgr:Close(self)--返回上个界面
-        elseif self.random_obj == click_obj then
+        elseif click_btn == self.random_obj then
 			self:OnClickRandomName()
         elseif click_btn == self.create_role_obj then
 			--请求创建角色
@@ -120,8 +134,9 @@ function LoginCreateRoleView:AddEvents(  )
 	        	print("Cat:LoginCreateRoleView [start:35] ack_data:", ack_data)
 	        	PrintTable(ack_data)
 	        	print("Cat:LoginCreateRoleView [end]")
-	            if ack_data.result == 1 then
+	            if ack_data.result == 0 then
 	                UIMgr:CloseAllView()
+	                require("Game/Login/LoginSceneBgView"):SetActive(false)
 	                --正式进入游戏场景
 	                GlobalEventSystem:Fire(LoginConst.Event.SelectRoleEnterGame, ack_data.role_id)
 	            else
@@ -140,7 +155,7 @@ function LoginCreateRoleView:AddEvents(  )
 end
 
 function LoginCreateRoleView:OnClose(  )
-    require("Game/Login/LoginSceneBgView"):SetActive(false)
+    -- require("Game/Login/LoginSceneBgView"):SetActive(false)
 end
 
 return LoginCreateRoleView

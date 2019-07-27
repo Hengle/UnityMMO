@@ -1,36 +1,34 @@
-local MainUIMenuView = BaseClass()
+local MainUIMenuView = BaseClass(UINode)
 
-function MainUIMenuView:DefaultVar( )
-	return { 
-	UIConfig = {
-		prefab_path = "Assets/AssetBundleRes/ui/mainui/MainUIMenuView.prefab",
-		canvas_name = "Normal",
-		components = {
-				{UI.HideOtherView},
-				{UI.DelayDestroy, {delay_time=5}},
-			},
-		},
-	}
+function MainUIMenuView:Constructor( )
+	self.prefabPath = "Assets/AssetBundleRes/ui/mainui/MainUIMenuView.prefab"
+	self.canvasName = "MainUI"
 end
 
 function MainUIMenuView:OnLoad(  )
-	local names = {}
+	local names = {
+		"bag:obj",
+	}
 	UI.GetChildren(self, self.transform, names)
-
 	self:AddEvents()
-	self:UpdateView()
+	self:OnUpdate()
 end
 
 function MainUIMenuView:AddEvents(  )
-	local on_click = function ( click_btn )
-		
+	local on_click = function ( click_obj )
+		if self.bag_obj == click_obj then
+			local view = require("Game.Bag.BagMainView").New()
+    		view:Load()
+		-- elseif self.main_city_obj == click_obj then
+			-- SceneMgr.Instance:ReqEnterScene(1001, 0)
+		end
 	end
-	-- UIHelper.BindClickEvent(self.return_btn, on_click)
-
+	-- UI.BindClickEvent(self.main_city_obj, on_click)
+	UI.BindClickEvent(self.bag_obj, on_click)
+	
 end
 
-function MainUIMenuView:UpdateView(  )
-	
+function MainUIMenuView:OnUpdate(  )
 end
 
 return MainUIMenuView

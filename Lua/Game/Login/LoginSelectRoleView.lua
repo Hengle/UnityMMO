@@ -16,7 +16,7 @@ end
 
 function LoginSelectRoleView:OnLoad(  )
 	local names = {
-		"item_scroll","close","role_con","role_tip","start:obj","item_scroll/Viewport/item_con",
+		"item_scroll","role_mesh:raw","role_tip","start:obj","item_scroll/Viewport/item_con",
 	}
 	UI.GetChildren(self, self.transform, names)
 	self.transform.sizeDelta = Vector2.zero
@@ -53,7 +53,7 @@ function LoginSelectRoleView:UpdateView()
     local info = {
 		data_list = self.data, 
 		item_con = self.item_con, 
-		prefab_path = GameResPath.GetFullUIPath("login/LoginSelectRoleItem.prefab"), 
+		prefab_path = ResPath.GetFullUIPath("login/LoginSelectRoleItem.prefab"), 
 		item_height = 121,
 		space_y = 15,
 		scroll_view = self.item_scroll,
@@ -90,8 +90,8 @@ function LoginSelectRoleView:UpdateRoleHeadItems( item, index, v )
 		item.role_name_txt.text = item.data.name
 		local curLv = item.data.base_info and item.data.base_info.level or 0
 		item.role_lv_txt.text = curLv.."级"
-		local headRes = GameResPath.GetRoleHeadRes(item.data.career, 0)
-		UIHelper.SetRawImage(item.role_head_raw, headRes)
+		local headRes = ResPath.GetRoleHeadRes(item.data.career, 0)
+		UI.SetRawImage(item.role_head_raw, headRes)
 		
 		item.role_head_obj:SetActive(true)
 		item.name_bg_obj:SetActive(true)
@@ -99,7 +99,7 @@ function LoginSelectRoleView:UpdateRoleHeadItems( item, index, v )
 		item.role_name_txt.text = ""
 		item.role_lv_txt.text = ""
 		item.role_head_obj:SetActive(false)
-		UIHelper.SetImage(item.head_img, "login/login_circle_head1_1.png")
+		UI.SetRawImage(item.role_head_raw, ResPath.GetRoleHeadRes(2, 0))
 
 		item.name_bg_obj:SetActive(false)
 	end
@@ -142,16 +142,18 @@ function LoginSelectRoleView:GetRoleInfoByID( role_id )
 	return nil
 end
 
-function LoginSelectRoleView:SetPlayModelInfo( role_vo )
+function LoginSelectRoleView:UpdateRoleMesh( role_vo )
 	local show_data = {
-		layer_name = self.layer_name,
-		action_name_list = {"show"},
-		can_rotate = true,
-		scale = 200,
+		showType = UILooksNode.ShowType.Role,
+		showRawImg = self.role_mesh_raw,
+		body = role_vo.body,
+		hair = role_vo.hair,
+		career = role_vo.career,
+		canRotate = true,
 		position = Vector3(0, 0, 0),
-		need_replay_action = "show", --界面从隐藏到显示，需要重新摆pose
 	}
-	-- lua_resM:SetRoleModelByVo(self, self.role_con, role_vo, show_data)
+	self.roleUILooksNode = self.roleUILooksNode or UILooksNode.New(self.role_mesh)
+	self.roleUILooksNode:SetData(show_data)
 end
 
 function LoginSelectRoleView:SetCurSelectRoleID( role_id )
@@ -172,7 +174,7 @@ function LoginSelectRoleView:SetCurSelectRoleID( role_id )
 	UIHelper.SetImage(self.role_tip_img, "login/login_role_tip_"..self.select_role_career..".png", true)
 	-- self.select_role_login_day = self.select_role_info.login_day
 	-- self.select_role_Create_time  = self.select_role_info.create_role_time
-	self:SetPlayModelInfo(self.select_role_info)
+	self:UpdateRoleMesh(self.select_role_info)
 end
 
 function LoginSelectRoleView:OnClose(  )

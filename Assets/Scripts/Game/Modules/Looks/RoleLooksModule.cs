@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityMMO;
+using UnityMMO.Component;
 
 public struct RoleLooksSpawnRequest : IComponentData
 {
@@ -43,15 +45,15 @@ public struct RoleLooksNetRequest : IComponentData
         var data = new RoleLooksNetRequest();
         data.roleUid = roleUid;
         data.owner = owner;
-        commandBuffer.CreateEntity();
-        commandBuffer.AddComponent(data);
+        var entity = commandBuffer.CreateEntity();
+        commandBuffer.AddComponent(entity, data);
     }
 }
 
 [DisableAutoCreation]
 public class HandleRoleLooksNetRequest : BaseComponentSystem
 {
-    ComponentGroup RequestGroup;
+    EntityQuery RequestGroup;
     public HandleRoleLooksNetRequest(GameWorld world) : base(world)
     {
     }
@@ -59,17 +61,20 @@ public class HandleRoleLooksNetRequest : BaseComponentSystem
     {
         Debug.Log("on OnCreateManager HandleRoleLooksNetRequest");
         base.OnCreateManager();
-        RequestGroup = GetComponentGroup(typeof(RoleLooksNetRequest));
+        RequestGroup = GetEntityQuery(typeof(RoleLooksNetRequest));
     }
 
     protected override void OnUpdate()
     {
         //TODO:控制刷新或请求频率
-        var requestArray = RequestGroup.GetComponentDataArray<RoleLooksNetRequest>();
+        var requestArray = RequestGroup.ToComponentDataArray<RoleLooksNetRequest>(Allocator.TempJob);
         if (requestArray.Length == 0)
+        {
+            requestArray.Dispose();
             return;
+        }
 
-        var requestEntityArray = RequestGroup.GetEntityArray();
+        var requestEntityArray = RequestGroup.ToEntityArray(Allocator.TempJob);
         
         // Copy requests as spawning will invalidate Group
         var requests = new RoleLooksNetRequest[requestArray.Length];
@@ -84,18 +89,20 @@ public class HandleRoleLooksNetRequest : BaseComponentSystem
             SprotoType.scene_get_role_look_info.request req = new SprotoType.scene_get_role_look_info.request();
             req.uid = requests[i].roleUid;
             Entity owner = requests[i].owner;
+            if (!EntityManager.Exists(owner))
+                continue;
             UnityMMO.NetMsgDispatcher.GetInstance().SendMessage<Protocol.scene_get_role_look_info>(req, (_) =>
             {
                 SprotoType.scene_get_role_look_info.response rsp = _ as SprotoType.scene_get_role_look_info.response;
-                Debug.Log("rsp.result : "+rsp.result.ToString()+" owner:"+owner.ToString());
+                // Debug.Log("rsp.result : "+rsp.result.ToString()+" owner:"+owner.ToString());
                 if (rsp.result == UnityMMO.GameConst.NetResultOk)
                 {
                     RoleMgr.GetInstance().SetName(req.uid, rsp.role_looks_info.name);
                     if (m_world.GetEntityManager().HasComponent<HealthStateData>(owner))
                     {
                         var hpData = m_world.GetEntityManager().GetComponentData<HealthStateData>(owner);
-                        hpData.health = rsp.role_looks_info.hp;
-                        hpData.maxHealth = rsp.role_looks_info.max_hp;
+                        hpData.CurHp = rsp.role_looks_info.hp;
+                        hpData.MaxHp = rsp.role_looks_info.max_hp;
                         m_world.GetEntityManager().SetComponentData<HealthStateData>(owner, hpData);
                     }
                     bool hasTrans = m_world.GetEntityManager().HasComponent<Transform>(owner);
@@ -108,6 +115,8 @@ public class HandleRoleLooksNetRequest : BaseComponentSystem
                 }
             });
         }
+        requestEntityArray.Dispose();
+        requestArray.Dispose();
     }
 }
 
@@ -115,7 +124,7 @@ public class HandleRoleLooksNetRequest : BaseComponentSystem
 [DisableAutoCreation]
 public class HandleRoleLooks : BaseComponentSystem
 {
-    ComponentGroup RoleGroup;
+    EntityQuery RoleGroup;
     public HandleRoleLooks(GameWorld world) : base(world)
     {
     }
@@ -123,14 +132,14 @@ public class HandleRoleLooks : BaseComponentSystem
     {
         Debug.Log("on OnCreateManager HandleRoleLooks");
         base.OnCreateManager();
-        RoleGroup = GetComponentGroup(typeof(UID), typeof(LooksInfo));
+        RoleGroup = GetEntityQuery(typeof(UID), typeof(LooksInfo), typeof(RoleInfo));
     }
 
     protected override void OnUpdate()
     {
-        EntityArray entities = RoleGroup.GetEntityArray();
-        var uidArray = RoleGroup.GetComponentDataArray<UID>();
-        var looksInfoArray = RoleGroup.GetComponentDataArray<LooksInfo>();
+        var entities = RoleGroup.ToEntityArray(Allocator.TempJob);
+        var uidArray = RoleGroup.ToComponentDataArray<UID>(Allocator.TempJob);
+        var looksInfoArray = RoleGroup.ToComponentDataArray<LooksInfo>(Allocator.TempJob);
         var mainRoleGOE = RoleMgr.GetInstance().GetMainRole();
         float3 mainRolePos = float3.zero;
         if (mainRoleGOE!=null)
@@ -158,10 +167,14 @@ public class HandleRoleLooks : BaseComponentSystem
             if (isNeedReqLooksInfo)
             {
                 looksInfo.CurState = LooksInfo.State.Loading;
-                looksInfoArray[i] = looksInfo;
+                // looksInfoArray[i] = looksInfo;
+                EntityManager.SetComponentData<LooksInfo>(entities[i], looksInfo);
                 RoleLooksNetRequest.Create(PostUpdateCommands, uid.Value, entity);
             }
         }
+        entities.Dispose();
+        looksInfoArray.Dispose();
+        uidArray.Dispose();
     }
 }
 
@@ -169,7 +182,7 @@ public class HandleRoleLooks : BaseComponentSystem
 [DisableAutoCreation]
 public class HandleRoleLooksSpawnRequests : BaseComponentSystem
 {
-    ComponentGroup SpawnGroup;
+    EntityQuery SpawnGroup;
 
     public HandleRoleLooksSpawnRequests(GameWorld world) : base(world)
     {
@@ -179,17 +192,20 @@ public class HandleRoleLooksSpawnRequests : BaseComponentSystem
     {
         Debug.Log("on OnCreateManager role looks system");
         base.OnCreateManager();
-        SpawnGroup = GetComponentGroup(typeof(RoleLooksSpawnRequest));
+        SpawnGroup = GetEntityQuery(typeof(RoleLooksSpawnRequest));
     }
 
     protected override void OnUpdate()
     {
         // Debug.Log("on OnUpdate role looks system");
-        var requestArray = SpawnGroup.GetComponentDataArray<RoleLooksSpawnRequest>();
+        var requestArray = SpawnGroup.ToComponentDataArray<RoleLooksSpawnRequest>(Allocator.TempJob);
         if (requestArray.Length == 0)
+        {
+            requestArray.Dispose();
             return;
+        }
 
-        var requestEntityArray = SpawnGroup.GetEntityArray();
+        var requestEntityArray = SpawnGroup.ToEntityArray(Allocator.TempJob);
         
         // Copy requests as spawning will invalidate Group
         var spawnRequests = new RoleLooksSpawnRequest[requestArray.Length];
@@ -207,12 +223,10 @@ public class HandleRoleLooksSpawnRequests : BaseComponentSystem
             int career = request.career;
             int body = request.body;
             int hair = request.hair;
-            int bodyID = 1000+career*100+body;
-            int hairID = 1000+career*100+hair;
-            string careerPath = UnityMMO.GameConst.GetRoleCareerResPath(career);
-            string bodyPath = careerPath+"/body/body_"+bodyID+"/model_clothe_"+bodyID+".prefab";
-            string hairPath = careerPath+"/hair/hair_"+hairID+"/model_head_"+hairID+".prefab";
-            Debug.Log("SpawnRoleLooks bodyPath : "+bodyPath);
+            // Debug.Log("body : "+body+" hair:"+hair);
+            string bodyPath = ResPath.GetRoleBodyResPath(career, body);
+            string hairPath = ResPath.GetRoleHairResPath(career, hair);
+            // Debug.Log("SpawnRoleLooks bodyPath : "+bodyPath);
             XLuaFramework.ResourceManager.GetInstance().LoadAsset<GameObject>(bodyPath, delegate(UnityEngine.Object[] objs) {
                 if (objs!=null && objs.Length>0)
                 {
@@ -224,7 +238,7 @@ public class HandleRoleLooksSpawnRequests : BaseComponentSystem
                     bodyOE.transform.localPosition = Vector3.zero;
                     bodyOE.transform.localRotation = Quaternion.identity;
                     LoadHair(hairPath, bodyOE.transform.Find("head"));
-                    Debug.Log("load ok role model");
+                    // Debug.Log("load ok role model");
                     looksInfo.CurState = LooksInfo.State.Loaded;
                     looksInfo.LooksEntity = bodyOE.Entity;
                     EntityManager.SetComponentData<LooksInfo>(request.ownerEntity, looksInfo);
@@ -235,6 +249,8 @@ public class HandleRoleLooksSpawnRequests : BaseComponentSystem
                 }
             });
         }
+        requestEntityArray.Dispose();
+        requestArray.Dispose();
     }
 
     void LoadHair(string hairPath, Transform parentNode)
@@ -252,7 +268,7 @@ public class HandleRoleLooksSpawnRequests : BaseComponentSystem
 [DisableAutoCreation]
 public class HandleLooksFollowLogicTransform : BaseComponentSystem
 {
-    ComponentGroup Group;
+    EntityQuery Group;
 
     public HandleLooksFollowLogicTransform(GameWorld world) : base(world)
     {}
@@ -261,14 +277,14 @@ public class HandleLooksFollowLogicTransform : BaseComponentSystem
     {
         Debug.Log("on OnCreateManager role looks system");
         base.OnCreateManager();
-        Group = GetComponentGroup(typeof(LooksInfo), typeof(Position), typeof(Rotation));
+        Group = GetEntityQuery(typeof(LooksInfo), typeof(Translation), typeof(Rotation));
     }
 
     protected override void OnUpdate()
     {
-        var states = Group.GetComponentDataArray<LooksInfo>();
-        var pos = Group.GetComponentDataArray<Position>();
-        var rotations = Group.GetComponentDataArray<Rotation>();
+        var states = Group.ToComponentDataArray<LooksInfo>(Allocator.TempJob);
+        var pos = Group.ToComponentDataArray<Translation>(Allocator.TempJob);
+        var rotations = Group.ToComponentDataArray<Rotation>(Allocator.TempJob);
         for (int i = 0; i < states.Length; i++)
         {
             var looksEntity = states[i].LooksEntity;
@@ -282,5 +298,8 @@ public class HandleLooksFollowLogicTransform : BaseComponentSystem
                 }
             }
         }
+        states.Dispose();
+        pos.Dispose();
+        rotations.Dispose();
     }
 }

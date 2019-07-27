@@ -14,19 +14,22 @@ public class Nameboard : MonoBehaviour
         None,
     }
     public Transform target;
-    string name;
+    string showName;
     ColorStyle curColorStyle = ColorStyle.None;
-
+    float maxHp;
+    float curHp;
     private TextMeshProUGUI nameLabel;
     Image bloodImg;
+    GameObject bloodObj;
+    Slider slider;
 
     public string Name 
     { 
-        get => name; 
+        get => showName; 
         set 
         {
-            name = value; 
-            nameLabel.text = name;
+            showName = value; 
+            nameLabel.text = showName;
         }
     }
     public ColorStyle CurColorStyle 
@@ -36,17 +39,54 @@ public class Nameboard : MonoBehaviour
         {
             if (curColorStyle != value)
             {
-                string resPath = GameConst.GetBloodResPath(value);
+                string resPath = ResPath.GetBloodResPath(value);
                 UIHelper.SetImage(bloodImg, resPath);
             }
             curColorStyle = value; 
         }
     }
 
+    public float MaxHp { 
+        get => maxHp; 
+        set
+        {
+            maxHp = value; 
+            UpdateBloodBar();
+        }
+    }
+    public float CurHp { 
+        get => curHp; 
+        set 
+        {
+            curHp = value;
+            UpdateBloodBar();
+        }
+    }
+
+    public void UpdateBloodBar()
+    {
+        // Debug.Log("curHp : "+curHp+" maxHp:"+maxHp+ " slider:"+slider!=null);
+        if (slider!=null)
+        {
+            slider.value = Mathf.Clamp01(curHp/maxHp);
+        }
+    } 
+
+    public void SetBloodVisible(bool isShow)
+    {
+        bloodObj.SetActive(isShow);
+    }
+
     private void Awake() 
     {
         nameLabel = transform.Find("name_con/name_label").GetComponent<TextMeshProUGUI>();
         bloodImg = transform.Find("blood_con/blood_bar/blood").GetComponent<Image>();
+        slider = transform.Find("blood_con").GetComponent<Slider>();
+        bloodObj = transform.Find("blood_con").gameObject;
+    }
+
+    private void Update() {
+        transform.LookAt(Camera.main.transform.position);
     }
 
 }

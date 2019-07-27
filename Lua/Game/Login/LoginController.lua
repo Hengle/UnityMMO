@@ -6,7 +6,6 @@ LoginController = {}
 
 function LoginController:Init(  )
 	print('Cat:LoginController.lua[Init]')
-
 	self:InitEvents()
 
     self.loginView = require("Game/Login/LoginView").New()
@@ -29,6 +28,10 @@ function LoginController:InitEvents(  )
             local role_list = ack_data.role_list
             LoginModel:GetInstance():SetRoleList(role_list)
             
+            if self.loginView then
+                UIMgr:Close(self.loginView)
+                self.loginView = nil
+            end
             if role_list and #role_list > 0 then
                 --已有角色就先进入选择角色界面
                 local view = require("Game/Login/LoginSelectRoleView").New()
@@ -44,16 +47,12 @@ function LoginController:InitEvents(  )
     self.login_succeed_handler = GlobalEventSystem:Bind(LoginConst.Event.LoginSucceed, LoginSucceed)
 
     local SelectRoleEnterGame = function ( role_id )
-        print('Cat:LoginController.lua[60] role_id', role_id)
+        CS.UnityMMO.LoadingView.Instance:SetActive(true)
+        CS.UnityMMO.LoadingView.Instance:ResetData()
         local on_ack = function ( ack_data )
-            print("Cat:LoginController [start:54] ack_data:", ack_data)
-            PrintTable(ack_data)
-            print("Cat:LoginController [end]")
             if ack_data.result == 1 then
                 --进入游戏成功,先关掉所有界面
                 UIMgr:CloseAllView()
-                --显示加载界面
-
                 --请求角色信息和场景信息
                 self:ReqMainRole()
             else
@@ -71,14 +70,15 @@ function LoginController:ReqMainRole(  )
         print("Cat:LoginController [start:76] ack_data:", ack_data)
         PrintTable(ack_data)
         print("Cat:LoginController [end]")
-        GlobalEventSystem:Fire(MainUIConst.Event.InitMainUIViews)
         local role_info = ack_data.role_info
         local pos = Vector3.New(role_info.pos_x/GameConst.RealToLogic, role_info.pos_y/GameConst.RealToLogic, role_info.pos_z/GameConst.RealToLogic)
-        SceneMgr.Instance:AddMainRole(role_info.scene_uid, role_info.role_id, role_info.name, role_info.career, pos)
-        SceneMgr.Instance:LoadScene(role_info.scene_id)
+        SceneMgr.Instance:AddMainRole(role_info.scene_uid, role_info.role_id, role_info.name, role_info.career, pos, role_info.cur_hp, role_info.max_hp)
+        -- SceneMgr.Instance:LoadScene(role_info.scene_id)
         
-
+        MainRole:GetInstance():SetBaseInfo(role_info)
         GameVariable.IsNeedSynchSceneInfo = true
+
+        GlobalEventSystem:Fire(GlobalEvents.GameStart)
     end
     NetDispatcher:SendMessage("scene_get_main_role_info", nil, on_ack_main_role)
 end
@@ -173,10 +173,6 @@ function LoginController:Connect()
         --接下来的处理就在OnReceiveMsg函数里
         self.login_state = LoginConst.Status.WaitForGameServerHandshake
 	end
-    if self.loginView then
-        UIMgr:Close(self.loginView)
-        self.loginView = nil
-    end
     if self.reconnectView then
         UIMgr:Close(self.reconnectView)
         self.reconnectView = nil
@@ -191,9 +187,7 @@ end
 
 function LoginController:OnReceiveMsg( bytes )
     local code = tostring(bytes)
-    -- print('Cat:LoginController.lua[handshake] code', code)
     local result = string.sub(code, 1, 3)
-    -- print('Cat:LoginController.lua[handshake] result code', result, tonumber(result))
     if tonumber(result) == 200 then
         --接收完一次就把网络控制权交给NetDispatcher了,开始使用sproto协议 
         NetDispatcher:Start()
@@ -203,8 +197,7 @@ function LoginController:OnReceiveMsg( bytes )
 
         Time:StartSynchServerTime()
     else
-        Message:show("与游戏服务器握手失败:"..result)
-        --Cat_Todo : 处理握手失败
+        Message:Show("与游戏服务器握手失败:"..result)
     end
 end
 
@@ -212,12 +205,14 @@ end
 
 function LoginController:Disconnect()
 	print('Cat:LoginController.lua[Disconnect]', self.login_state)
-    if not self.login_info.had_disconnect_with_account_server and self.login_state == LoginConst.Status.WaitForGameServerConnect then
+    if not self.login_info.had_disconnect_with_account_server and (self.login_state == LoginConst.Status.WaitForGameServerConnect or self.login_state == LoginConst.Status.WaitForGameServerHandshake) then
         --每次登录流程中，进入游戏服务器时都会从帐号服务器断开，所以首次断开时可忽略，不需要弹断网的窗口
         self.login_info.had_disconnect_with_account_server = true
         return
     end
-
+    if self.login_state == LoginConst.Status.WaitForLoginServerChanllenge then
+        Message:Show("连接登录服务器失败")
+    end
     if self.reconnectView then return end
     local showData = {
         content = "网络已断开连接",
@@ -225,25 +220,24 @@ function LoginController:Disconnect()
         on_ok = function()
             -- Message:Show("重连")
             --Cat_Todo : 判断帐号服务器是否也断了，是的话也是要先连帐号服务器的
-            self:StartConnectGameServer()
-            -- self:StartLogin(self.login_info)
+            -- self:StartConnectGameServer()
+            self:StartLogin(self.login_info)
             -- UIMgr:Close(self.reconnectView)
         end,
         cancel_btn_text = "重新登录",
         on_cancel = function()
             --Cat_Todo : 清理场景啊
             --显示登录界面
-            if not self.loginView then
+            if self.loginView then
+                UIMgr:Close(self.reconnectView)
+                self.reconnectView = nil
+            else
                 self.loginView = require("Game/Login/LoginView").New()
                 UIMgr:Show(self.loginView)
             end
         end,
     }
     self.reconnectView = UI.AlertView.Show(showData)
-    --Cat_Todo : 重新向游戏服务器请求连接
-	-- if self.login_state == 4 then
- --    	NetMgr:SendConnect("192.168.5.142", 8888, CS.XLuaFramework.NetPackageType.BaseHead)
- --    end
 end
 
 return LoginController

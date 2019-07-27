@@ -1,61 +1,117 @@
-CREATE DATABASE  IF NOT EXISTS `UnityMMOGame` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `UnityMMOGame`;
--- MySQL dump 10.13  Distrib 5.6.17, for Win32 (x86)
---
--- Host: 192.168.5.142    Database: UnityMMOGame
--- ------------------------------------------------------
--- Server version	5.6.40
+/*
+Navicat MySQL Data Transfer
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+Source Server         : UnityMMO
+Source Server Version : 50640
+Source Host           : 192.168.5.132:3306
+Source Database       : UnityMMOGame
 
---
--- Table structure for table `Account`
---
+Target Server Type    : MYSQL
+Target Server Version : 50640
+File Encoding         : 65001
 
-DROP TABLE IF EXISTS `Account`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Account` (
-  `account_id` bigint(20) NOT NULL,
-  `role_id_1` bigint(20) DEFAULT NULL,
-  `role_id_2` bigint(20) DEFAULT NULL,
-  `role_id_3` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+Date: 2019-07-19 19:35:19
+*/
 
---
--- Table structure for table `RoleBaseInfo`
---
+SET FOREIGN_KEY_CHECKS=0;
 
+-- ----------------------------
+-- Table structure for Bag
+-- ----------------------------
+DROP TABLE IF EXISTS `Bag`;
+CREATE TABLE `Bag` (
+  `goods_uid` bigint(20) unsigned NOT NULL,
+  `goods_type_id` int(10) unsigned NOT NULL,
+  `role_id` bigint(20) unsigned NOT NULL,
+  `pos` tinyint(10) unsigned NOT NULL,
+  `cell` smallint(10) unsigned NOT NULL,
+  `num` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`goods_uid`),
+  KEY `role_id` (`role_id`) USING BTREE,
+  KEY `pos` (`pos`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for BagInfo
+-- ----------------------------
+DROP TABLE IF EXISTS `BagInfo`;
+CREATE TABLE `BagInfo` (
+  `role_id` bigint(20) unsigned zerofill NOT NULL,
+  `pos` varchar(255) DEFAULT NULL,
+  `cell_num` mediumint(10) unsigned zerofill NOT NULL,
+  KEY `role_id` (`role_id`,`pos`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for Property
+-- ----------------------------
+DROP TABLE IF EXISTS `Property`;
+CREATE TABLE `Property` (
+  `role_id` bigint(60) NOT NULL,
+  `att` int(255) DEFAULT NULL,
+  `hp` int(255) DEFAULT NULL,
+  `def` int(255) DEFAULT NULL,
+  `hit` int(255) DEFAULT NULL,
+  `dodge` int(255) DEFAULT NULL,
+  PRIMARY KEY (`role_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for RoleBaseInfo
+-- ----------------------------
 DROP TABLE IF EXISTS `RoleBaseInfo`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `RoleBaseInfo` (
-  `role_id` bigint(20) NOT NULL,
+  `role_id` bigint(20) unsigned NOT NULL,
   `name` varchar(18) NOT NULL,
   `career` tinyint(4) NOT NULL,
-  `level` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `level` smallint(5) unsigned DEFAULT '0',
+  `scene_id` int(11) DEFAULT NULL,
+  `pos_x` int(11) DEFAULT NULL,
+  `pos_y` int(11) DEFAULT NULL,
+  `pos_z` int(11) DEFAULT NULL,
+  `coin` int(11) unsigned zerofill DEFAULT NULL,
+  `diamond` int(11) unsigned zerofill DEFAULT NULL,
   PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+-- ----------------------------
+-- Table structure for RoleList
+-- ----------------------------
+DROP TABLE IF EXISTS `RoleList`;
+CREATE TABLE `RoleList` (
+  `account_id` bigint(20) unsigned NOT NULL,
+  `role_id` bigint(20) unsigned NOT NULL,
+  `create_time` bigint(20) unsigned NOT NULL,
+  KEY `account_id` (`account_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dump completed on 2018-07-30 21:14:03
+-- ----------------------------
+-- Table structure for RoleLooksInfo
+-- ----------------------------
+DROP TABLE IF EXISTS `RoleLooksInfo`;
+CREATE TABLE `RoleLooksInfo` (
+  `role_id` bigint(64) NOT NULL,
+  `body` int(10) DEFAULT NULL,
+  `hair` int(10) DEFAULT NULL,
+  `weapon` int(10) DEFAULT NULL,
+  `wing` int(10) DEFAULT NULL,
+  PRIMARY KEY (`role_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for TaskList
+-- ----------------------------
+DROP TABLE IF EXISTS `TaskList`;
+CREATE TABLE `TaskList` (
+  `id` bigint(60) NOT NULL AUTO_INCREMENT,
+  `roleID` bigint(60) NOT NULL,
+  `taskID` int(11) NOT NULL,
+  `status` tinyint(5) DEFAULT NULL,
+  `subTaskIndex` tinyint(10) unsigned zerofill DEFAULT NULL,
+  `subType` int(10) DEFAULT NULL,
+  `curProgress` int(8) unsigned zerofill DEFAULT NULL,
+  `maxProgress` int(8) unsigned DEFAULT NULL,
+  `contentID` int(8) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `role_id` (`roleID`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;

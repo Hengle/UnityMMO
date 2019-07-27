@@ -21,23 +21,28 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(Unity.Entities.World);
-			Utils.BeginObjectRegister(type, L, translator, 0, 7, 4, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 8, 7, 1);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ToString", _m_ToString);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Dispose", _m_Dispose);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "CreateManager", _m_CreateManager);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetOrCreateManager", _m_GetOrCreateManager);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "AddManager", _m_AddManager);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetExistingManager", _m_GetExistingManager);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "DestroyManager", _m_DestroyManager);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "CreateSystem", _m_CreateSystem);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetOrCreateSystem", _m_GetOrCreateSystem);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "AddSystem", _m_AddSystem);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetExistingSystem", _m_GetExistingSystem);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "DestroySystem", _m_DestroySystem);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Update", _m_Update);
 			
 			
-			Utils.RegisterFunc(L, Utils.GETTER_IDX, "BehaviourManagers", _g_get_BehaviourManagers);
+			Utils.RegisterFunc(L, Utils.GETTER_IDX, "Systems", _g_get_Systems);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "Name", _g_get_Name);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "Version", _g_get_Version);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "EntityManager", _g_get_EntityManager);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "IsCreated", _g_get_IsCreated);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "SequenceNumber", _g_get_SequenceNumber);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "QuitUpdate", _g_get_QuitUpdate);
             
-			
+			Utils.RegisterFunc(L, Utils.SETTER_IDX, "QuitUpdate", _s_set_QuitUpdate);
+            
 			
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
@@ -166,7 +171,7 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_CreateManager(RealStatePtr L)
+        static int _m_CreateSystem(RealStatePtr L)
         {
 		    try {
             
@@ -179,9 +184,9 @@ namespace XLua.CSObjectWrap
                 
                 {
                     System.Type _type = (System.Type)translator.GetObject(L, 2, typeof(System.Type));
-                    object[] _constructorArgumnents = translator.GetParams<object>(L, 3);
+                    object[] _constructorArguments = translator.GetParams<object>(L, 3);
                     
-                        Unity.Entities.ScriptBehaviourManager gen_ret = gen_to_be_invoked.CreateManager( _type, _constructorArgumnents );
+                        Unity.Entities.ComponentSystemBase gen_ret = gen_to_be_invoked.CreateSystem( _type, _constructorArguments );
                         translator.Push(L, gen_ret);
                     
                     
@@ -196,65 +201,7 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_GetOrCreateManager(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-                Unity.Entities.World gen_to_be_invoked = (Unity.Entities.World)translator.FastGetCSObj(L, 1);
-            
-            
-                
-                {
-                    System.Type _type = (System.Type)translator.GetObject(L, 2, typeof(System.Type));
-                    
-                        Unity.Entities.ScriptBehaviourManager gen_ret = gen_to_be_invoked.GetOrCreateManager( _type );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_AddManager(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-                Unity.Entities.World gen_to_be_invoked = (Unity.Entities.World)translator.FastGetCSObj(L, 1);
-            
-            
-                
-                {
-                    Unity.Entities.ScriptBehaviourManager _manager = (Unity.Entities.ScriptBehaviourManager)translator.GetObject(L, 2, typeof(Unity.Entities.ScriptBehaviourManager));
-                    
-                        Unity.Entities.ScriptBehaviourManager gen_ret = gen_to_be_invoked.AddManager( _manager );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_GetExistingManager(RealStatePtr L)
+        static int _m_GetOrCreateSystem(RealStatePtr L)
         {
 		    try {
             
@@ -268,7 +215,7 @@ namespace XLua.CSObjectWrap
                 {
                     System.Type _type = (System.Type)translator.GetObject(L, 2, typeof(System.Type));
                     
-                        Unity.Entities.ScriptBehaviourManager gen_ret = gen_to_be_invoked.GetExistingManager( _type );
+                        Unity.Entities.ComponentSystemBase gen_ret = gen_to_be_invoked.GetOrCreateSystem( _type );
                         translator.Push(L, gen_ret);
                     
                     
@@ -283,7 +230,7 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_DestroyManager(RealStatePtr L)
+        static int _m_AddSystem(RealStatePtr L)
         {
 		    try {
             
@@ -295,9 +242,94 @@ namespace XLua.CSObjectWrap
             
                 
                 {
-                    Unity.Entities.ScriptBehaviourManager _manager = (Unity.Entities.ScriptBehaviourManager)translator.GetObject(L, 2, typeof(Unity.Entities.ScriptBehaviourManager));
+                    Unity.Entities.ComponentSystemBase _system = (Unity.Entities.ComponentSystemBase)translator.GetObject(L, 2, typeof(Unity.Entities.ComponentSystemBase));
                     
-                    gen_to_be_invoked.DestroyManager( _manager );
+                        Unity.Entities.ComponentSystemBase gen_ret = gen_to_be_invoked.AddSystem( _system );
+                        translator.Push(L, gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_GetExistingSystem(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                Unity.Entities.World gen_to_be_invoked = (Unity.Entities.World)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    System.Type _type = (System.Type)translator.GetObject(L, 2, typeof(System.Type));
+                    
+                        Unity.Entities.ComponentSystemBase gen_ret = gen_to_be_invoked.GetExistingSystem( _type );
+                        translator.Push(L, gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_DestroySystem(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                Unity.Entities.World gen_to_be_invoked = (Unity.Entities.World)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    Unity.Entities.ComponentSystemBase _system = (Unity.Entities.ComponentSystemBase)translator.GetObject(L, 2, typeof(Unity.Entities.ComponentSystemBase));
+                    
+                    gen_to_be_invoked.DestroySystem( _system );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_Update(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                Unity.Entities.World gen_to_be_invoked = (Unity.Entities.World)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    
+                    gen_to_be_invoked.Update(  );
                     
                     
                     
@@ -314,13 +346,37 @@ namespace XLua.CSObjectWrap
         
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_BehaviourManagers(RealStatePtr L)
+        static int _g_get_Active(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			    translator.Push(L, Unity.Entities.World.Active);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_AllWorlds(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			    translator.Push(L, Unity.Entities.World.AllWorlds);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_Systems(RealStatePtr L)
         {
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			
                 Unity.Entities.World gen_to_be_invoked = (Unity.Entities.World)translator.FastGetCSObj(L, 1);
-                translator.PushAny(L, gen_to_be_invoked.BehaviourManagers);
+                translator.PushAny(L, gen_to_be_invoked.Systems);
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
             }
@@ -356,23 +412,13 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_Active(RealStatePtr L)
+        static int _g_get_EntityManager(RealStatePtr L)
         {
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			    translator.Push(L, Unity.Entities.World.Active);
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            return 1;
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_AllWorlds(RealStatePtr L)
-        {
-		    try {
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			    translator.Push(L, Unity.Entities.World.AllWorlds);
+			
+                Unity.Entities.World gen_to_be_invoked = (Unity.Entities.World)translator.FastGetCSObj(L, 1);
+                translator.Push(L, gen_to_be_invoked.EntityManager);
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
             }
@@ -393,6 +439,34 @@ namespace XLua.CSObjectWrap
             return 1;
         }
         
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_SequenceNumber(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                Unity.Entities.World gen_to_be_invoked = (Unity.Entities.World)translator.FastGetCSObj(L, 1);
+                LuaAPI.lua_pushuint64(L, gen_to_be_invoked.SequenceNumber);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_QuitUpdate(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                Unity.Entities.World gen_to_be_invoked = (Unity.Entities.World)translator.FastGetCSObj(L, 1);
+                LuaAPI.lua_pushboolean(L, gen_to_be_invoked.QuitUpdate);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
+        
         
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -401,6 +475,21 @@ namespace XLua.CSObjectWrap
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			    Unity.Entities.World.Active = (Unity.Entities.World)translator.GetObject(L, 1, typeof(Unity.Entities.World));
+            
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 0;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_QuitUpdate(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                Unity.Entities.World gen_to_be_invoked = (Unity.Entities.World)translator.FastGetCSObj(L, 1);
+                gen_to_be_invoked.QuitUpdate = LuaAPI.lua_toboolean(L, 2);
             
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
