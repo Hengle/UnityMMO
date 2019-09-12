@@ -22,8 +22,8 @@ namespace XLuaFramework
     {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
 
-       ConsoleWindows.ConsoleWindow console = new ConsoleWindows.ConsoleWindow();
-       ConsoleWindows.ConsoleInput input = new ConsoleWindows.ConsoleInput();
+    //    ConsoleWindows.ConsoleWindow console = new ConsoleWindows.ConsoleWindow();
+    //    ConsoleWindows.ConsoleInput input = new ConsoleWindows.ConsoleInput();
 #endif
         private Thread thread;
         static readonly object m_lockObject = new object();
@@ -39,28 +39,26 @@ namespace XLuaFramework
                 AddMessage(message, type);
             });
 
-            string log_dir = AppConfig.DataPath + "log";
+            string log_dir = Path.Combine(AppConfig.DataPath, "log");
             if (!Directory.Exists(log_dir))
                 Directory.CreateDirectory(log_dir);
 
             if (Application.isEditor)
-                output_path = log_dir + "/out_put.txt";
+                output_path = Path.Combine(log_dir, "out_put.txt");
             else
-                output_path = log_dir + "/out_put_uneditor.txt";
+                output_path = Path.Combine(log_dir, "out_put_uneditor.txt");
             Debug.Log("LogHandler.cs log_dir : " + log_dir+ "  Directory.Exists(log_dir)"+ Directory.Exists(log_dir).ToString());
+            Debug.Log("LogHandler.cs output_path : " + output_path+ "  Directory.Exists(output_path)"+ Directory.Exists(output_path).ToString());
             //每次启动先删除旧的
-            if (File.Exists(output_path))
-            {
-                File.Delete(output_path);
-            }
-            // if (!Directory.Exists(log_dir))
-            //     Directory.CreateDirectory(log_dir);
+            File.WriteAllText(output_path, "");
+            // if (File.Exists(output_path))
+            //     File.Delete(output_path);
             // if (!File.Exists(output_path))
-            //     File.Create(output_path);
+                // File.Create(output_path);
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            console.Initialize();
-            console.SetTitle("game log");
+            // console.Initialize();
+            // console.SetTitle("game log");
 #endif
 
             thread = new Thread(OnUpdateThread);
@@ -98,7 +96,7 @@ namespace XLuaFramework
         void Update()
         {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            input.Update();
+            // input.Update();
 #endif
         }
 
@@ -122,8 +120,8 @@ namespace XLuaFramework
                         else
                             System.Console.ForegroundColor = System.ConsoleColor.White;
 
-                        if (System.Console.CursorLeft != 0)
-                            input.ClearLine();
+                        // if (System.Console.CursorLeft != 0)
+                        //     input.ClearLine();
 
                         System.Console.WriteLine(li.message);
 #endif
@@ -153,7 +151,7 @@ namespace XLuaFramework
         void OnDestroy()
         {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            console.Shutdown();
+            // console.Shutdown();
 #endif
         }
     }

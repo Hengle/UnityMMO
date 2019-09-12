@@ -20,12 +20,19 @@ public class FightFlyWord : MonoBehaviour {
 
     public void StartFly()
     {
-        var moveAction = Cocos.MoveBy.CreateAbs(0.7f, new Vector3(0, 1, 0));
-        var fadeOutAction = Cocos.FadeOut.Create(0.3f, Cocos.ColorAttrCatcherTextMeshPro.Ins);
-        var delayFadeoutAction = Cocos.Sequence.Create(Cocos.DelayTime.Create(0.4f), fadeOutAction);
+        var randomX = Random.RandomRange(-1.0f, 1.0f);
+        var randomY = Random.RandomRange(1.5f, 2.5f);
+        var randomZ = Random.RandomRange(-1.0f, 1.0f);
+        var randomMoveDuration = Random.RandomRange(0.5f, 1.0f);
+        var moveAction = Cocos.MoveBy.CreateAbs(randomMoveDuration, new Vector3(randomX, randomY, randomZ));
+        var fadeOutAction = Cocos.FadeOut.Create(0.7f, Cocos.ColorAttrCatcherTextMeshPro.Ins);
+        var delayFadeoutAction = Cocos.Sequence.Create(Cocos.DelayTime.Create(0.5f), fadeOutAction);
         var spawnAction = Cocos.Spawn.Create(moveAction, delayFadeoutAction);
         var action = Cocos.Sequence.Create(spawnAction, Cocos.CallFunc.Create(()=>{
-            Object.Destroy(gameObject, 0.1f);
+            // Object.Destroy(gameObject, 0.1f);
+            gameObject.SetActive(false);
+            Cocos.Helper.SetOpacity(transform, 1, Cocos.ColorAttrCatcherTextMeshPro.Ins);
+            ResMgr.GetInstance().UnuseGameObject("FightFlyWord", gameObject);
         }));
         runner.PlayAction(action);
     }

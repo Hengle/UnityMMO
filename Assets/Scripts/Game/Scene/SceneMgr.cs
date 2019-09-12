@@ -8,6 +8,8 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.Playables;
 using UnityMMO.Component;
 using XLua;
 
@@ -40,6 +42,8 @@ public class SceneMgr : MonoBehaviour
     public SceneInfo CurSceneInfo { get => curSceneInfo; }
     public Transform MoveQueryContainer { get =>moveQueryContainer; }
     public Transform FlyWordContainer { get =>flyWordContainer; }
+    public int CurSceneID { get => curSceneID; set => curSceneID = value; }
+
     Cinemachine.CinemachineFreeLook freeLookCamera;
     Transform freeLookCameraTrans;
     Transform mainCameraTrans;
@@ -92,7 +96,7 @@ public class SceneMgr : MonoBehaviour
 	{
         m_GameWorld = world;
 
-        ResMgr.GetInstance().Init();
+        // ResMgr.GetInstance().Init();
         RoleMgr.GetInstance().Init(world);
         MonsterMgr.GetInstance().Init(world);
         NPCMgr.GetInstance().Init(world);
@@ -100,6 +104,8 @@ public class SceneMgr : MonoBehaviour
 
 	public void OnDestroy()
 	{
+        Debug.Log("destroy scene mgr");
+        // UnloadScene();
 		Instance = null;
 	}
 
@@ -123,27 +129,31 @@ public class SceneMgr : MonoBehaviour
             scene_json = Repalce(scene_json);
             SceneInfo scene_info = JsonUtility.FromJson<SceneInfo>(scene_json);
             curSceneInfo = scene_info;
-            // ApplyLightInfo(scene_info);//TODO:bake light
-            
-            m_Controller = gameObject.GetComponent<SceneObjectLoadController>();
-            if (m_Controller == null)
-                m_Controller = gameObject.AddComponent<SceneObjectLoadController>();
-            int max_create_num = 19;
-            int min_create_num = 0;
-            m_Controller.Init(scene_info.Bounds.center, scene_info.Bounds.size, true, max_create_num, min_create_num, SceneSeparateTreeType.QuadTree);
-
-            Debug.Log("scene_info.ObjectInfoList.Count : "+scene_info.ObjectInfoList.Count.ToString());
-            for (int i = 0; i < scene_info.ObjectInfoList.Count; i++)
+            Debug.Log("LoadSceneInfo start LoadSceneRes count:"+scene_info.ResPathList.Count+" "+scene_info.MonsterList.Count);
+            // ApplyLightInfo(scene_info);
+            ResMgr.GetInstance().LoadSceneRes(scene_info.ResPathList, delegate(bool isOk)
             {
-                m_Controller.AddSceneBlockObject(scene_info.ObjectInfoList[i]);
-            }
+                ResMgr.GetInstance().LoadMonsterResList(scene_info.MonsterList, delegate(bool isOk2) {
+                LoadingView.Instance.SetData(0.6f, "初始化场景节点信息...");
+                m_Controller = gameObject.GetComponent<SceneObjectLoadController>();
+                if (m_Controller == null)
+                    m_Controller = gameObject.AddComponent<SceneObjectLoadController>();
+                int max_create_num = 25;
+                int min_create_num = 5;
+                m_Controller.Init(scene_info.Bounds.center, scene_info.Bounds.size, true, max_create_num, min_create_num, SceneSeparateTreeType.QuadTree);
+                // Debug.Log("scene_info.ObjectInfoList.Count : "+scene_info.ObjectInfoList.Count.ToString());
+                for (int i = 0; i < scene_info.ObjectInfoList.Count; i++)
+                {
+                    m_Controller.AddSceneBlockObject(scene_info.ObjectInfoList[i]);
+                }
 
-            GameObjectEntity mainRoleGOE = RoleMgr.GetInstance().GetMainRole();
-            if (mainRoleGOE != null)
-            {
-                detector = mainRoleGOE.GetComponent<SceneDetectorBase>();
-            }
-            on_ok(1);
+                GameObjectEntity mainRoleGOE = RoleMgr.GetInstance().GetMainRole();
+                if (mainRoleGOE != null)
+                {
+                    detector = mainRoleGOE.GetComponent<SceneDetectorBase>();
+                }
+                on_ok(1);
+            });});
         });
     }
 
@@ -161,41 +171,48 @@ public class SceneMgr : MonoBehaviour
         isLoadingScene = true;
         isBaseWorldLoadOk = false;
         LoadSceneInfo(scene_id, delegate(int result){
-            string navmeshPath = "";
+            string baseWorldScenePath = "";
             if (XLuaFramework.AppConfig.DebugMode)
             {
-                navmeshPath = "Assets/AssetBundleRes/scene/base_world/base_world_"+scene_id+".unity";
+                baseWorldScenePath = "Assets/AssetBundleRes/scene/base_world/base_world_"+scene_id+".unity";
             }
             else
             {
-                navmeshPath = "base_world_"+scene_id;
-                XLuaFramework.ResourceManager.GetInstance().LoadNavMesh(navmeshPath);
+                baseWorldScenePath = "base_world_"+scene_id;
+                XLuaFramework.ResourceManager.GetInstance().LoadNavMesh(baseWorldScenePath);
             }
-            LoadingView.Instance.SetData(0.6f, "加载基础场景...");
-            AsyncOperation asy = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(navmeshPath, UnityEngine.SceneManagement.LoadSceneMode.Additive);
-            asy.completed += delegate(AsyncOperation asyOp){
+            LoadingView.Instance.SetData(0.8f, "加载基础场景...");
+            AsyncOperation asy = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(baseWorldScenePath, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+            // asy.allowSceneActivation = false;
+            // while (asy.progress < 0.9f)
+            // {
+            //     Debug.Log("Loading scene " + " [][] Progress: " + asy.progress);
+            //     yield return null;
+            // }
+            asy.completed += delegate(AsyncOperation asyOp)
+            {
                 Debug.Log("load base world:"+asyOp.isDone.ToString());
                 isLoadingScene = false;
                 isBaseWorldLoadOk = true;
                 // CorrectMainRolePos();
                 LoadingView.Instance.SetData(1, "加载场景完毕");
                 LoadingView.Instance.SetActive(false, 0.5f);
-                var mainRole = RoleMgr.GetInstance().GetMainRole();
-                if (mainRole != null)
-                {
-                    Debug.Log("reset nav agent");
-                    var moveQuery = mainRole.GetComponent<MoveQuery>();
-                    moveQuery.UpdateNavAgent();
-                }
+                Timer.Register(0.5f, () => {
+                    //切换场景后需要重置一下 NavMeshAgent 组件
+                    RoleMgr.GetInstance().UpdateMainRoleNavAgent();
+                });
                 CorrectSceneObjectsPos();
                 CorrectMainRolePos();
+                XLuaFramework.CSLuaBridge.GetInstance().CallLuaFunc(GlobalEvents.SceneChanged);
             };
         });
     }
 
     public void UnloadScene()
     {
+        RoleMgr.GetInstance().StopMainRoleRunning();
         string baseSceneName = "base_world_"+curSceneID;
+        // NavMesh.RemoveAllNavMeshData();
         AsyncOperation asy = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(baseSceneName);
         asy.completed += delegate(AsyncOperation asyOp){
             Debug.Log("unload scene finish");
@@ -203,15 +220,11 @@ public class SceneMgr : MonoBehaviour
         if (m_Controller != null)
             m_Controller.ResetAllData();
         RemoveAllSceneObjects();
-        var mainRole = RoleMgr.GetInstance().GetMainRole();
-        if (mainRole != null)
-        {
-            var fight = mainRole.GetComponent<AutoFight>();
-            fight.enabled = false;
-        }
+        var sceneObjects = GameObject.Find("SceneMgr").transform;
+        XLuaFramework.Util.ClearChild(sceneObjects);
     }
 
-    public void ReqEnterScene(int scene_id, int door_id)
+    public void ReqEnterScene(int scene_id, int door_id=0)
     {
         SprotoType.scene_enter_to.request req = new SprotoType.scene_enter_to.request();
         req.scene_id = scene_id;
@@ -228,6 +241,7 @@ public class SceneMgr : MonoBehaviour
         this.detector = detector;
     }
 
+    //光照信息放在base_world后此函数就没用了
     private void ApplyLightInfo(SceneInfo scene_info)
     {
         LightmapSettings.lightmapsMode = scene_info.LightmapMode;
@@ -375,7 +389,7 @@ public class SceneMgr : MonoBehaviour
         {
             long curHP = Int64.Parse(info_strs[8]);
             long maxHP = Int64.Parse(info_strs[9]);
-            Entity role = RoleMgr.GetInstance().AddRole(uid, typeID, pos, targetPos, curHP/GameConst.RealToLogic, maxHP/GameConst.RealToLogic);
+            Entity role = RoleMgr.GetInstance().AddRole(uid, typeID, pos, targetPos, curHP, maxHP);
             entitiesDic[SceneObjectType.Role].Add(uid, role);
             return role;
         }
@@ -383,13 +397,12 @@ public class SceneMgr : MonoBehaviour
         {
             long curHP = Int64.Parse(info_strs[8]);
             long maxHP = Int64.Parse(info_strs[9]);
-            Entity monster = MonsterMgr.GetInstance().AddMonster(uid, typeID, pos, targetPos, curHP/GameConst.RealToLogic, maxHP/GameConst.RealToLogic);
+            Entity monster = MonsterMgr.GetInstance().AddMonster(uid, typeID, pos, targetPos, curHP, maxHP);
             entitiesDic[SceneObjectType.Monster].Add(uid, monster);
             return monster;
         }
         else if (type == SceneObjectType.NPC)
         {
-            Debug.Log("content : "+content+" newPos:"+pos.x+" "+pos.y+" "+pos.z);
             Entity npc = NPCMgr.GetInstance().AddNPC(uid, typeID, pos, targetPos);
             entitiesDic[SceneObjectType.NPC].Add(uid, npc);
             return npc;
@@ -446,13 +459,14 @@ public class SceneMgr : MonoBehaviour
 
     public void RemoveSceneEntity(Entity entity, bool deleInDic)
     {
-        MoveQuery moveQuery=null;
+        MoveQuery moveQuery = null;
         if (EntityManager.HasComponent<MoveQuery>(entity))
             moveQuery = EntityManager.GetComponentObject<MoveQuery>(entity);
-        if (EntityManager.HasComponent<NameboardData>(entity))
+        bool hasNameboard = EntityManager.HasComponent<NameboardData>(entity);
+        if (hasNameboard)
         {
-            var nameboardData = EntityManager.GetComponentData<NameboardData>(entity);
-            nameboardData.Destroy();
+            var nameboardData = EntityManager.GetComponentObject<NameboardData>(entity);
+            nameboardData.UnuseLooks();
         }
         if (EntityManager.HasComponent<LooksInfo>(entity))
         {
@@ -461,6 +475,11 @@ public class SceneMgr : MonoBehaviour
         }
         var trans = EntityManager.GetComponentObject<Transform>(entity);
         World.RequestDespawn(trans.gameObject);
+        var playableDir = trans.GetComponent<PlayableDirector>();
+        if (playableDir != null)
+        {
+            playableDir.Stop();
+        }
         if (deleInDic)
         {
             var UIDData = EntityManager.GetComponentData<UID>(entity);
@@ -501,11 +520,29 @@ public class SceneMgr : MonoBehaviour
         }
     }
 
+    public void ChangeRoleUID(Entity entity, long newUID)
+    {
+        // var mainRoleGOE = RoleMgr.GetInstance().GetMainRole();
+        // if (mainRoleGOE == null || mainRoleGOE.Entity==Entity.Null)
+            // return;
+        // var entity = mainRoleGOE.Entity;
+        var lastUID = SceneMgr.Instance.EntityManager.GetComponentData<UID>(entity);
+        Debug.Log("lastUID.value : "+lastUID.Value+" newUID:"+newUID);
+        var roleDic = entitiesDic[SceneObjectType.Role];
+        if (roleDic.ContainsKey(lastUID.Value))
+        {
+            roleDic.Remove(lastUID.Value);
+        }
+        roleDic.Add(newUID, entity);
+        SceneMgr.Instance.EntityManager.SetComponentData<UID>(entity, new UID{Value=newUID});
+        MoveQuery moveQuery = SceneMgr.Instance.EntityManager.GetComponentObject<MoveQuery>(entity);
+        // Debug.Log("ApplyChangeInfoSceneChange new uid : "+uid+" moveQuery:"+(moveQuery!=null));
+        if (moveQuery != null)
+            moveQuery.ChangeUID(newUID);
+    }
+
     public Entity GetSceneObject(long uid)
     {
-        // Debug.Log("GetSceneObject uid : "+uid.ToString()+" ContainsKey:"+entityDic.ContainsKey(uid).ToString());
-        // if (entityDic.ContainsKey(uid))
-            // return entityDic[uid];
         foreach (var item in entitiesDic)
         {
             if (item.Value.ContainsKey(uid))
@@ -520,7 +557,6 @@ public class SceneMgr : MonoBehaviour
     {
         return entitiesDic[type];
     }
-
 }
 
 }

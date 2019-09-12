@@ -12,14 +12,32 @@ namespace UnityMMO {
 public class SceneInfoExporter : Editor
 {
     const string SavePath = "Assets/AssetBundleRes/scene/";
+    static Dictionary<string, int> ResPathDic;
+    static List<string> ResPathList;
+    static int CurResID;
 
     [MenuItem("SceneEditor/Export Scene Info")]
     private static void Export()
     {
+        var sceneLoadCtl = Selection.activeGameObject.GetComponent<SceneObjectLoadController>();
+        // SceneInfoForServer scene_info = Selection.activeTransform.GetComponent<SceneInfoForServer>();
+        if (sceneLoadCtl == null)
+        {
+            EditorUtility.DisplayDialog("Warning", "you must select a GameObject with SceneObjectLoadController component", "Ok");
+            return;
+        }
+        sceneLoadCtl.ResetAllData();
+        string defaultFolder = SavePath+Selection.activeGameObject.name;
+        string save_path = EditorUtility.SaveFilePanel("Save Scene Info File", defaultFolder, "scene_info", "json");
+        if (save_path=="")
+            return;
+        ResPathDic = new Dictionary<string, int>();
+        ResPathList = new List<string>();
+        CurResID = 0;
         SceneInfo export_info = new SceneInfo();
         //先把所有选中的场景节点信息导出来
         export_info.ObjectInfoList = new List<SceneStaticObject>();
-        PickChild(Selection.activeTransform, export_info.ObjectInfoList);
+        PickChild(Selection.activeTransform, export_info.ObjectInfoList, Vector3.one);
         if (export_info.ObjectInfoList.Count <= 0)
         {
             Debug.Log("export scene info failed!");
@@ -52,20 +70,27 @@ public class SceneInfoExporter : Editor
         {
             export_info.BornList.Add(new BornInfoData(item.GetUnityPos(), item.born_id));
         }
-        Debug.Log("born_list : "+born_list.Length+" "+export_info.BornList.Count);
-        // DataContractJsonSerializer js = new DataContractJsonSerializer(typeof(SceneInfo));
-        // MemoryStream msObj = new MemoryStream();
-        //将序列化之后的Json格式数据写入流中
-        // js.WriteObject(msObj, export_info);
-        // msObj.Position = 0;
-        // StreamReader sr = new StreamReader(msObj, Encoding.UTF8);
-        // string json = sr.ReadToEnd();
-        // sr.Close();
-        // msObj.Close();
+        MonsterInfo[] mons_list = Selection.activeTransform.GetComponentsInChildren<MonsterInfo>();
+        export_info.MonsterList = new List<int>();
+        foreach (var item in mons_list)
+        {
+            if (!export_info.MonsterList.Exists(x => x==item.monster_type_id))
+                export_info.MonsterList.Add(item.monster_type_id);
+        }
+
+        export_info.ResPathList = ResPathList;
         string json = JsonUtility.ToJson(export_info, true);
-        string savePath = SavePath+Selection.activeGameObject.name+"/scene_info.json";
-        File.WriteAllText(savePath, json);
-        Debug.Log("export succeed : "+savePath+" content : "+json);
+        File.WriteAllText(save_path, json);
+        Debug.Log("export succeed : "+save_path+" content : "+json);
+
+        int max_create_num = 19;
+        int min_create_num = 0;
+        sceneLoadCtl.Init(export_info.Bounds.center, export_info.Bounds.size, true, max_create_num, min_create_num, SceneSeparateTreeType.QuadTree);
+        Debug.Log("export_info.ObjectInfoList.Count : "+export_info.ObjectInfoList.Count.ToString());
+        for (int i = 0; i < export_info.ObjectInfoList.Count; i++)
+        {
+            sceneLoadCtl.AddSceneBlockObject(export_info.ObjectInfoList[i]);
+        }
     }
 
     private static void SaveLightInfo(SceneInfo export_info)
@@ -86,16 +111,17 @@ public class SceneInfoExporter : Editor
         }
     }
 
-    private static void PickChild(Transform transform, List<SceneStaticObject> sceneObjectList)
+    private static void PickChild(Transform transform, List<SceneStaticObject> sceneObjectList, Vector3 boundScale)
     {
         var obj = PrefabUtility.GetCorrespondingObjectFromSource(transform);
+        var curScale = boundScale;
+        var scaleInfo = transform.GetComponent<BoundScaleInfo>();
+        if (scaleInfo != null)
+            curScale = scaleInfo.BoundScale;
         if (obj != null)
         {
             string path = AssetDatabase.GetAssetPath(obj);
-            // path = path.Replace(SavePath, "");
-            // string ext = Path.GetExtension(path);
-            // path = path.Replace(ext, "");
-            var o = GetChildInfo(transform, path);
+            var o = GetChildInfo(transform, path, curScale);
             if (o != null)
                 sceneObjectList.Add(o);
         }
@@ -104,13 +130,28 @@ public class SceneInfoExporter : Editor
             for (int i = 0; i < transform.childCount; i++)
             {
                 if (transform.GetChild(i).gameObject.activeSelf)
-                    PickChild(transform.GetChild(i), sceneObjectList);
+                    PickChild(transform.GetChild(i), sceneObjectList, curScale);
             }
         }
     }
 
-    private static SceneStaticObject GetChildInfo(Transform transform, string resPath)
+    private static int GetResID(string resPath)
     {
+        int resID = -1;
+        bool isOk = ResPathDic.TryGetValue(resPath, out resID);
+        if (!isOk)
+        {
+            resID = CurResID;
+            CurResID++;
+            ResPathDic.Add(resPath, resID);
+            ResPathList.Add(resPath);
+        }
+        return resID;
+    }
+
+    private static SceneStaticObject GetChildInfo(Transform transform, string resPath, Vector3 boundScale)
+    {
+        int resID = GetResID(resPath);
         if (string.IsNullOrEmpty(resPath))
             return null;
         Renderer[] renderers = transform.gameObject.GetComponentsInChildren<MeshRenderer>();
@@ -132,11 +173,20 @@ public class SceneInfoExporter : Editor
         if (size.z <= 0)
             size.z = 0.2f;
         bounds.size = size;
-        int lightmapIndex = renderers[0].lightmapIndex;
+        var expandAmount = size;
+        if (boundScale.x != 1)
+            expandAmount.x *= boundScale.x;
+        if (boundScale.y != 1)
+            expandAmount.y *= boundScale.y;
+        if (boundScale.z != 1)
+            expandAmount.z *= boundScale.z;
+        if (expandAmount != size)
+            bounds.Expand(expandAmount);
+        bool useLightProbe = renderers[0].lightProbeUsage != UnityEngine.Rendering.LightProbeUsage.Off;
+        int lightmapIndex = useLightProbe?-1:renderers[0].lightmapIndex;
         Vector4 lightmapScaleOffset = renderers[0].lightmapScaleOffset;
-        SceneStaticObject obj = new SceneStaticObject(bounds, transform.position, transform.eulerAngles, transform.localScale, resPath, lightmapIndex, lightmapScaleOffset);
+        SceneStaticObject obj = new SceneStaticObject(bounds, transform.position, transform.eulerAngles, transform.localScale, resID, lightmapIndex, lightmapScaleOffset);
         return obj;
-        
     }
 }
 }

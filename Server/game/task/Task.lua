@@ -2,6 +2,7 @@ local skynet = require "skynet"
 require "Common.Util.TableUtil"
 local TaskConst = require "game.task.TaskConst"
 
+local user_info
 local Task = {
 	cfg = require "Config.ConfigTask",
 	taskInfos = {},
@@ -52,7 +53,7 @@ local addTargetMonsterIfKillTask = function ( roleID, taskInfo )
 	end 
 end
 
-local removeTargetMonsterIfKillTask = function ( roleID, taskInfo )
+local updateTargetMonsterIfKillTask = function ( roleID, taskInfo )
 	if taskInfo.subType == TaskConst.SubType.KillMonster and Task.monsterTargetIDs[roleID] and Task.monsterTargetIDs[roleID][taskInfo.contentID] then
 		Task.monsterTargetIDs[roleID][taskInfo.contentID] = Task.monsterTargetIDs[roleID][taskInfo.contentID] - 1
 		if Task.monsterTargetIDs[roleID][taskInfo.contentID] <= 0 then
@@ -104,7 +105,7 @@ local completeSubTask = function ( roleID, taskInfo )
 	local cfg = Task.cfg[taskInfo.taskID]
 	if not cfg then return end
 	
-	removeTargetMonsterIfKillTask(roleID, taskInfo)
+	updateTargetMonsterIfKillTask(roleID, taskInfo)
 	taskInfo.subTaskIndex = taskInfo.subTaskIndex + 1
 	local isFinishTask = taskInfo.subTaskIndex > #cfg.subTasks
 	if isFinishTask then
@@ -118,7 +119,6 @@ local completeSubTask = function ( roleID, taskInfo )
 		taskInfo.maxProgress = nextSubTask.maxProgress or 1
 		taskInfo.contentID = nextSubTask.contentID or 0
 		addTargetMonsterIfKillTask(roleID, taskInfo)
-		print('Cat:Task.lua[118] taskInfo.id', taskInfo.id)
 		if taskInfo.id then
 			skynet.send(Task.gameDBServer, "lua", "update", "TaskList", "id", taskInfo.id, taskInfo)
 		end
@@ -219,6 +219,16 @@ function SprotoHandlers.Task_ProgressChanged( userInfo, reqData )
 end
 
 local PublicFuncs = {}
+
+function PublicFuncs.Init( userInfo )
+	user_info = userInfo
+end
+
+function PublicFuncs.Logout( )
+	print('Cat:Task.lua[Logout]')
+	-- local taskInfos = Task.taskInfos[user_info.cur_role_id]
+end
+
 function PublicFuncs.NPCHasTask( roleID, npcID )
 	--Cat_Todo : cache npc status
 	local taskIDs = getTaskListInNPC(roleID, npcID)
@@ -226,16 +236,17 @@ function PublicFuncs.NPCHasTask( roleID, npcID )
 end
 
 function PublicFuncs.KillMonster( roleID, monsterID, killNum )
-	-- print('Cat:Task.lua[203] roleID, monsterID, killNum', roleID, monsterID, killNum, Task.monsterTargetIDs[roleID])
+	-- print('Cat:Task.lua[203] roleID, monsterID, killNum', roleID, monsterID, killNum, Task.monsterTargetIDs[roleID], Task.monsterTargetIDs[roleID] and Task.monsterTargetIDs[roleID][monsterID] or "nil", Task.taskInfos[roleID])
 	if Task.monsterTargetIDs[roleID] and Task.monsterTargetIDs[roleID][monsterID] then
 		local taskInfos = Task.taskInfos[roleID]
 		if taskInfos and taskInfos.taskList then
 			for i,v in ipairs(taskInfos.taskList) do
-				-- print('Cat:Task.lua[216] v.curProgress', v.curProgress, v.contentID, v.subType)
+				-- print('Cat:Task.lua[216] v.curProgress', v.curProgress, v.maxProgress, v.contentID, v.subType)
 				if v.subType == TaskConst.SubType.KillMonster and v.contentID == monsterID then
 					v.curProgress = v.curProgress + killNum
 					if v.curProgress >= v.maxProgress then
 						completeSubTask(roleID, v)
+						addNewChangedTaskInfo(roleID, v)
 					else
 						addNewChangedTaskInfo(roleID, v)
 						--avoid frequent update database

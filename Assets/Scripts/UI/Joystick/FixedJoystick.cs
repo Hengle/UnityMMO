@@ -19,6 +19,18 @@ public class FixedJoystick : Joystick
         joystickPosition = RectTransformUtility.WorldToScreenPoint(UICamera, background.position);
     }
 
+    public override void OnPointerDown(PointerEventData eventData)
+    {
+        OnDrag(eventData);
+        var goe = RoleMgr.GetInstance().GetMainRole();
+        AutoFight fightAi = goe.GetComponent<UnityMMO.AutoFight>();
+        if (fightAi != null) 
+            fightAi.enabled = false;
+        var moveQuery = goe.GetComponent<UnityMMO.MoveQuery>();
+        if (moveQuery != null)
+            moveQuery.StopFindWay();
+    }
+
     public override void OnDrag(PointerEventData eventData)
     {
         Vector2 direction = eventData.position - joystickPosition;
@@ -26,15 +38,8 @@ public class FixedJoystick : Joystick
         ClampJoystick();
         handle.anchoredPosition = (inputVector * background.sizeDelta.x / 2f) * handleLimit;
         GameInput.GetInstance().JoystickDir = inputVector;
-        if (Event.current != null)
-            Event.current.Use();
-    }
-
-    public override void OnPointerDown(PointerEventData eventData)
-    {
-        OnDrag(eventData);
-        if (Event.current != null)
-            Event.current.Use();
+        // if (Event.current != null)
+        //     Event.current.Use();
     }
 
     public override void OnPointerUp(PointerEventData eventData)
@@ -42,7 +47,5 @@ public class FixedJoystick : Joystick
         inputVector = Vector2.zero;
         handle.anchoredPosition = Vector2.zero;
         GameInput.GetInstance().JoystickDir = inputVector;
-        if (Event.current != null)
-            Event.current.Use();
     }
 }

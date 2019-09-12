@@ -1,16 +1,16 @@
-local LoginView = BaseClass()
+local LoginView = BaseClass(UINode)
 
-function LoginView:DefaultVar( )
-	return {
-	UIConfig = {
-			prefab_path = "Assets/AssetBundleRes/ui/login/LoginView.prefab",
-			canvas_name = "Normal",
-		},
+function LoginView:Constructor( )
+	self.viewCfg = {
+		prefabPath = "Assets/AssetBundleRes/ui/login/LoginView.prefab",
+		canvasName = "Normal",
 	}
 end
 
 function LoginView:OnLoad(  )
-	local names = {"login", "account", "server_ip", "port", "game_server_ip:input","game_port:input",}
+	local names = {
+		"login", "account", "server_ip", "port", "game_server_ip:input","game_port:input","setting:obj",
+	}
 	UI.GetChildren(self, self.transform, names)
 	self.login_btn_obj = self.login.gameObject
     self.account_txt = self.account:GetComponent("InputField")
@@ -19,6 +19,7 @@ function LoginView:OnLoad(  )
     self.transform.sizeDelta = Vector2.New(0, 0)
 	self:AddEvents()
 	self:UpdateView()
+	CS.UnityMMO.LoadingView.Instance:SetActive(false)
 end
 
 function LoginView:AddEvents(  )
@@ -42,7 +43,10 @@ function LoginView:AddEvents(  )
 	        print("Cat:LoginView [end]")
 	        GlobalEventSystem:Fire(LoginConst.Event.StartLogin, login_info)
 	        CookieWrapper:GetInstance():SaveCookie(CookieLevelType.Common, CookieTimeType.TYPE_ALWAYS, CookieKey.LastLoginInfo, login_info)
-		-- elseif click_obj == self.single_mode_obj then
+		elseif click_obj == self.setting_obj then
+			local view = require("Game.GM.GMSettingView").New()
+			view:Load()
+			-- elseif click_obj == self.single_mode_obj then
   --           UIMgr:CloseAllView()
 		-- 	GameVariable.IsSingleMode = true
   --       	GlobalEventSystem:Fire(GlobalEvents.GameStart)
@@ -50,6 +54,7 @@ function LoginView:AddEvents(  )
 		end
 	end
 	UIHelper.BindClickEvent(self.login_btn_obj, on_click)
+	UIHelper.BindClickEvent(self.setting_obj, on_click)
 	-- UIHelper.BindClickEvent(self.single_mode_obj, on_click)
 end
 

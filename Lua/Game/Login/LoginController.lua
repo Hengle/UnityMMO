@@ -9,7 +9,8 @@ function LoginController:Init(  )
 	self:InitEvents()
 
     self.loginView = require("Game/Login/LoginView").New()
-    UIMgr:Show(self.loginView)
+    self.loginView:Load()
+    -- UIMgr:Show(self.loginView)
 end
 
 function LoginController:InitEvents(  )
@@ -29,7 +30,8 @@ function LoginController:InitEvents(  )
             LoginModel:GetInstance():SetRoleList(role_list)
             
             if self.loginView then
-                UIMgr:Close(self.loginView)
+                -- UIMgr:Close(self.loginView)
+                self.loginView:Unload()
                 self.loginView = nil
             end
             if role_list and #role_list > 0 then
@@ -201,8 +203,6 @@ function LoginController:OnReceiveMsg( bytes )
     end
 end
 
-
-
 function LoginController:Disconnect()
 	print('Cat:LoginController.lua[Disconnect]', self.login_state)
     if not self.login_info.had_disconnect_with_account_server and (self.login_state == LoginConst.Status.WaitForGameServerConnect or self.login_state == LoginConst.Status.WaitForGameServerHandshake) then
@@ -233,7 +233,8 @@ function LoginController:Disconnect()
                 self.reconnectView = nil
             else
                 self.loginView = require("Game/Login/LoginView").New()
-                UIMgr:Show(self.loginView)
+                self.loginView:Load()
+                -- UIMgr:Show(self.loginView)
             end
         end,
     }

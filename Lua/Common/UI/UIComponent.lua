@@ -21,7 +21,8 @@ end
 UI.Background = BaseClass(UI.UIComponent)
 function UI.Background:OnLoad()
 	-- print('Cat:UIComponent.lua[23] self.alpha, self.is_click_to_close', self.alpha, self.is_click_to_close)
-	local bg = UIWidgetPool:CreateWidget("Background")
+	local bg = PrefabPool:Get("Background")
+	self.bg_widget = bg
 	self.bg_img = bg.gameObject:GetComponent("RawImage")
 	self.bg_obj = bg.gameObject
 	if self.alpha then
@@ -34,13 +35,17 @@ function UI.Background:OnLoad()
 	UIHelper.SetSizeDelta(bg.transform, 1280 ,720)
 	UIHelper.SetLocalScale(bg.transform, 1.2 , 1.2, 1)
 	bg.transform:SetAsFirstSibling()
-	self.bg_widget = bg
 	if self.is_click_to_close then
 		self.bg_img.raycastTarget = true
 		local on_click = function ( )
-			UIMgr:Close(self.view_owner)
+			print('Cat:UIComponent.lua[41] self.view_owner.Unload', self.view_owner, self.view_owner.Unload)
+			if self.view_owner.Unload then
+				self.view_owner:Unload()
+			else
+				UIMgr:Close(self.view_owner)
+			end
 		end
-		UIHelper.BindClickEvent(self.bg_obj, on_click)
+		UI.BindClickEvent(self.bg_obj, on_click)
 	end
 end
 
@@ -55,7 +60,7 @@ end
 function UI.Background:OnClose()
 	print('Cat:UI.lua[Background OnClose]')
 	if self.bg_widget then
-		UIWidgetPool:RecycleWidget(self.bg_widget)
+		PrefabPool:Recycle(self.bg_widget)
 		self.bg_widget = nil
 	end
 end

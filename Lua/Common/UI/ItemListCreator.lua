@@ -2,8 +2,8 @@
 用于创建Item列表的组件,支持三种创建方式:
 )传入Item类名:使用字段item_class
 )传入prefab资源名:使用字段prefab_path
-)对象池类型如:UIObjPool.UIType.AwardItem:使用字段obj_pool_type
-)单个控件如：UIType.Label使用字段ui_factory_type
+)对象池类型如:GoodsItem:使用字段lua_pool_name
+)单个控件如：字段prefab_pool_name
 各字段使用说明:
 data_list:子节点的信息列表
 create_frequency:分时加载,即每隔这么多秒加载一个子节点
@@ -110,7 +110,7 @@ function UI.ItemListCreator:UpdateItems(info)
 		UpdateItemsGrid(self)
 	else
 		-- local visual_w = GetSizeDeltaX(info.scroll_view)
-		info.show_col = Round((self.visual_width+info.space_x) / self.offset_x)
+		info.show_col = math.floor((self.visual_width+info.space_x) / self.offset_x)
 		UpdateItemsGrid(self)
 	end
 end
@@ -150,7 +150,7 @@ UpdateItemsGrid = function ( self )
 			self.cur_create_index = self.cur_create_index + 1
 			if self.cur_create_index > self.max_create_num then
 				if self.step_create_item_id then
-					GlobalTimerQuest:CancelQuest(self.step_create_item_id)
+					self.step_create_item_id:Stop()
 					self.step_create_item_id = nil
 				end
 				if self.scroll_view_scr then
@@ -174,11 +174,15 @@ UpdateItemsGrid = function ( self )
 				local origin_func = step_create_item
 				step_create_item = function()
 					for i=1,info.create_num_per_time do
+						if self.cur_create_index > self.max_create_num then
+							break
+						end
 						origin_func()
 					end
 				end
 			end
-			self.step_create_item_id = GlobalTimerQuest:AddPeriodQuest(step_create_item, info.create_frequency, -1)
+			self.step_create_item_id = Timer.New(step_create_item, info.create_frequency, -1)
+			self.step_create_item_id:Start()
 		end
 		step_create_item()
 	else
@@ -375,7 +379,8 @@ GetItemCreator = function ( self )
 		creator = function(i, v)
 			local item = self.item_list[i]
 			if not item then
-				item = info.item_class.New(info.item_con)
+				item = info.item_class.New()
+				item:SetParent(info.item_con)
 				self.item_list[i] = item
 				item._real_index_for_item_creator_ = i
 			end
@@ -383,124 +388,63 @@ GetItemCreator = function ( self )
 			item:SetLocalPositionXYZ(self.get_item_pos_xy_func(item._real_index_for_item_creator_))
 			update_item_for_creator(self, item)
 		end
-	elseif info.prefab_path then
+	elseif info.prefab_path or info.prefab_pool_name then
 		creator = function(i, v)
 			local item = self.item_list[i]
 			if not item then
 				local on_load_ok = function ( item )
 					UI.GetChildren(item, item.transform, info.child_names)
-					-- UI.SetParent(item.transform, info.item_con)
-					if item.cache_data and item.OnUpdate then
-						item:OnUpdate(item.cache_data.index, item.cache_data.data)
-						item.cache_data = nil
+					if item.___data_for_itmector___ then
+						item.___data_for_itmector___ = nil
+						update_item_for_creator(self, item)
 					end
 				end
-				-- item = {
-				-- 	UIConfig = {
-				-- 		prefab_path = info.prefab_path,
-				-- 	},
-				-- 	OnLoad = on_load_ok,
-				-- 	SetActive = function(item, isActive)
-				-- 		if item.is_loaded then
-				-- 			item.gameObject:SetActive(isActive)
-				-- 		else
-				-- 			item.cacheIsActive = isActive
-				-- 		end
-				-- 	end,
-				-- 	SetLocalPositionXYZ = function(item, x, y)
-				-- 		if item.is_loaded then
-				-- 			UI.SetLocalPositionXY(item.transform, x, y)
-				-- 		else
-				-- 			item.cache_pos = {x=x, y=y}
-				-- 		end
-				-- 	end,
-				-- 	SetData = function(item, i, v)
-				-- 		if item.is_loaded and item.UpdateView then
-				-- 			item:UpdateView(i, v)
-				-- 		else
-				-- 			item.cache_data = {index=i, data=v}
-				-- 		end
-				-- 	end,
-				-- 	Destroy = function(item)
-				-- 		if item.is_loaded and item.gameObject then
-				-- 			UIMgr:RemoveAllComponents(item)
-				-- 			if item.destroy_callback then
-				-- 				item.destroy_callback(item)
-				-- 			end
-				-- 			GameObject.Destroy(item.gameObject)
-				-- 		end
-				-- 		item.had_destroyed = true
-				-- 	end,
-				-- }
-				-- UIMgr:Show(item)
-				-- ResMgr:LoadPrefabGameObject(info.prefab_path, on_load_ok)
 				item = UINode.New()
-				item.prefabPath = info.prefab_path
-				item.parentTrans = info.item_con
+				if info.prefab_path then
+					item.viewCfg = {
+						prefabPath = info.prefab_path,
+					}
+				elseif info.prefab_pool_name then
+					item.viewCfg = {
+						prefabPoolName = info.prefab_pool_name,
+					}
+				end
+				item.viewCfg.parentTrans = info.item_con
 				item.SetData = function(item, i, v)
 					if item.isLoaded and item.OnUpdate then
-						item:OnUpdate(i, v)
+						update_item_for_creator(self, item)
 					else
-						item.cacheData = {index=i, data=v}
+						item.___data_for_itmector___ = {index=i, data=v}
 					end
 				end
 				item.OnLoad = on_load_ok
-				item:Load()
 				self.item_list[i] = item
 				self.item_list[i]._real_index_for_item_creator_ = i
-				item.OnUpdate = on_update_prefab_item
+				item:Load()
 			end
 			item:SetActive(true)
 			item:SetLocalPositionXYZ(self.get_item_pos_xy_func(item._real_index_for_item_creator_))
-			item:SetData(nil, self)
+			item:SetData(i, v)
 		end
-	elseif info.obj_pool_type then
+	elseif info.lua_pool_name then
 		creator = function(i, v)
 			local item = self.item_list[i]
 			if not item then
-				item = UIObjPool:PopItem(info.obj_pool_type, info.item_con)
+				item = LuaPool:Get(info.lua_pool_name)
+				item:Load()
+				item:SetParent(info.item_con)
 				self.item_list[i] = item
 				item._real_index_for_item_creator_ = i
 			end
 			item:SetActive(true)
 			item:SetLocalPositionXYZ(self.get_item_pos_xy_func(item._real_index_for_item_creator_))
-			if item.SetItemSize and info.obj_pool_type == UIObjPool.UIType.AwardItem then
-				local item_size = info.item_width or info.item_height
-				item:SetItemSize(item_size, item_size)
-			end
+			-- if item.SetItemSize and info.lua_pool_name == "GoodsItem" then
+			-- 	local item_size = info.item_width or info.item_height
+			-- 	item:SetItemSize(item_size, item_size)
+			-- end
 			update_item_for_creator(self, item)
 		end
-		self.destroy_pool_type = info.obj_pool_type
-	elseif info.ui_factory_type then
-		creator = function(i, v)
-			local item = self.item_list[i]
-			if not item then
-				local gameObj = UiFactory.createChild(info.item_con, info.ui_factory_type)
-				item = {
-					gameObject = gameObj,
-					transform = gameObj.transform,
-					is_loaded = true,
-					SetLocalPositionXYZ = function(item, x, y)
-						UIHelper.SetLocalPosition(item.transform, x, y)
-					end,
-					SetActive = function(item, is_show)
-						item.gameObject:SetActive(is_show)
-					end,
-					AddUIComponent = UIPartical.AddUIComponent,
-					RemoveUIComponent = UIPartical.RemoveUIComponent,
-					Destroy=LuaResManager.__DestroyPrefab, 
-				}
-				item.transform.pivot = Vector2(0, 1)--作为子节点的话一般轴点都是左上角的啦
-				item.transform.anchorMin = Vector2(0, 1)
-				item.transform.anchorMax = Vector2(0, 1)
-				self.item_list[i] = item
-				item._real_index_for_item_creator_ = i
-			end
-			item:SetActive(true)
-			item:SetLocalPositionXYZ(self.get_item_pos_xy_func(item._real_index_for_item_creator_))
-			update_item_for_creator(self, item)
-		end
-		
+		self.destroy_pool_type = info.lua_pool_name
 	else
 		--没有指定创建节点的方式
 		assert(false, "has not specify create way!")
@@ -773,7 +717,9 @@ ResizeItemList = function( self, min_item_num )
 	if #self.item_list > min_item_num then
 		for i=min_item_num+1, #self.item_list do
 			if self.destroy_pool_type then
-				UIObjPool:PushItem(self.destroy_pool_type, self.item_list[i])
+				LuaPool:Recycle(self.destroy_pool_type, self.item_list[i])
+			elseif self.item_list[i].Unload then
+				self.item_list[i]:Unload()
 			else
 				self.item_list[i]:Destroy()
 			end
@@ -798,13 +744,16 @@ function UI.ItemListCreator:OnClose()
 
 	if self.destroy_pool_type then
 		for i,item in pairs(self.item_list) do
-			UIObjPool:PushItem(self.destroy_pool_type, item)
+			LuaPool:Recycle(self.destroy_pool_type, item)
 		end
 		self.item_list = {} 
 	else
 		for k,v in pairs(self.item_list) do
-			v:Destroy()
-			v = nil
+			if v.Unload then
+				v:Unload()
+			else
+				v:Destroy()
+			end
 		end
 		self.item_list = {}
 	end
@@ -813,7 +762,7 @@ function UI.ItemListCreator:OnClose()
 		self.scroll_view_scr = nil
 	end
 	if self.step_create_item_id then
-		GlobalTimerQuest:CancelQuest(self.step_create_item_id)
+		self.step_create_item_id:Stop()
 		self.step_create_item_id = nil
 	end
 end

@@ -1,14 +1,17 @@
 local TaskDialogView = BaseClass(UINode)
 
 function TaskDialogView:Constructor(  )
-	self.prefabPath = "Assets/AssetBundleRes/ui/task/TaskDialogView.prefab"
+	self.viewCfg = {
+		prefabPath = "Assets/AssetBundleRes/ui/task/TaskDialogView.prefab",
+		canvasName = "Normal",
+	}
 	self.model = TaskModel:GetInstance()
 	self:Load()
 end
 
 function TaskDialogView:OnLoad(  )
 	local names = {
-		"skip_con/skip_btn:obj","bottom/npc:raw","bottom/btn:obj","bottom/npc_name:txt","bottom/chat:txt","click_bg:obj","bottom/btn/btn_label:txt"
+		"skip_con/skip_btn:obj","bottom/npc:raw","bottom/btn:obj","bottom/npc_name:txt","bottom/chat:txt","click_bg:obj","bottom/btn/btn_label:txt","bottom/left_time:txt",
 	}
 	UI.GetChildren(self, self.transform, names)
 	self.transform.sizeDelta = Vector2.zero
@@ -16,23 +19,23 @@ function TaskDialogView:OnLoad(  )
 	self:AddEvents()
 end
 
--- function TaskDialogView:SetData( data )
--- 	UINode.SetData(self, data)
--- end
+function TaskDialogView:HandleBtnClick(  )
+	print('Cat:TaskDialogView.lua[26] self.curShowData.clickCallBack', self.curShowData.clickCallBack)
+	if self.curShowData.clickCallBack then
+		self.curShowData.clickCallBack()
+	else
+		self:Unload()
+	end
+end
 
 function TaskDialogView:AddEvents(  )
 	local on_click = function ( click_obj )
 		if self.btn_obj == click_obj then
-			print('Cat:TaskDialogView.lua[26] self.curShowData.clickCallBack', self.curShowData.clickCallBack)
-			if self.curShowData.clickCallBack then
-				self.curShowData.clickCallBack()
-			else
-				self:Destroy()
-			end
+			self:HandleBtnClick()
 		elseif self.skip_btn_obj == click_obj then
-			self:Destroy()
+			self:Unload()
 		elseif self.click_bg_obj == click_obj then
-			self:Destroy()
+			self:Unload()
 		end
 	end
 	UI.BindClickEvent(self.btn_obj, on_click)
@@ -49,7 +52,7 @@ end
 function TaskDialogView:ReqTakeTask(  )
 	local ackTakeTask = function ( ackData )
 		if ackData.result == NoError then
-        	self:Destroy()
+        	self:Unload()
         else
         	Message:Show(ConfigMgr:GetErrorDesc(ackData.result))
         end
@@ -60,7 +63,7 @@ end
 function TaskDialogView:ReqDoTask(  )
 	local ackDoTask = function ( ackData )
 		if ackData.result == NoError then
-        	self:Destroy()
+        	self:Unload()
         else
         	Message:Show(ConfigMgr:GetErrorDesc(ackData.result))
         end
@@ -69,7 +72,7 @@ function TaskDialogView:ReqDoTask(  )
 end
 
 function TaskDialogView:ClickOk(  )
-	self:Close()
+	self:Unload()
 end
 
 function TaskDialogView:ProcessBtnNameAndCallBack( flag )
@@ -77,7 +80,7 @@ function TaskDialogView:ProcessBtnNameAndCallBack( flag )
 		self.flagMap = {
 			[TaskConst.DialogBtnFlag.Continue] = {name="继续", func=TaskDialogView.ShowNextTalk},
 			[TaskConst.DialogBtnFlag.TakeTask] = {name="接取", func=TaskDialogView.ReqTakeTask},
-			[TaskConst.DialogBtnFlag.DoTask]   = {name="接取", func=TaskDialogView.ReqDoTask},
+			[TaskConst.DialogBtnFlag.DoTask]   = {name="完成", func=TaskDialogView.ReqDoTask},
 			[TaskConst.DialogBtnFlag.Ok] 	   = {name="确定", func=TaskDialogView.ClickOk},
 		}
 	end
@@ -88,6 +91,14 @@ function TaskDialogView:ProcessBtnNameAndCallBack( flag )
     self.curShowData.clickCallBack = function()
     	flagInfo.func(self)
 	end
+	self.countdown = self.countdown or self:AddUIComponent(UI.Countdown)
+  	self.countdown:CountdownByLeftTime(8000, function(leftTime)
+  		if leftTime > 0 then
+  			self.left_time_txt.text = string.format("%s秒后自动", math.floor(leftTime/1000))
+  		else
+			self:HandleBtnClick()
+		end
+	end, 200)
 end
 
 function TaskDialogView:ProcessTaskInfo(  )
@@ -114,7 +125,7 @@ function TaskDialogView:ProcessTaskInfo(  )
     else
         --show default conversation
         self.curShowData = {}
-        self.curShowData.content = "哈哈，你猜我是谁？"
+        self.curShowData.content = "哈哈,你猜我是谁?"
         self.curShowData.who = self.data.npcID
         self:ProcessBtnNameAndCallBack(TaskConst.DialogBtnFlag.Ok)
     end
@@ -137,12 +148,14 @@ end
 function TaskDialogView:UpdateLooks( )
 	local show_data
 	if self.curShowData.who == 0 then
+		local mainRoleLooksInfo = LRoleMgr:GetMainRoleLooksInfo()
+		if not mainRoleLooksInfo then return end
 		show_data = {
 			showType = UILooksNode.ShowType.Role,
 			showRawImg = self.npc_raw,
-			body = 1,
-			hair = 1,
-			career = 2,
+			body = mainRoleLooksInfo.body,
+			hair = mainRoleLooksInfo.hair,
+			career = mainRoleLooksInfo.career,
 			canRotate = true,
 		}
 	else

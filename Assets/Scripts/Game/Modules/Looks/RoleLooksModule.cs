@@ -57,10 +57,10 @@ public class HandleRoleLooksNetRequest : BaseComponentSystem
     public HandleRoleLooksNetRequest(GameWorld world) : base(world)
     {
     }
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
-        Debug.Log("on OnCreateManager HandleRoleLooksNetRequest");
-        base.OnCreateManager();
+        Debug.Log("on OnCreate HandleRoleLooksNetRequest");
+        base.OnCreate();
         RequestGroup = GetEntityQuery(typeof(RoleLooksNetRequest));
     }
 
@@ -97,13 +97,30 @@ public class HandleRoleLooksNetRequest : BaseComponentSystem
                 // Debug.Log("rsp.result : "+rsp.result.ToString()+" owner:"+owner.ToString());
                 if (rsp.result == UnityMMO.GameConst.NetResultOk)
                 {
-                    RoleMgr.GetInstance().SetName(req.uid, rsp.role_looks_info.name);
+                    var name = rsp.role_looks_info.name;
+                    RoleMgr.GetInstance().SetName(req.uid, name);
+                    RoleMgr.GetInstance().UpdateLooksInfo(req.uid, new RoleLooksInfo{
+                        uid=req.uid, career=(int)rsp.role_looks_info.career,
+                        body=(int)rsp.role_looks_info.body,
+                        hair=(int)rsp.role_looks_info.hair,
+                        weapon=(int)rsp.role_looks_info.weapon,
+                        wing=(int)rsp.role_looks_info.wing,
+                        horse=(int)rsp.role_looks_info.horse,
+                        hp=(int)rsp.role_looks_info.hp,
+                        maxHp=(int)rsp.role_looks_info.max_hp,
+                        name=name,
+                    });
                     if (m_world.GetEntityManager().HasComponent<HealthStateData>(owner))
                     {
                         var hpData = m_world.GetEntityManager().GetComponentData<HealthStateData>(owner);
                         hpData.CurHp = rsp.role_looks_info.hp;
                         hpData.MaxHp = rsp.role_looks_info.max_hp;
                         m_world.GetEntityManager().SetComponentData<HealthStateData>(owner, hpData);
+                    }
+                    if (m_world.GetEntityManager().HasComponent<NameboardData>(owner))
+                    {
+                        var nameboardData = m_world.GetEntityManager().GetComponentObject<NameboardData>(owner);
+                        nameboardData.SetName(name);
                     }
                     bool hasTrans = m_world.GetEntityManager().HasComponent<Transform>(owner);
                     if (hasTrans)
@@ -128,10 +145,10 @@ public class HandleRoleLooks : BaseComponentSystem
     public HandleRoleLooks(GameWorld world) : base(world)
     {
     }
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
-        Debug.Log("on OnCreateManager HandleRoleLooks");
-        base.OnCreateManager();
+        Debug.Log("on OnCreate HandleRoleLooks");
+        base.OnCreate();
         RoleGroup = GetEntityQuery(typeof(UID), typeof(LooksInfo), typeof(RoleInfo));
     }
 
@@ -188,10 +205,10 @@ public class HandleRoleLooksSpawnRequests : BaseComponentSystem
     {
     }
 
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
-        Debug.Log("on OnCreateManager role looks system");
-        base.OnCreateManager();
+        Debug.Log("on OnCreate role looks system");
+        base.OnCreate();
         SpawnGroup = GetEntityQuery(typeof(RoleLooksSpawnRequest));
     }
 
@@ -273,10 +290,10 @@ public class HandleLooksFollowLogicTransform : BaseComponentSystem
     public HandleLooksFollowLogicTransform(GameWorld world) : base(world)
     {}
 
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
-        Debug.Log("on OnCreateManager role looks system");
-        base.OnCreateManager();
+        Debug.Log("on OnCreate role looks system");
+        base.OnCreate();
         Group = GetEntityQuery(typeof(LooksInfo), typeof(Translation), typeof(Rotation));
     }
 

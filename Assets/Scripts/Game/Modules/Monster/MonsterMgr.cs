@@ -44,26 +44,30 @@ public class MonsterMgr
         monsterGameOE.transform.localPosition = pos;
         Entity monster = monsterGameOE.Entity;
         monsterGameOE.GetComponent<UIDProxy>().Value = new UID{Value=uid};
-        InitMonster(monster, uid, typeID, pos, targetPos, curHp, maxHp);
+        InitMonster(monsterGameOE, uid, typeID, pos, targetPos, curHp, maxHp);
         return monster;
 	}
 
-    private void InitMonster(Entity monster, long uid, long typeID, Vector3 pos, Vector3 targetPos, float curHp, float maxHp)
+    private void InitMonster(GameObjectEntity monsterGameOE, long uid, long typeID, Vector3 pos, Vector3 targetPos, float curHp, float maxHp)
     {
-        EntityManager.AddComponentData(monster, new MoveSpeed {Value = ConfigMonster.GetInstance().GetMoveSpeed(typeID)});
+        Entity monster = monsterGameOE.Entity;
+        var speed = ConfigMonster.GetInstance().GetMoveSpeed(typeID);
+        EntityManager.AddComponentData(monster, new MoveSpeed {Value = speed, BaseValue = speed});
         EntityManager.AddComponentData(monster, new TargetPosition {Value = targetPos});
-        EntityManager.AddComponentData(monster, new LocomotionState {LocoState = curHp>0.001f?LocomotionState.State.Idle:LocomotionState.State.Dead, StartTime=0});
+        EntityManager.AddComponentData(monster, new LocomotionState {LocoState = curHp>0.001f?LocomotionState.State.Idle:LocomotionState.State.Dead});
         EntityManager.AddComponentData(monster, new LooksInfo {CurState=LooksInfo.State.None, LooksEntity=Entity.Null});
-        // EntityManager.SetComponentData(monster, new UID {Value=uid});
         EntityManager.AddComponentData(monster, new TypeID {Value=typeID});
         EntityManager.AddComponentData(monster, ActionData.Empty);
         EntityManager.AddComponentData(monster, new SceneObjectTypeData {Value=SceneObjectType.Monster});
-        EntityManager.AddComponentData(monster, new NameboardData {UIResState=NameboardData.ResState.WaitLoad});
-        // EntityManager.AddComponentData(monster, new JumpState {JumpStatus=JumpState.State.None, JumpCount=0, OriginYPos=0, AscentHeight=0});
         EntityManager.AddComponentData(monster, new PosOffset {Value = float3.zero});
         EntityManager.AddComponentData(monster, new HealthStateData {CurHp=curHp, MaxHp=maxHp});
         EntityManager.AddComponentData(monster, new TimelineState {NewStatus=TimelineState.NewState.Allow, InterruptStatus=TimelineState.InterruptState.Allow});
-        
+        monsterGameOE.gameObject.AddComponent<BeHitEffect>();
+        monsterGameOE.gameObject.AddComponent<SuckHPEffect>();
+        EntityManager.AddComponentObject(monster, monsterGameOE.gameObject.GetComponent<BeHitEffect>());
+        EntityManager.AddComponentObject(monster, monsterGameOE.gameObject.GetComponent<SuckHPEffect>());
+        // EntityManager.AddComponentObject(monster, new BeHitEffect{Status=EffectStatus.None, EndTime=0});
+        // EntityManager.AddComponentObject(monster, new SuckHPEffect{Status=EffectStatus.None, EndTime=0});
         MoveQuery rmq = EntityManager.GetComponentObject<MoveQuery>(monster);
         rmq.Initialize();
 
@@ -72,33 +76,34 @@ public class MonsterMgr
 
     private void CreateLooks(Entity ownerEntity, long typeID)
     {
-        var resPath = ResPath.GetMonsterResPath(typeID);
-        var bodyResID = ConfigMonster.GetInstance().GetBodyResID(typeID);
-        if (bodyResID == 0)
+        string resID = "MonsterRes_"+typeID;
+        if (ResMgr.GetInstance().HasLoadedPrefab(resID))
         {
-            Debug.LogError("monster body res id 0, typeID:"+typeID);
-            return;
+            var obj = ResMgr.GetInstance().GetGameObject(resID);
+            InitLooksObj(obj, ownerEntity, typeID);
         }
-        string bodyPath = resPath+"/model_clothe_"+bodyResID+".prefab";
-        XLuaFramework.ResourceManager.GetInstance().LoadAsset<GameObject>(bodyPath, delegate(UnityEngine.Object[] objs) {
-            if (objs!=null && objs.Length>0 && EntityManager.Exists(ownerEntity))
+        else
+        {
+            string bodyPath = ResPath.GetMonsterBodyResPath(typeID);
+            ResMgr.GetInstance().LoadPrefab(bodyPath, resID, delegate(GameObject prefab)
             {
-                GameObject bodyObj = objs[0] as GameObject;
-                GameObjectEntity bodyOE = m_world.Spawn<GameObjectEntity>(bodyObj);
-                var parentTrans = EntityManager.GetComponentObject<Transform>(ownerEntity);
-                bodyOE.transform.SetParent(parentTrans);
-                bodyOE.transform.localPosition = Vector3.zero;
-                bodyOE.transform.localRotation = Quaternion.identity;
-                var looksInfo = EntityManager.GetComponentData<LooksInfo>(ownerEntity);
-                looksInfo.CurState = LooksInfo.State.Loaded;
-                looksInfo.LooksEntity = bodyOE.Entity;
-                EntityManager.SetComponentData<LooksInfo>(ownerEntity, looksInfo);
-            }
-            else
-            {
-                Debug.LogError("cannot fine file "+bodyPath);
-            }
-        });
+                var obj = ResMgr.GetInstance().GetGameObject(resID);
+                InitLooksObj(obj, ownerEntity, typeID);
+            });
+        }
+    }
+
+    private void InitLooksObj(GameObject obj, Entity ownerEntity, long typeID)
+    {
+        GameObjectEntity bodyOE = m_world.SpawnByGameObject<GameObjectEntity>(obj);
+        var parentTrans = EntityManager.GetComponentObject<Transform>(ownerEntity);
+        bodyOE.transform.SetParent(parentTrans);
+        bodyOE.transform.localPosition = Vector3.zero;
+        bodyOE.transform.localRotation = Quaternion.identity;
+        var looksInfo = EntityManager.GetComponentData<LooksInfo>(ownerEntity);
+        looksInfo.CurState = LooksInfo.State.Loaded;
+        looksInfo.LooksEntity = bodyOE.Entity;
+        EntityManager.SetComponentData<LooksInfo>(ownerEntity, looksInfo);
     }
 
     public string GetName(Entity entity)

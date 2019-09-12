@@ -13,26 +13,24 @@ public class UpdateAnimatorSystem : BaseComponentSystem
 
     EntityQuery group;
 
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
-        base.OnCreateManager();
-        group = GetEntityQuery(typeof(LooksInfo), typeof(LocomotionState), typeof(PlayableDirector));
+        base.OnCreate();
+        group = GetEntityQuery(typeof(LooksInfo), typeof(LocomotionState));
     }
 
     protected override void OnUpdate()
     {
         var looksInfos = group.ToComponentDataArray<LooksInfo>(Allocator.TempJob);
         var locoStates = group.ToComponentDataArray<LocomotionState>(Allocator.TempJob);
-        var directors = group.ToComponentArray<PlayableDirector>();
+        // var directors = group.ToComponentArray<PlayableDirector>();
         for (int i=0; i<looksInfos.Length; i++)
         {
             var looksInfo = looksInfos[i];
-            var director = directors[i];
-            // Debug.Log("director.state : "+director.state.ToString());
             if (looksInfo.CurState!=LooksInfo.State.Loaded)
                 continue;
             var looksEntity = looksInfo.LooksEntity;
-            var animator = m_world.GetEntityManager().GetComponentObject<Animator>(looksEntity);
+            var animator = EntityManager.GetComponentObject<Animator>(looksEntity);
             if (animator!=null)
                 UpdateAnimator(animator, locoStates[i]);
         }
@@ -43,39 +41,44 @@ public class UpdateAnimatorSystem : BaseComponentSystem
     void UpdateAnimator(Animator animator, LocomotionState locoData)
     {
         LocomotionState.State locoState = locoData.LocoState;
-        // Debug.Log("locoState : "+locoState);
-        if (locoState == LocomotionState.State.Idle && !animator.GetCurrentAnimatorStateInfo(0).IsName("idle"))
+        string aniName = "";
+        // if (locoState == LocomotionState.State.BeHit)
+            // Debug.Log("be hit ani : "+animator.GetCurrentAnimatorStateInfo(0).IsName("behit"));
+        if (locoState == LocomotionState.State.Idle && !IsIdleAnimation(animator))
         {
-            // animator.CrossFade("idle", 0.2f, 0, Time.deltaTime);
-            animator.Play("idle");
+            aniName = "idle";
         }
         else if (locoState == LocomotionState.State.Run && !animator.GetCurrentAnimatorStateInfo(0).IsName("run"))
         {
-            // animator.CrossFade("run", 0.2f, 0, Time.deltaTime);
-            animator.Play("run");
+            aniName = "run";
         }
         else if (locoState == LocomotionState.State.BeHit && !animator.GetCurrentAnimatorStateInfo(0).IsName("behit"))
         {
-            animator.Play("behit");
+            aniName = "behit";
         }
         else if (locoState == LocomotionState.State.Jump && !animator.GetCurrentAnimatorStateInfo(0).IsName("jump"))
         {
-            animator.Play("jump");
+            aniName = "jump";
         }
         else if (locoState == LocomotionState.State.DoubleJump && !animator.GetCurrentAnimatorStateInfo(0).IsName("jump2"))
         {
-            animator.Play("jump2");
+            aniName = "jump2";
         }
         else if (locoState == LocomotionState.State.TrebleJump && !animator.GetCurrentAnimatorStateInfo(0).IsName("jump3"))
         {
-            animator.Play("jump3");
+            aniName = "jump3";
+        }
+        else if (locoState == LocomotionState.State.Dizzy && !animator.GetCurrentAnimatorStateInfo(0).IsName("dizzy"))
+        {
+            aniName = "dizzy";
         }
         else if (locoState == LocomotionState.State.Dead && !animator.GetCurrentAnimatorStateInfo(0).IsName("death"))
         {
+            aniName = "death";
             // Debug.Log("TimeEx.ServerTime:"+TimeEx.ServerTime+" startTime:"+locoData.StartTime+" "+((Time.time - locoData.StartTime)));
             // if (Time.time - locoData.StartTime <= 1)
             // {
-                animator.Play("death");
+                // ------animator.Play("death");
             // }
             // else
             // {
@@ -83,6 +86,28 @@ public class UpdateAnimatorSystem : BaseComponentSystem
             //     animator.Play("death", 0, 1.0f);
             // }
         }
-        
+        if (aniName != "")
+        {
+            animator.Play(aniName);
+            if (aniName == "idle" || aniName == "run")
+            {
+                var headTrans = animator.transform.Find("head");
+                Animator headAnimator = null;
+                if (headTrans != null)
+                {
+                    headAnimator = headTrans.GetComponent<Animator>();
+                    animator.Play(aniName);
+                }
+                // Debug.Log("locoState : "+locoState+" headTrans:"+(headTrans!=null));
+            }
+        }
+    }
+
+    public bool IsIdleAnimation(Animator animator)
+    {
+        return animator.GetCurrentAnimatorStateInfo(0).IsName("idle") || animator.GetCurrentAnimatorStateInfo(0).IsName("idle2")
+            || animator.GetCurrentAnimatorStateInfo(0).IsName("idle3") || animator.GetCurrentAnimatorStateInfo(0).IsName("idle4")
+            || animator.GetCurrentAnimatorStateInfo(0).IsName("idle5") || animator.GetCurrentAnimatorStateInfo(0).IsName("idle6")
+            || animator.GetCurrentAnimatorStateInfo(0).IsName("casual") || animator.GetCurrentAnimatorStateInfo(0).IsName("casual2");
     }
 }

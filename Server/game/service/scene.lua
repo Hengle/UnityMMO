@@ -51,29 +51,40 @@ end
 function CMD.scene_cast_skill(user_info, req_data)
 	local role = sceneMgr.roleMgr:GetRole(user_info.cur_role_id)
 	if role ~= nil then
-		local result_code, fight_event = sceneMgr.fightMgr:CastSkill(role.scene_uid, req_data)
+		local result_code, cd_end_time, fight_event = sceneMgr.fightMgr:CastSkill(role.scene_uid, req_data)
 		-- print("Cat:scene [start:355] fight_event, result_code:", fight_event, result_code)
 		-- PrintTable(fight_event)
 		-- print("Cat:scene [end]")
-		-- do
-			--test : 给自己发送自己的技能协议
-			-- table.insert(sceneMgr.roleMgr.roleList[user_info.cur_role_id].fight_events_in_around, fight_event)
-		-- end
-		return {result=result_code, fight_event=fight_event}
+		return {result=result_code, cd_end_time=cd_end_time, skill_id=req_data.skill_id}
 	else
 		skynet.error("error : cannot find role by id : "..(user_info.role_id or " nil"))
 		return {result=1}
 	end
 end
 
-function CMD.scene_listen_fight_event(user_info, req_data)
+function CMD.scene_listen_skill_event(user_info, req_data)
 	local role_info = sceneMgr.roleMgr:GetRole(user_info.cur_role_id)
-	if role_info and not role_info.ack_scene_listen_fight_event then
+	if role_info and not role_info.ack_scene_listen_skill_event then
 		--synch info at fixed time
-		role_info.ack_scene_listen_fight_event = skynet.response()
+		role_info.ack_scene_listen_skill_event = skynet.response()
 		return NORET
 	end
 	return {}
+end
+
+function CMD.scene_listen_hurt_event( user_info, req_data )
+	local role_info = sceneMgr.roleMgr:GetRole(user_info.cur_role_id)
+	if role_info and not role_info.ack_scene_listen_hurt_event then
+		--synch info at fixed time
+		role_info.ack_scene_listen_hurt_event = skynet.response()
+		return NORET
+	end
+	return {}
+end
+
+function CMD.scene_relive( user_info, req_data )
+	local ret = sceneMgr.roleMgr:Relive(user_info.cur_role_id, req_data.relive_type)
+	return {result=ret, relive_type=req_data.relive_type}
 end
 
 skynet.start(function()

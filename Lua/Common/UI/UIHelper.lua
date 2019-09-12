@@ -21,34 +21,34 @@ UI.UpdateVisibleJuryTable = {}
 UI.UpdateVisibleJuryTableForValue = {}
 function UI.InitForUIHelper(  )
 	print('Cat:UIHelper.lua[InitForUIHelper]')
-	setmetatable(UpdateVisibleJuryTable, {__mode = "k"})   
-	setmetatable(UpdateVisibleJuryTableForValue, {__mode = "v"})   
+	setmetatable(UI.UpdateVisibleJuryTable, {__mode = "k"})   
+	setmetatable(UI.UpdateVisibleJuryTableForValue, {__mode = "v"})   
 end
 
 --你显示隐藏前都要给我一个理由,我会综合考虑,只会在没有任何理由隐藏时我才会真正地显示出来
 function UI.UpdateVisibleByJury( obj, is_show, reason )
 	if not obj then return end
 	local tab_str = tostring(obj)
-	UpdateVisibleJuryTableForValue[tab_str] = obj
-	if not UpdateVisibleJuryTable[obj] then
+	UI.UpdateVisibleJuryTableForValue[tab_str] = obj
+	if not UI.UpdateVisibleJuryTable[obj] then
 		local jury = Jury.New()
 		--当陪审团的投票结果变更时触发 
 		local on_jury_change = function (  )
 			--之所以用UpdateVisibleJuryTableForValue弱表是因为直接引用obj的话将影响到obj的gc,因为Jury等着obj释放时跟着自动释放,但Jury引用了本函数,而本函数又引用obj的话就循环引用了(想依赖弱引用做自动回收是会有这个问题的)
-			if UpdateVisibleJuryTableForValue[tab_str] then
+			if UI.UpdateVisibleJuryTableForValue[tab_str] then
 				--没人投票的话就说明可以显示啦
 				-- print('Cat:UIHelper.lua[obj] jury:IsNoneVote()', jury:IsNoneVote())
-				UI.SetActive(UpdateVisibleJuryTableForValue[tab_str], jury:IsNoneVote())
+				UI.SetActive(UI.UpdateVisibleJuryTableForValue[tab_str], jury:IsNoneVote())
 			end
 		end
 		jury:CallBackOnResultChange(on_jury_change)
-		UpdateVisibleJuryTable[obj] = jury
+		UI.UpdateVisibleJuryTable[obj] = jury
 	end
 	if is_show then
-		UpdateVisibleJuryTable[obj]:UnVote(reason)
+		UI.UpdateVisibleJuryTable[obj]:UnVote(reason)
 	else
 		--想隐藏就投票
-		UpdateVisibleJuryTable[obj]:Vote(reason)
+		UI.UpdateVisibleJuryTable[obj]:Vote(reason)
 	end
 end
 
@@ -56,9 +56,9 @@ local find = string.find
 local gsub = string.gsub
 local Split = Split
 UI.G_ComponentMapForGetChildren = {
-	img = "Image", txtnav = "Text", tog = "Toggle", imgex = "ImageExtend", outline = "Outline", raw = "RawImage", scroll = "ScrollRect", input = "InputField", txt = "TextMeshProUGUI",
+	img = "Image", txtnav = "Text", tog = "Toggle", imgex = "ImageExtend", outline = "Outline", raw = "RawImage", scroll = "ScrollRect", input = "InputField", txt = "TextMeshProUGUI", inp = "TMP_InputField",
 }
-function UI.GetChildren( self, parent, names )
+function UI.GetChildren( self, parent, names, ignoreExist )
 	assert(parent, "UIHelper:GetChildren() cannot find transform!")
 	for i=1,#names do
 		local name_parts = Split(names[i], ":")
@@ -67,7 +67,9 @@ function UI.GetChildren( self, parent, names )
 		if short_name and find(short_name,"/") then
 			short_name = gsub(short_name,".+/","")
 		end
-		assert(self[short_name] == nil, short_name .. " already exists")
+		if not ignoreExist then
+			assert(self[short_name] == nil, short_name .. " already exists")
+		end
 		if short_name then
 			self[short_name] = parent:Find(full_name)
 		end
@@ -347,4 +349,64 @@ function UI.GetSizeDeltaY(transform)
 		return size.y
 	end
 	return 0
+end
+
+function UI.SetBg( self, rawImg, bg_res, is_auto_size, loaded_call_back )
+	print('Cat:UIHelper.lua[355] self, rawImg, bg_res, is_auto_size, loaded_call_back', self, rawImg, bg_res, is_auto_size, loaded_call_back)
+	if not rawImg then return end
+	rawImg.gameObject:SetActive(false)
+	local on_loaded = function (  )
+		print('Cat:UIHelper.lua[358] self.destroyed', self.destroyed)
+		if self.destroyed then return end
+		rawImg.gameObject:SetActive(true)
+		if loaded_call_back then
+			loaded_call_back()
+		end
+	end
+	UI.SetRawImage(self, rawImg, bg_res, is_auto_size, on_loaded)
+end
+
+function UI.SetImage( self, img, resPath, isAutoSize, loadedCallBack )
+	if not self or not img then 
+		LogError("UI.SetImage failed "..tostring(self).." img:"..tostring(img).." resPath:"..resPath)
+		return 
+	end
+	resPath = UI.FillUIResPath(resPath)
+	self.__img_cur_res__ = self.__img_cur_res__ or {}
+	self.__img_cur_res__[img] = resPath
+	local onLoadedImg = function ( objs )
+		if not objs or not objs[0] or self.destroyed or not img or img:IsDestroyed() or self.__img_cur_res__[img] ~= resPath then return end
+		img.sprite = objs[0]
+		if isAutoSize then
+			img:SetNativeSize()
+		end
+		if loadedCallBack then
+			loadedCallBack()
+		end
+	end
+	ResMgr:LoadSprite(resPath, onLoadedImg)
+end
+
+function UI.SetRawImage( self, img, resPath, isAutoSize, loadedCallBack )
+	-- print('Cat:UIHelper.lua[SetRawImage] self, img, resPath, isAutoSize', self, img, resPath, isAutoSize)
+	if not self or not img then 
+		LogError("UI.SetRawImage failed "..tostring(self).." img:"..tostring(img).." resPath:"..resPath)
+		return 
+	end
+	if not self or not img then return end
+	resPath = UI.FillUIResPath(resPath)
+	self.__img_cur_res__ = self.__img_cur_res__ or {}
+	self.__img_cur_res__[img] = resPath
+	local onLoadedImg = function ( objs )
+		-- print('Cat:UIHelper.lua[SetRawImage] self.__img_cur_res__[img], ', self.__img_cur_res__[img], resPath)
+		if not objs or not objs[0] or self.destroyed or not img or img:IsDestroyed() or self.__img_cur_res__[img] ~= resPath then return end
+		img.texture = objs[0]
+		if isAutoSize then
+			img:SetNativeSize()
+		end
+		if loadedCallBack then
+			loadedCallBack()
+		end
+	end
+	ResMgr:LoadTexture(resPath, onLoadedImg)
 end

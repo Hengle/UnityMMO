@@ -8,41 +8,41 @@ using UnityEngine.Profiling;
 using Unity.Collections;
 
 
-#if UNITY_EDITOR
-[InitializeOnLoad]
-// Class makes sure we have world when starting game in editor (GameObjectEntities in scene needs world in OnEnable)   
-class EditorWorldCreator
-{
-    static EditorWorldCreator()
-    {
-        EditorApplication.playModeStateChanged -= EditorApplicationOnPlayModeStateChanged;
-        EditorApplication.playModeStateChanged += EditorApplicationOnPlayModeStateChanged;
+// #if UNITY_EDITOR
+// [InitializeOnLoad]
+// // Class makes sure we have world when starting game in editor (GameObjectEntities in scene needs world in OnEnable)   
+// class EditorWorldCreator
+// {
+//     static EditorWorldCreator()
+//     {
+//         EditorApplication.playModeStateChanged -= EditorApplicationOnPlayModeStateChanged;
+//         EditorApplication.playModeStateChanged += EditorApplicationOnPlayModeStateChanged;
 
-        CreateWorld();
-    }
+//         CreateWorld();
+//     }
 
-    private static void EditorApplicationOnPlayModeStateChanged(PlayModeStateChange change)
-    {
-        if (change == PlayModeStateChange.ExitingEditMode) 
-            ShutdownWorld();
-    }
+//     private static void EditorApplicationOnPlayModeStateChanged(PlayModeStateChange change)
+//     {
+//         if (change == PlayModeStateChange.ExitingEditMode) 
+//             ShutdownWorld();
+//     }
 
-    static void CreateWorld()
-    {
-        if(World.Active == null)
-            World.Active = new World("EditorWorld"); 
-    }
+//     static void CreateWorld()
+//     {
+//         if(World.Active == null)
+//             World.Active = new World("EditorWorld"); 
+//     }
 
-    static void ShutdownWorld()
-    {
-        if (World.Active != null)
-        {
-            World.Active.Dispose();
-            World.Active = null;
-        }
-    }
-}
-#endif        
+//     static void ShutdownWorld()
+//     {
+//         if (World.Active != null)
+//         {
+//             World.Active.Dispose();
+//             World.Active = null;
+//         }
+//     }
+// }
+// #endif        
 
 
 
@@ -62,9 +62,9 @@ public class DestroyDespawning : ComponentSystem
 {
     EntityQuery Group;
 
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
-        base.OnCreateManager();
+        base.OnCreate();
         Group = GetEntityQuery(typeof(DespawningEntity));
     }
     
@@ -188,6 +188,27 @@ public class GameWorld
     public World GetECSWorld()    
     {
         return m_ECSWorld;
+    }
+
+    public T SpawnByGameObject<T>(GameObject gameObject) where T : Component
+    {
+        return SpawnByGameObject<T>(gameObject, Vector3.zero, Quaternion.identity);
+    }
+
+    public T SpawnByGameObject<T>(GameObject gameObject, Vector3 position, Quaternion rotation) where T : Component
+    {
+        Entity entity = RegisterInternal(gameObject, true);
+        if (gameObject == null)
+            return null;
+
+        var result = gameObject.GetComponent<T>();
+        if (result == null)
+        {
+            GameDebug.Log(string.Format("Spawned entity '{0}' didn't have component '{1}'", gameObject, typeof(T).FullName));
+            return null;
+        }
+
+        return result;
     }
 
     public T Spawn<T>(GameObject prefab) where T : Component

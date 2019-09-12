@@ -13,9 +13,9 @@ public class MovementUpdateSystem : BaseComponentSystem
 
     EntityQuery group;
 
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
-        base.OnCreateManager();
+        base.OnCreate();
         // group = GetComponentGroup(typeof(TargetPosition), typeof(Transform), typeof(MoveSpeed), typeof(MoveQuery), typeof(LocomotionState), typeof(PosOffset), typeof(PosSynchInfo));
         group = GetEntityQuery(typeof(TargetPosition), typeof(Transform), typeof(MoveSpeed), typeof(MoveQuery), typeof(LocomotionState), typeof(PosOffset));
     }
@@ -40,6 +40,8 @@ public class MovementUpdateSystem : BaseComponentSystem
             var curLocoStateObj = locoStates[i];
             var query = moveQuerys[i];
             // if (speed <= 0 || curLocoStateObj.LocoState==LocomotionState.State.BeHit|| curLocoStateObj.LocoState==LocomotionState.State.Dead)
+            // if (curLocoStateObj.LocoState==LocomotionState.State.BeHit)
+                // continue;
             if (speed <= 0)
                 continue;
             var curTrans = transforms[i];
@@ -52,48 +54,58 @@ public class MovementUpdateSystem : BaseComponentSystem
             var isAutoFinding = query.IsAutoFinding;
             bool isMoveWanted = moveDistance>0.01f || isAutoFinding;
             var newLocoState = LocomotionState.State.StateNum;
-            var phaseDuration = Time.time - curLocoStateObj.StartTime;
+            var phaseDuration = TimeEx.ServerTime - curLocoStateObj.StartTime;
             var curLocoState = curLocoStateObj.LocoState;
             bool isOnGround = curLocoStateObj.IsOnGround();
             if (isOnGround)
             {
                 if (isMoveWanted)
                     newLocoState = LocomotionState.State.Run;
-                else
+                else if (curLocoStateObj.LocoState!=LocomotionState.State.BeHit)
                     newLocoState = LocomotionState.State.Idle;
             }
             float ySpeed = 0;
-            bool isClickJump = false;
-            if (EntityManager.HasComponent<ActionData>(entities[i]))
-            {
-                var actionData = EntityManager.GetComponentData<ActionData>(entities[i]);
-                isClickJump = actionData.Jump == 1;
-            }
+            
             // Jump
-            if (isOnGround)
-                curLocoStateObj.JumpCount = 0;
-
-            if (isClickJump && isOnGround)
+            var isCanJump = EntityManager.HasComponent<JumpData>(entities[i]);
+            if (isCanJump)
             {
-                curLocoStateObj.JumpCount = 1;
-                newLocoState = LocomotionState.State.Jump;
-            }
+                var jumpData = EntityManager.GetComponentData<JumpData>(entities[i]);
+                var lastJumpCount = jumpData.JumpCount;
+                if (isOnGround)
+                    jumpData.JumpCount = 0;
 
-            if (isClickJump && curLocoStateObj.IsInJump() && curLocoStateObj.JumpCount < 3)
-            {
-                curLocoStateObj.JumpCount = curLocoStateObj.JumpCount + 1;
-                newLocoState = curLocoStateObj.JumpCount==2?LocomotionState.State.DoubleJump:LocomotionState.State.TrebleJump;
-            }
+                bool isClickJump = false;
+                if (EntityManager.HasComponent<ActionData>(entities[i]))
+                {
+                    var actionData = EntityManager.GetComponentData<ActionData>(entities[i]);
+                    isClickJump = actionData.Jump == 1;
+                }
+                if (isClickJump && isOnGround)
+                {
+                    jumpData.JumpCount = 1;
+                    newLocoState = LocomotionState.State.Jump;
+                }
 
-            if (curLocoStateObj.LocoState == LocomotionState.State.Jump || curLocoStateObj.LocoState == LocomotionState.State.DoubleJump || curLocoStateObj.LocoState == LocomotionState.State.TrebleJump)
-            {
-                if (phaseDuration >= GameConst.JumpAscentDuration[curLocoStateObj.LocoState-LocomotionState.State.Jump])
-                    newLocoState = LocomotionState.State.InAir;
+                if (isClickJump && curLocoStateObj.IsInJump() && jumpData.JumpCount < 3)
+                {
+                    jumpData.JumpCount++;
+                    newLocoState = jumpData.JumpCount==2?LocomotionState.State.DoubleJump:LocomotionState.State.TrebleJump;
+                }
+
+                if (curLocoStateObj.LocoState == LocomotionState.State.Jump || curLocoStateObj.LocoState == LocomotionState.State.DoubleJump || curLocoStateObj.LocoState == LocomotionState.State.TrebleJump)
+                {
+                    if (phaseDuration >= GameConst.JumpAscentDuration[curLocoStateObj.LocoState-LocomotionState.State.Jump])
+                        newLocoState = LocomotionState.State.InAir;
+                }
+                if (jumpData.JumpCount != lastJumpCount)
+                {
+                    EntityManager.SetComponentData(entities[i], jumpData);
+                }
             }
             if (newLocoState != LocomotionState.State.StateNum && newLocoState != curLocoState)
             {
                 curLocoStateObj.LocoState = newLocoState;
-                curLocoStateObj.StartTime = Time.time;
             }
             if (curLocoStateObj.LocoState == LocomotionState.State.Jump || curLocoStateObj.LocoState == LocomotionState.State.DoubleJump || curLocoStateObj.LocoState == LocomotionState.State.TrebleJump)
             {
@@ -157,9 +169,9 @@ class MovementHandleGroundCollision : BaseComponentSystem
     }
 
     EntityQuery group;
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
-        base.OnCreateManager();
+        base.OnCreate();
         group = GetEntityQuery(typeof(Transform), typeof(MoveQuery), typeof(LocomotionState), typeof(TargetPosition));
     }
 
@@ -200,8 +212,7 @@ class MovementHandleGroundCollision : BaseComponentSystem
                 {
                     locoState.LocoState = LocomotionState.State.InAir;                    
                 }
-                
-                locoState.StartTime = Time.time;
+                // locoState.StartTime = Time.time;
                 // locoStates[i] = locoState;
                 EntityManager.SetComponentData<LocomotionState>(entities[i], locoState);
             }
@@ -220,47 +231,12 @@ public class CreateTargetPosFromUserInputSystem : BaseComponentSystem
 
     EntityQuery group;
 
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
-        base.OnCreateManager();
+        base.OnCreate();
         group = GetEntityQuery(typeof(TargetPosition), typeof(Transform), typeof(MoveSpeed), typeof(PosSynchInfo), typeof(LocomotionState), typeof(MoveQuery));
     }
 
-#if false
-    protected override void OnUpdate()
-    {
-        var posArray = group.ToComponentArray<Transform>();
-        Entities.ForEach((Entity entity, ref TargetPosition targetPos, ref MoveSpeed moveSpeed, ref LocomotionState curLocoStateObj, ref PosSynchInfo synchInfo)=>{
-            if (curLocoStateObj.LocoState==LocomotionState.State.BeHit|| curLocoStateObj.LocoState==LocomotionState.State.Dead)
-                return;
-            var input = GameInput.GetInstance().JoystickDir;
-            // Debug.Log("input.sqrMagnitude:"+input.sqrMagnitude);
-            if (input.sqrMagnitude > 0)
-            {
-                var forward = SceneMgr.Instance.MainCameraTrans.TransformDirection(Vector3.forward);
-                forward.y = 0;
-                var right = SceneMgr.Instance.MainCameraTrans.TransformDirection(Vector3.right);
-                float3 targetDirection = input.x * right + input.y * forward;
-                targetDirection.y = 0;
-                targetDirection = Vector3.Normalize(targetDirection);
-                float3 curPos = posArray[0].localPosition;
-                var speed = moveSpeed.Value;
-                float3 newTargetPos;
-                if (speed > 0)
-                    newTargetPos = curPos+targetDirection*(speed/GameConst.SpeedFactor*0.10f);//延着方向前进0.10秒为目标坐标
-                else
-                    newTargetPos = curPos;
-                newTargetPos.y = targetPos.Value.y;
-                targetPos.Value = newTargetPos;
-                // Debug.Log("targetDirection : "+newTargetPos.x+" "+newTargetPos.y+" "+newTargetPos.z);
-            }
-            else
-            {
-                targetPos.Value = posArray[0].localPosition;
-            }
-        });
-    }
-#endif
     protected override void OnUpdate()
     {
         var entities = group.ToEntityArray(Allocator.TempJob);

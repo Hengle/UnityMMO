@@ -6,6 +6,8 @@ namespace UnityMMO {
 [DataContract]
 public class SceneInfo{
     [DataMember]
+    public List<string> ResPathList;
+    [DataMember]
     public LightmapsMode LightmapMode;
     [DataMember]
     public List<string> LightColorResPath;
@@ -17,6 +19,8 @@ public class SceneInfo{
     public List<SceneStaticObject> ObjectInfoList;
     [DataMember]
     public List<BornInfoData> BornList;
+    [DataMember]
+    public List<int> MonsterList;
 }
 
 public class BaseSceneInfoData

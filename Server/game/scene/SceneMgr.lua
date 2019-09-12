@@ -1,5 +1,7 @@
 require "game.scene.Global"
+require "game.scene.com.Components"
 local skynet = require "skynet"
+local Ac = require "Action"
 local ECS = require "ECS"
 local BP = require "Blueprint"
 local SceneConst = require "game.scene.SceneConst"
@@ -10,8 +12,8 @@ RequireAllLuaFileInFolder("./game/scene/system")
 local SceneMgr = BaseClass()
 
 function SceneMgr:Constructor(  )
-	self.uid_obj_map = {}--the scene object includes the role monster npc
 	self.uid_entity_map = {}
+	self.aoi_uid_map = {}
 end
 
 function SceneMgr:GetEntity( uid )
@@ -22,21 +24,22 @@ function SceneMgr:SetEntity( uid, entity )
 	self.uid_entity_map[uid] = entity
 end
 
-local fork_loop_ecs = function ( sceneMgr )
-	skynet.fork(function()
-		while true do
-			sceneMgr.ecsSystemMgr:update()
-			skynet.sleep(3)
-		end
-	end)
+function SceneMgr:GetUIDByAOI( aoi )
+	return self.aoi_uid_map[aoi]
 end
 
-local fork_loop_time = function (  )
+function SceneMgr:SetAOI( aoi, uid )
+	self.aoi_uid_map[aoi] = uid
+end
+
+local fork_loop_logic = function ( sceneMgr )
 	Time:update()
 	skynet.fork(function()
 		while true do
 			Time:update()
 			BP.Time:Update(Time.time)
+			sceneMgr.ecsSystemMgr:Update()
+			sceneMgr.actionMgr:Update(Time.deltaTimeMS)
 			skynet.sleep(1)
 		end
 	end)
@@ -47,11 +50,11 @@ local update_around_objs = function ( sceneMgr, role_info )
 	local objs = sceneMgr.aoi:get_around_offset(role_info.aoi_handle, role_info.radius_short, role_info.radius_long)
 	local cur_time = Time.timeMS
 	for aoi_handle, flag in pairs(objs) do
-		-- local scene_uid = sceneMgr.aoi_handle_uid_map[aoi_handle]
-		local scene_uid = sceneMgr.aoi:get_user_data(aoi_handle, "uid")
+		local scene_uid = sceneMgr:GetUIDByAOI(aoi_handle)
+		-- local scene_uid = sceneMgr.aoi:get_user_data(aoi_handle, "uid")
 		local is_enter = flag==1
-		-- print('Cat:scene.lua[67] flag, ', flag, aoi_handle, role_info.aoi_handle, scene_uid)
-		if is_enter then
+		-- print('Cat:SceneMgr.lua[57] flag, scene_uid, aoi_handle', is_enter, flag, role_info.scene_uid, role_info.aoi_handle, scene_uid, aoi_handle)
+		if is_enter and scene_uid then
 			role_info.around_objs[scene_uid] = scene_uid
 			local entity = sceneMgr.uid_entity_map[scene_uid]
 			if entity then
@@ -69,10 +72,8 @@ local update_around_objs = function ( sceneMgr, role_info )
 				end
 				role_info.change_obj_infos = SceneHelper.AddInfoItem(role_info.change_obj_infos, scene_uid, {key=SceneConst.InfoKey.EnterView, value=eventStr, time=cur_time})
 			end
-		else
-			if scene_uid then
-				role_info.around_objs[scene_uid] = nil
-			end
+		elseif scene_uid then
+			role_info.around_objs[scene_uid] = nil
 			role_info.change_obj_infos = SceneHelper.AddInfoItem(role_info.change_obj_infos, scene_uid, {key=SceneConst.InfoKey.LeaveView, value="", time=cur_time})
 		end
 	end
@@ -87,9 +88,15 @@ local collect_events = function ( sceneMgr )
 					if not event_info.is_private then
 						role_info.change_obj_infos = SceneHelper.AddInfoItem(role_info.change_obj_infos, interest_uid, event_info)
 					end
-					if event_info.is_private then
-						print('Cat:SceneMgr.lua[91] private event ')
-					end
+				end
+			end
+		end
+		--有些就算是自己的事件也要转发给其它玩家，比如自己复活
+		local event_list = sceneMgr.eventMgr:GetSceneEvent(role_info.scene_uid)
+		if event_list then
+			for i,event_info in ipairs(event_list) do
+				if SceneConst.InterestSelfEvent[event_info.key] then
+					role_info.change_obj_infos = SceneHelper.AddInfoItem(role_info.change_obj_infos, role_info.scene_uid, event_info)
 				end
 			end
 		end
@@ -97,11 +104,11 @@ local collect_events = function ( sceneMgr )
 	sceneMgr.eventMgr:ClearAllSceneEvents()
 end
 
+--synch info at fixed time
 local fork_loop_scene_info_change = function ( sceneMgr )
 	skynet.fork(function()
 		while true do
 			collect_events(sceneMgr)
-			--synch info at fixed time
 			for _,role_info in pairs(sceneMgr.roleMgr.roleList) do
 				if role_info.change_obj_infos and role_info.ack_scene_get_objs_info_change then
 					role_info.ack_scene_get_objs_info_change(true, role_info.change_obj_infos)
@@ -117,31 +124,51 @@ end
 local collect_fight_events = function ( sceneMgr )
 	for _,role_info in pairs(sceneMgr.roleMgr.roleList) do
 		for _,interest_uid in pairs(role_info.around_objs) do
-			-- local event_list = sceneMgr.fight_events[interest_uid]
-			local event_list = sceneMgr.eventMgr:GetFightEvent(interest_uid)
-			if event_list then
+			local event_list = sceneMgr.eventMgr:GetSkillEvent(interest_uid)
+			if event_list and #event_list > 0 then
 				for i,event_info in ipairs(event_list) do
-					table.insert(role_info.fight_events_in_around, event_info)
+					table.insert(role_info.skill_events_in_around, event_info)
+				end
+			end
+			--Cat_Todo : 受击者是关注对象时也要发，因为有可能施法者离自己较远，不在关注列表
+			local event_list = sceneMgr.eventMgr:GetHurtEvent(interest_uid)
+			if event_list and #event_list > 0 then
+				for i,event_info in ipairs(event_list) do
+					table.insert(role_info.hurt_events_in_around, event_info)
 				end
 			end
 		end
+		--自己发的技能伤害事件列表也要告诉自己
+		local event_list = sceneMgr.eventMgr:GetHurtEvent(role_info.scene_uid)
+		if event_list and #event_list > 0 then
+			for i,event_info in ipairs(event_list) do
+				table.insert(role_info.hurt_events_in_around, event_info)
+			end
+		end
+		local sort_func = function ( a, b )
+			return a.time < b.time
+		end
+		table.sort(role_info.hurt_events_in_around, sort_func)
 	end
-	sceneMgr.eventMgr:ClearAllFightEvents()
+	sceneMgr.eventMgr:ClearAllSkillEvents()
+	sceneMgr.eventMgr:ClearAllHurtEvents()
 end
 
---定时合批发送战斗事件
+--Notify combat events at fixed times
 local fork_loop_fight_event = function ( sceneMgr )
 	skynet.fork(function()
 		while true do 
 			collect_fight_events(sceneMgr)
 			for k,role_info in pairs(sceneMgr.roleMgr.roleList) do
-				if role_info.fight_events_in_around and #role_info.fight_events_in_around>0 and role_info.ack_scene_listen_fight_event then
-					-- print("Cat:scene [start:138] role_info.fight_events_in_around:", role_info.fight_events_in_around)
-					-- PrintTable(role_info.fight_events_in_around)
-					-- print("Cat:scene [end]")
-					role_info.ack_scene_listen_fight_event(true, {fight_events=role_info.fight_events_in_around})
-					role_info.fight_events_in_around = {}
-					role_info.ack_scene_listen_fight_event = nil
+				if role_info.skill_events_in_around and #role_info.skill_events_in_around>0 and role_info.ack_scene_listen_skill_event then
+					role_info.ack_scene_listen_skill_event(true, {events=role_info.skill_events_in_around})
+					role_info.skill_events_in_around = {}
+					role_info.ack_scene_listen_skill_event = nil
+				end
+				if role_info.hurt_events_in_around and #role_info.hurt_events_in_around>0 and role_info.ack_scene_listen_hurt_event then
+					role_info.ack_scene_listen_hurt_event(true, {events=role_info.hurt_events_in_around})
+					role_info.hurt_events_in_around = {}
+					role_info.ack_scene_listen_hurt_event = nil
 				end
 			end
 			skynet.sleep(5)
@@ -162,13 +189,13 @@ local fork_loop_update_around = function ( sceneMgr )
 end
 
 function SceneMgr:Init( scene_id )
-	fork_loop_time()
+	-- fork_loop_time()
 
 	self.roleMgr = require("game.scene.RoleMgr").New()
 	self.monsterMgr = require("game.scene.MonsterMgr").New()
 	self.npcMgr = require("game.scene.NPCMgr").New()
 	self.fightMgr = require("game.scene.FightMgr").New()
-
+	self.actionMgr = Ac.ActionMgr{}
 	--管理所有的ECS System
 	self.ecsSystemMgr = require("game.scene.ECSSystemMgr").New()
 
@@ -187,14 +214,17 @@ function SceneMgr:Init( scene_id )
 	self.entityMgr = ECS.World.Active:GetOrCreateManager(ECS.EntityManager.Name)
 	self.scene_cfg = require("config.scene.config_scene_"..scene_id)
 	self.curSceneID = scene_id
+	self.actionMgr:Init()
 	self.roleMgr:Init(self)
 	self.monsterMgr:Init(self, self.scene_cfg.monster_list)
 	self.npcMgr:Init(self, self.scene_cfg.npc_list)
 	self.fightMgr:Init(self)
 	self.ecsSystemMgr:Init(self.ecs_world, self)
 	self.eventMgr:Init(self)
+	local FightHelper = require("game.scene.FightHelper")
+	FightHelper:Init(self)
 	--开始游戏循环
-	fork_loop_ecs(self)
+	fork_loop_logic(self)
 	fork_loop_scene_info_change(self)
 	fork_loop_fight_event(self)
 	fork_loop_update_around(self)

@@ -9,7 +9,6 @@ local SubState = {
 	GoBack = 3,--回到巡逻点
 }
 function FightState:OnInit(  )
-	-- print('Cat:FightState.lua[OnInit]')
 	self.aoi_handle = self.blackboard:GetVariable("aoi_handle")
 	self.aoi_area = self.blackboard:GetVariable("aoi_area")
 	self.entity = self.blackboard:GetVariable("entity")
@@ -28,9 +27,9 @@ function FightState:OnEnter(  )
 end
 
 function FightState:OnUpdate( )
-	-- print('Cat:FightState.lua[27] self.targetEnemyEntity', self.targetEnemyEntity)
 	if self.sub_state == SubState.Chase then
-		if self.targetEnemyEntity and self.entityMgr:Exists(self.targetEnemyEntity) then
+		local isLive = FightHelper:IsLive(self.targetEnemyEntity)
+		if isLive then
 			if not self.last_retarget_time or Time.time-self.last_retarget_time > 0.5 then
 				self.last_retarget_time = Time.time
 				--判断是否进入攻击范围，是则发起攻击，否则追上去
@@ -40,7 +39,6 @@ function FightState:OnUpdate( )
 				local isMaxOk = distanceFromTargetSqrt <= self.cfg.ai.attack_area.max_distance
 				local isMinOk = distanceFromTargetSqrt >= self.cfg.ai.attack_area.min_distance
 				local isOverHuntDis = distanceFromTargetSqrt > self.cfg.ai.hunt_radius
-				-- print('Cat:FightState.lua[34] distanceFromTargetSqrt', distanceFromTargetSqrt, isMaxOk)
 				if isOverHuntDis then
 					self.targetEnemyEntity = nil
 					self.blackboard:SetVariable("targetEnemyEntity", nil)
@@ -50,21 +48,15 @@ function FightState:OnUpdate( )
 					self:Attack()
 				else
 					--离敌人太远或太近了，走位移动到可攻击的目标点
-					local newPos = FightHelper.GetAssailablePos(myPos, enemyPos, self.cfg.ai.attack_area.min_distance, self.cfg.ai.attack_area.max_distance)			
-					self.monsterMgr:ChangeTargetPos(self.entity, newPos)
+					local newPos = FightHelper:GetAssailablePos(myPos, enemyPos, self.cfg.ai.attack_area.min_distance, self.cfg.ai.attack_area.max_distance)			
+					FightHelper:ChangeTargetPos(self.entity, newPos)
 				end
 			end
 		else
 			--没有攻击目标了，回去耕田吧
-			-- self:SetSubState(SubState.GoBack)
+			self.targetEnemyEntity = nil
 			self.fsm:TriggerState("PatrolState")
 		end
-	-- elseif self.sub_state == SubState.Fighting then
-		--Cat_Todo : 攻击时间间隔需要加上其触发的技能等信息判断
-		-- if not self.last_attack_time or Time.time - self.last_attack_time > 2 then
-		-- 	self.last_attack_time = Time.time
-		-- 	-- self.sceneMgr.fightMgr:Add()
-		-- end
 	end
 end
 
@@ -73,9 +65,13 @@ function FightState:Attack(  )
 		return
 	end
 	self.last_attack_time = Time.time
-	self.last_attack_duration = math.random(1, 3)
+	self.last_attack_duration = math.random(2, 5)
 	--先随机挑个技能
 	if not self.cfg or not self.cfg.ai.skill_list then return end
+	local ability = self.entityMgr:GetComponentData(self.entity, "UMO.Ability")
+	local canCastSkill = ability.CastSkill.value
+	if not canCastSkill then return end
+	
 	local skill_id = nil
 	local randomNum = math.random(1,100)
 	local elapsedNum = 0
@@ -90,9 +86,6 @@ function FightState:Attack(  )
 	local enemyPos = self.entityMgr:GetComponentData(self.targetEnemyEntity, "UMO.Position")
 	local defender_uid = self.entityMgr:GetComponentData(self.targetEnemyEntity, "UMO.UID")
 
-	-- local dir = Vector3.Sub(enemyPos, pos)
-	-- local angle = dir:Angle(Vector3.right)
-	-- print('Cat:FightState.lua[76] monster attack!!!!!!')
 	self.sceneMgr.fightMgr:CastSkill(self.uid, {
 		skill_id = skill_id,
 		cur_pos_x = math.floor(pos.x),
@@ -101,8 +94,7 @@ function FightState:Attack(  )
 		target_pos_x = math.floor(enemyPos.x),
 		target_pos_y = math.floor(enemyPos.y),
 		target_pos_z = math.floor(enemyPos.z),
-		-- direction = math.floor(angle*100),
-		uid_defenders_map = {[defender_uid]=true},	
+		targets = {[defender_uid]=true},	
 	})
 	
 end
